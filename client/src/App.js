@@ -5,7 +5,7 @@ import 'animate.css'
 import './styles/base.scss'
 import './styles/App.scss'
 
-const DefaultLayout = loadable(() => import(/* webpackChunkName: 'default' */ './containers'))
+const DefaultLayout = loadable(() => import('./containers'))
 
 const App = () => (
     <Router>

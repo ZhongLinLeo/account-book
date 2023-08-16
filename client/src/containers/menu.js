@@ -2,14 +2,12 @@ const menu = [
     {
         key: '/index',
         title: '首页',
-        icon: 'home',
-        auth: [1]
+        icon: 'home'
     },
     {
         title: '关于',
         key: '/about',
-        icon: 'user',
-        auth: [1]
+        icon: 'user'
     }
 ]
 
