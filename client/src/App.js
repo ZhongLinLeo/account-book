@@ -1,10 +1,19 @@
-import "./styles.css";
+import React from 'react'
+import { HashRouter as Router, Route, Switch, Redirect } from 'react-router-dom'
+import loadable from './utils/loadable'
+import 'animate.css'
+import './styles/base.scss'
+import './styles/App.scss'
 
-export default function App() {
-    return (
-        <div className="App">
-            <h1>Hello CodeSandbox</h1>
-            <h2>Start editing to see some magic happen!</h2>
-        </div>
-    );
-}
+const DefaultLayout = loadable(() => import(/* webpackChunkName: 'default' */ './containers'))
+
+const App = () => (
+    <Router>
+        <Switch>
+            <Route path='/' exact render={() => <Redirect to='/index' />} />
+            <Route component={DefaultLayout} />
+        </Switch>
+    </Router>
+)
+
+export default App

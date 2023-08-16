@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Layout, Icon } from 'antd'
-import CustomMenu from '@/components/CustomMenu'
+import CustomMenu from '../components/CustomMenu'
 
 const { Sider } = Layout
 
