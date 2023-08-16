@@ -3,7 +3,7 @@ import { Layout, Input, Icon, Form, Button, Divider, message, notification } fro
 import { withRouter } from 'react-router-dom'
 // import axios from '@/api'
 // import { API } from '@/api/config'
-import '@/style/view-style/login.scss'
+import '@/styles/view-style/login.scss'
 
 class Login extends Component {
     state = {

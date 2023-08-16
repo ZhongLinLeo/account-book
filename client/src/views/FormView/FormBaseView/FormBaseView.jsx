@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import CustomBreadcrumb from '../../../components/CustomBreadcrumb'
+import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 import {
     Alert,
     Layout,
@@ -23,7 +23,7 @@ import {
     AutoComplete,
     message
 } from 'antd'
-import '@/style/view-style/form.scss'
+import '@/styles/view-style/form.scss'
 
 const { Option } = Select
 const AutoCompleteOption = AutoComplete.Option
@@ -321,7 +321,7 @@ class FromView extends Component {
                                         valuePropName: 'checked'
                                     })(
                                         <Checkbox>
-                                            阅读并理解 <a href='https://github.com/ltadpoles'>此协议</a>
+                                            阅读并理解此协议
                                         </Checkbox>
                                     )}
                                 </Form.Item>

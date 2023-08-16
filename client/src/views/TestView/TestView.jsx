@@ -1,6 +1,6 @@
 import React from 'react'
 import { Layout, Divider } from 'antd'
-import CustomBreadcrumb from '../../components/CustomBreadcrumb'
+import CustomBreadcrumb from '@/components/CustomBreadcrumb'
 
 const TestView = () => (
     <Layout>
