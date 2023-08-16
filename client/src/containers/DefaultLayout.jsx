@@ -1,9 +1,9 @@
-import React, { Component } from 'react'
-import { Route, Switch, Redirect, withRouter } from 'react-router-dom'
-import { connect } from 'react-redux'
-import { Layout, BackTop, message } from 'antd'
+import React, {Component} from 'react'
+import {Route, Switch, Redirect, withRouter} from 'react-router-dom'
+import {connect} from 'react-redux'
+import {Layout, BackTop, message} from 'antd'
 import routes from '@/routes'
-import { menuToggleAction } from '@/store/actionCreators'
+import {menuToggleAction} from '@/store/actionCreators'
 import echarts from 'echarts/lib/echarts'
 import avatar from '@/assets/images/user.jpg'
 import menu from './menu'
@@ -13,7 +13,7 @@ import AppHeader from './AppHeader.jsx'
 import AppAside from './AppAside.jsx'
 import AppFooter from './AppFooter.jsx'
 
-const { Content } = Layout
+const {Content} = Layout
 
 class DefaultLayout extends Component {
     state = {
@@ -53,7 +53,7 @@ class DefaultLayout extends Component {
     }
 
     componentDidUpdate() {
-        let { pathname } = this.props.location
+        let {pathname} = this.props.location
 
         // 菜单收缩展开时 echarts 图表的自适应
         if (pathname === '/' || pathname === '/index') {
@@ -74,13 +74,13 @@ class DefaultLayout extends Component {
     }
 
     render() {
-        let { menuClick, menuToggle } = this.props
-        let { auth } = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : ''
+        let {menuClick, menuToggle} = this.props
+        let {auth} = JSON.parse(localStorage.getItem('user')) ? JSON.parse(localStorage.getItem('user')) : ''
         return (
             <Layout className='app'>
-                <BackTop />
-                <AppAside menuToggle={menuToggle} menu={this.state.menu} />
-                <Layout style={{ marginLeft: menuToggle ? '80px' : '200px', minHeight: '100vh' }}>
+                <BackTop/>
+                <AppAside menuToggle={menuToggle} menu={this.state.menu}/>
+                <Layout style={{marginLeft: menuToggle ? '80px' : '200px', minHeight: '100vh'}}>
                     <AppHeader
                         menuToggle={menuToggle}
                         menuClick={menuClick}
@@ -105,13 +105,13 @@ class DefaultLayout extends Component {
                                                 // 这里也可以跳转到 403 页面
                                                 <Redirect to='/404' {...props} />
                                             )
-                                        }></Route>
+                                        }/>
                                 )
                             })}
-                            <Redirect to='/404' />
+                            <Redirect to='/404'/>
                         </Switch>
                     </Content>
-                    <AppFooter />
+                    <AppFooter/>
                 </Layout>
             </Layout>
         )

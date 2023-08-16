@@ -36,29 +36,29 @@ const AppHeader = props => {
                     type={menuToggle ? 'menu-unfold' : 'menu-fold'}
                 />
             </div>
-            <div className='right'>
-                <div className='mr15'>
-                    <a rel='noopener noreferrer'  target='_blank'>
-                        {/*todo*/}
-                        <Icon type='github' style={{ color: '#000' }} />
-                    </a>
-                </div>
-                <div className='mr15'>
-                    <Badge dot={true} offset={[-2, 0]}>
-                        <a  style={{ color: '#000' }}>
-                            {/*todo*/}
-                            <Icon type='bell' />
-                        </a>
-                    </Badge>
-                </div>
-                <div>
-                    <Dropdown overlay={menu} overlayStyle={{ width: '20rem' }}>
-                        <div className='ant-dropdown-link'>
-                            <Avatar icon='user' src={avatar} alt='avatar' style={{ cursor: 'pointer' }} />
-                        </div>
-                    </Dropdown>
-                </div>
-            </div>
+            {/*<div className='right'>*/}
+            {/*    <div className='mr15'>*/}
+            {/*        <a rel='noopener noreferrer'  target='_blank'>*/}
+            {/*            /!*todo*!/*/}
+            {/*            <Icon type='github' style={{ color: '#000' }} />*/}
+            {/*        </a>*/}
+            {/*    </div>*/}
+            {/*    <div className='mr15'>*/}
+            {/*        <Badge dot={true} offset={[-2, 0]}>*/}
+            {/*            <a  style={{ color: '#000' }}>*/}
+            {/*                /!*todo*!/*/}
+            {/*                <Icon type='bell' />*/}
+            {/*            </a>*/}
+            {/*        </Badge>*/}
+            {/*    </div>*/}
+            {/*    <div>*/}
+            {/*        <Dropdown overlay={menu} overlayStyle={{ width: '20rem' }}>*/}
+            {/*            <div className='ant-dropdown-link'>*/}
+            {/*                <Avatar icon='user' src={avatar} alt='avatar' style={{ cursor: 'pointer' }} />*/}
+            {/*            </div>*/}
+            {/*        </Dropdown>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
         </Header>
     )
 }

@@ -15,7 +15,7 @@ const AppAside = props => {
                     <Icon type='github' style={{ fontSize: '3.8rem', color: '#fff' }} />
                 </a>
             </div>
-            <CustomMenu menu={menu}></CustomMenu>
+            <CustomMenu menu={menu}/>
         </Sider>
     )
 }
