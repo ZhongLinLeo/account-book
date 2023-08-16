@@ -29,7 +29,7 @@ class DefaultLayout extends Component {
     }
 
     getMenu = menu => {
-            return menu
+        return menu
     }
 
     componentDidMount() {
