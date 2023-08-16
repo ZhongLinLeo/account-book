@@ -25,3 +25,7 @@ hs_err_pid*
 .idea
 .idea/*
 *.iml
+
+package-lock.json
+node_modules/
+.eslintcache
