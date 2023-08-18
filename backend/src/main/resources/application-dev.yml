@@ -1,0 +1,38 @@
+spring:
+  datasource:
+    url: jdbc:h2:mem:h2-test;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
+    username: sa
+    password:
+    driver-class-name: org.h2.Driver
+    hikari: # http://blog.didispace.com/Springboot-2-0-HikariCP-default-reason/
+      minimum-idle: 1
+      maximum-pool-size: 5
+      auto-commit: true
+      idle-timeout: 30000
+      pool-name: H2HikariCP
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    show-sql: true
+    hibernate:
+      ddl-auto: update
+    properties:
+      hibernate:
+        use_sql_comments: true
+        format_sql: true
+  h2:
+    console:
+      # 进行该配置，程序开启时就会启动h2 web console。当然这是默认的，如果你不想在启动程序时启动h2 web console，那么就设置为false。
+      enabled: true
+      # 进行该配置，你就可以通过 URL/h2-console访问h2 web console。
+      path: /h2-console
+      settings:
+        trace: false
+        # 进行该配置后，h2 web console 就可以在远程访问了。否则只能在本机访问。
+        web-allow-others: false
+  sql:
+    init:
+      schema-locations: classpath:db/schema-h2.sql
+      data-locations: classpath:db/data-h2.sql

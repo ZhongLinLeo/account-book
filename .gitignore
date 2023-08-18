@@ -25,6 +25,7 @@ hs_err_pid*
 .idea
 .idea/*
 *.iml
+target/
 
 package-lock.json
 node_modules/
