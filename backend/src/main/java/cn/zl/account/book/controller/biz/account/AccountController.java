@@ -1,9 +1,11 @@
-package cn.leo.zl.ui.controller;
+package cn.zl.account.book.controller.biz.account;
 
-import cn.leo.zl.ui.dto.request.AccountReqDTO;
-import cn.leo.zl.ui.dto.response.AccountRespDTO;
+import cn.zl.account.book.controller.application.AccountAppService;
+import cn.zl.account.book.controller.request.AccountRequest;
+import cn.zl.account.book.controller.dto.AccountInfoDTO;
 import org.springframework.web.bind.annotation.*;
 
+import javax.annotation.Resource;
 import java.util.List;
 
 /**
@@ -15,11 +17,14 @@ import java.util.List;
 @RequestMapping("account")
 public class AccountController {
 
+    @Resource
+    private AccountAppService accountAppService;
+
     /**
      * list all account info
      */
     @GetMapping("list")
-    public List<AccountRespDTO> listAccount() {
+    public List<AccountInfoDTO> listAccount() {
         return null;
     }
 
@@ -29,7 +34,9 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PostMapping()
-    public Boolean createAccount(@RequestBody AccountReqDTO accountReq) {
+    public Boolean createAccount(@RequestBody AccountRequest accountReq) {
+
+
 
         return null;
     }
@@ -41,7 +48,7 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PutMapping("{accountId}")
-    public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountReqDTO accountReq) {
+    public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequest accountReq) {
 
         return null;
     }

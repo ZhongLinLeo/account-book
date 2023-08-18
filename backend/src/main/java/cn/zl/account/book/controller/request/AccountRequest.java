@@ -1,16 +1,14 @@
-package cn.leo.zl.ui.dto.response;
+package cn.zl.account.book.controller.request;
 
 import lombok.Data;
 
 /**
- * account view info
+ * account create
  *
  * @author create by leo.zl on 2023/8/17
  */
 @Data
-public class AccountRespDTO {
-
-    private Long  accountId;
+public class AccountRequest {
 
     private String  accountName;
 
@@ -18,7 +16,4 @@ public class AccountRespDTO {
 
     private Long  accountBalance;
 
-    private Long  accountIncome;
-
-    private Long  accountExpenditure;
 }
