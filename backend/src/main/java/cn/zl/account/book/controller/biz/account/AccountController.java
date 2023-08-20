@@ -1,12 +1,15 @@
 package cn.zl.account.book.controller.biz.account;
 
+import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
-import cn.zl.account.book.controller.request.AccountRequest;
+import cn.zl.account.book.controller.converter.AccountConverter;
 import cn.zl.account.book.controller.dto.AccountInfoDTO;
+import cn.zl.account.book.controller.request.AccountRequest;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * account controller
@@ -25,7 +28,10 @@ public class AccountController {
      */
     @GetMapping("list")
     public List<AccountInfoDTO> listAccount() {
-        return null;
+
+        List<AccountInfo> accountInfos = accountAppService.listAccount();
+
+       return accountInfos.stream().map(AccountConverter::accountInfo2AccountResp).collect(Collectors.toList());
     }
 
     /**
@@ -35,10 +41,9 @@ public class AccountController {
      */
     @PostMapping()
     public Boolean createAccount(@RequestBody AccountRequest accountReq) {
+        final AccountInfo accountInfo = AccountConverter.accountRequest2AccountInfo(accountReq);
 
-
-
-        return null;
+        return accountAppService.createAccount(accountInfo);
     }
 
     /**
@@ -49,8 +54,9 @@ public class AccountController {
      */
     @PutMapping("{accountId}")
     public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequest accountReq) {
-
-        return null;
+        final AccountInfo accountInfo = AccountConverter.accountRequest2AccountInfo(accountReq);
+        accountInfo.setAccountId(accountId);
+        return accountAppService.modifyAccount(accountInfo);
     }
 
     /**
@@ -60,7 +66,6 @@ public class AccountController {
      */
     @DeleteMapping("{accountId}")
     public Boolean delAccount(@PathVariable Long accountId) {
-
-        return null;
+        return accountAppService.delAccount(accountId);
     }
 }

@@ -1,6 +1,7 @@
 package cn.zl.account.book.controller.converter;
 
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.controller.dto.AccountInfoDTO;
 import cn.zl.account.book.controller.request.AccountRequest;
 
 /**
@@ -10,8 +11,7 @@ import cn.zl.account.book.controller.request.AccountRequest;
  */
 public final class AccountConverter {
 
-
-    public AccountInfo accountRequest2AccountInfo(AccountRequest accountRequest) {
+    public static AccountInfo accountRequest2AccountInfo(AccountRequest accountRequest) {
         return AccountInfo.builder()
                 .accountName(accountRequest.getAccountName())
                 .accountDescribe(accountRequest.getAccountDescribe())
@@ -19,6 +19,17 @@ public final class AccountConverter {
                 .build();
     }
 
+
+    public static AccountInfoDTO accountInfo2AccountResp(AccountInfo accountInfo) {
+        return AccountInfoDTO.builder()
+                .accountId(accountInfo.getAccountId())
+                .accountName(accountInfo.getAccountName())
+                .accountDescribe(accountInfo.getAccountDescribe())
+                .accountBalance(accountInfo.getAccountBalance())
+                .accountIncome(accountInfo.getAccountIncome())
+                .accountExpenditure(accountInfo.getAccountExpenditure())
+                .build();
+    }
 
     private AccountConverter() {
     }

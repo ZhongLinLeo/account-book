@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.dto;
 
+import lombok.Builder;
 import lombok.Data;
 
 /**
@@ -7,6 +8,7 @@ import lombok.Data;
  *
  * @author create by leo.zl on 2023/8/17
  */
+@Builder
 @Data
 public class AccountInfoDTO {
 
