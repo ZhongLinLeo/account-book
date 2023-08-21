@@ -3,8 +3,8 @@ package cn.zl.account.book.controller.biz.account;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.converter.AccountConverter;
-import cn.zl.account.book.controller.dto.AccountInfoDTO;
-import cn.zl.account.book.controller.request.AccountRequest;
+import cn.zl.account.book.controller.response.AccountInfoResponseDTO;
+import cn.zl.account.book.controller.request.AccountRequestDTO;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -27,7 +27,7 @@ public class AccountController {
      * list all account info
      */
     @GetMapping("list")
-    public List<AccountInfoDTO> listAccount() {
+    public List<AccountInfoResponseDTO> listAccount() {
 
         List<AccountInfo> accountInfos = accountAppService.listAccount();
 
@@ -40,7 +40,7 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PostMapping()
-    public Boolean createAccount(@RequestBody AccountRequest accountReq) {
+    public Boolean createAccount(@RequestBody AccountRequestDTO accountReq) {
         final AccountInfo accountInfo = AccountConverter.accountRequest2AccountInfo(accountReq);
 
         return accountAppService.createAccount(accountInfo);
@@ -53,7 +53,7 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PutMapping("{accountId}")
-    public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequest accountReq) {
+    public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequestDTO accountReq) {
         final AccountInfo accountInfo = AccountConverter.accountRequest2AccountInfo(accountReq);
         accountInfo.setAccountId(accountId);
         return accountAppService.modifyAccount(accountInfo);

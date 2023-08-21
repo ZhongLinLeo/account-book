@@ -8,7 +8,7 @@ import lombok.Data;
  * @author create by leo.zl on 2023/8/17
  */
 @Data
-public class AccountRequest {
+public class AccountRequestDTO {
 
     private String  accountName;
 

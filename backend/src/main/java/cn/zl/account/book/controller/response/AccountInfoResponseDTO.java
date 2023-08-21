@@ -1,4 +1,4 @@
-package cn.zl.account.book.controller.dto;
+package cn.zl.account.book.controller.response;
 
 import lombok.Builder;
 import lombok.Data;
@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Builder
 @Data
-public class AccountInfoDTO {
+public class AccountInfoResponseDTO {
 
     private Long  accountId;
 
