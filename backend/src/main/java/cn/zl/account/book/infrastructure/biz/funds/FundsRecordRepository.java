@@ -8,5 +8,5 @@ import org.springframework.stereotype.Repository;
  * @author lin.zl
  */
 @Repository
-public interface FundsRecordRepository extends PagingAndSortingRepository<Long, FundsRecordEntity> {
+public interface FundsRecordRepository extends PagingAndSortingRepository<FundsRecordEntity, Long> {
 }
