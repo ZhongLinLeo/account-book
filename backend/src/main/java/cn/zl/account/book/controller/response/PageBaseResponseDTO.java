@@ -33,4 +33,9 @@ public class PageBaseResponseDTO<T> extends BaseResponseDTO {
         response.setTotalSize(totalSize);
         return response;
     }
+
+    public static <T> PageBaseResponseDTO<T> wrapSuccessPageResponse(Integer pageSize, Integer pageNumber,
+                                                                     Long totalSize, List<T> content) {
+        return wrapPageResponse(ResponseStatusEnum.SUCCESS, pageSize, pageNumber, totalSize, content);
+    }
 }

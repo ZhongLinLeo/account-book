@@ -20,8 +20,8 @@ import java.util.stream.Collectors;
  * @author lin.zl
  */
 @RestController
-@RequestMapping("fund_record")
-public class FundRecordController {
+@RequestMapping("funds_record")
+public class FundsRecordController {
 
     @Resource
     private FundsRecordAppService fundsRecordAppService;
@@ -35,8 +35,8 @@ public class FundRecordController {
                 .map(FundsRecordConverter::info2Resp)
                 .collect(Collectors.toList());
 
-        return PageBaseResponseDTO.wrapPageResponse(ResponseStatusEnum.SUCCESS, paginationReq.getPageSize(),
-                paginationReq.getPageNumber(), fundsRecords.getTotalElements(), content);
+        return PageBaseResponseDTO.wrapSuccessPageResponse(paginationReq.getPageSize(), paginationReq.getPageNumber(),
+                fundsRecords.getTotalElements(), content);
     }
 
     @PostMapping()
@@ -47,21 +47,21 @@ public class FundRecordController {
     }
 
     @PutMapping()
-    public NormalResponseDTO<Boolean> modifyFundRecord(FundsRecordRequestDTO fundsRecordReq) {
+    public NormalResponseDTO<Boolean> modifyFundsRecord(FundsRecordRequestDTO fundsRecordReq) {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
-        fundsRecordAppService.modifyFundRecord(fundsRecordInfo);
+        fundsRecordAppService.modifyFundsRecord(fundsRecordInfo);
 
         return NormalResponseDTO.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
     @DeleteMapping("{recordId}")
-    public NormalResponseDTO<Boolean> delFundRecord(@PathVariable Long recordId) {
-        fundsRecordAppService.delFundRecord(recordId);
+    public NormalResponseDTO<Boolean> delFundsRecord(@PathVariable Long recordId) {
+        fundsRecordAppService.delFundsRecord(recordId);
         return NormalResponseDTO.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
     @PostMapping("import")
-    public NormalResponseDTO<Boolean> importFundRecords() {
+    public NormalResponseDTO<Boolean> importFundsRecord() {
         // todo
 
         return NormalResponseDTO.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);

@@ -34,12 +34,12 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     }
 
     @Override
-    public void modifyFundRecord(FundsRecordInfo fundsRecordInfo) {
+    public void modifyFundsRecord(FundsRecordInfo fundsRecordInfo) {
         fundsRecordDomainService.modifyFundRecord(fundsRecordInfo);
     }
 
     @Override
-    public void delFundRecord(Long recordId) {
+    public void delFundsRecord(Long recordId) {
         fundsRecordDomainService.delFundRecord(recordId);
     }
 

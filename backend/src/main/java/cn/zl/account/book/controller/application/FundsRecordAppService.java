@@ -21,14 +21,14 @@ public interface FundsRecordAppService {
      *
      * @param fundsRecordInfo funds record info
      */
-    void modifyFundRecord(FundsRecordInfo fundsRecordInfo);
+    void modifyFundsRecord(FundsRecordInfo fundsRecordInfo);
 
     /**
      * del record
      *
      * @param recordId funds record id
      */
-    void delFundRecord(Long recordId);
+    void delFundsRecord(Long recordId);
 
     /**
      * query record
