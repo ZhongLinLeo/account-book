@@ -11,7 +11,7 @@ import cn.zl.account.book.controller.request.AccountRequestDTO;
  */
 public final class AccountConverter {
 
-    public static AccountInfo accountRequest2AccountInfo(AccountRequestDTO accountRequest) {
+    public static AccountInfo req2Info(AccountRequestDTO accountRequest) {
         return AccountInfo.builder()
                 .accountName(accountRequest.getAccountName())
                 .accountDescribe(accountRequest.getAccountDescribe())
@@ -19,8 +19,7 @@ public final class AccountConverter {
                 .build();
     }
 
-
-    public static AccountInfoResponseDTO accountInfo2AccountResp(AccountInfo accountInfo) {
+    public static AccountInfoResponseDTO info2Resp(AccountInfo accountInfo) {
         return AccountInfoResponseDTO.builder()
                 .accountId(accountInfo.getAccountId())
                 .accountName(accountInfo.getAccountName())

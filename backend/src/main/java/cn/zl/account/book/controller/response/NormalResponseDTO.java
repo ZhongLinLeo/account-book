@@ -31,4 +31,8 @@ public class NormalResponseDTO<T> extends BaseResponseDTO{
         response.setResponseContent(responseContent);
         return  response;
     }
+
+    public static <T> NormalResponseDTO<T> wrapSuccessResponse(T responseContent){
+        return  wrapResponse(ResponseStatusEnum.SUCCESS,responseContent);
+    }
 }

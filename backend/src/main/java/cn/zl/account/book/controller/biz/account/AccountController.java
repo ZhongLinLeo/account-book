@@ -31,7 +31,7 @@ public class AccountController {
 
         List<AccountInfo> accountInfos = accountAppService.listAccount();
 
-       return accountInfos.stream().map(AccountConverter::accountInfo2AccountResp).collect(Collectors.toList());
+       return accountInfos.stream().map(AccountConverter::info2Resp).collect(Collectors.toList());
     }
 
     /**
@@ -41,7 +41,7 @@ public class AccountController {
      */
     @PostMapping()
     public Boolean createAccount(@RequestBody AccountRequestDTO accountReq) {
-        final AccountInfo accountInfo = AccountConverter.accountRequest2AccountInfo(accountReq);
+        final AccountInfo accountInfo = AccountConverter.req2Info(accountReq);
 
         return accountAppService.createAccount(accountInfo);
     }
@@ -54,7 +54,7 @@ public class AccountController {
      */
     @PutMapping("{accountId}")
     public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequestDTO accountReq) {
-        final AccountInfo accountInfo = AccountConverter.accountRequest2AccountInfo(accountReq);
+        final AccountInfo accountInfo = AccountConverter.req2Info(accountReq);
         accountInfo.setAccountId(accountId);
         return accountAppService.modifyAccount(accountInfo);
     }

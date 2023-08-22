@@ -9,7 +9,7 @@ import cn.zl.account.book.controller.response.FundsRecordResponseDTO;
  */
 public final class FundsRecordConverter {
 
-    public static FundsRecordResponseDTO fundsRecordInfo2FundsRecord(FundsRecordInfo fundsRecordInfo){
+    public static FundsRecordResponseDTO info2Resp(FundsRecordInfo fundsRecordInfo){
 
         FundsRecordResponseDTO resp = new FundsRecordResponseDTO();
         resp.setFundsAccountId(fundsRecordInfo.getFundsAccountId());
@@ -22,7 +22,7 @@ public final class FundsRecordConverter {
         return resp;
     }
 
-    public static FundsRecordInfo fundsRecordReq2FundsRecordInfo(FundsRecordRequestDTO fundsRecordReq){
+    public static FundsRecordInfo req2Info(FundsRecordRequestDTO fundsRecordReq){
         FundsRecordInfo info = new FundsRecordInfo();
         info.setFundsRecordClassifyId(fundsRecordReq.getFundsRecordClassifyId());
         info.setFundsRecordTime(fundsRecordReq.getFundsRecordTime());

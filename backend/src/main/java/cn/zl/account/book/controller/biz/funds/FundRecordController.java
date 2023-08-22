@@ -32,7 +32,7 @@ public class FundRecordController {
         Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(paginationReq);
 
         List<FundsRecordResponseDTO> content = fundsRecords.get()
-                .map(FundsRecordConverter::fundsRecordInfo2FundsRecord)
+                .map(FundsRecordConverter::info2Resp)
                 .collect(Collectors.toList());
 
         return PageBaseResponseDTO.wrapPageResponse(ResponseStatusEnum.SUCCESS, paginationReq.getPageSize(),
@@ -41,14 +41,14 @@ public class FundRecordController {
 
     @PostMapping()
     public NormalResponseDTO<Boolean> recordFunds(FundsRecordRequestDTO fundsRecordReq) {
-        FundsRecordInfo fundsRecordInfo = FundsRecordConverter.fundsRecordReq2FundsRecordInfo(fundsRecordReq);
+        FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordAppService.recordFunds(fundsRecordInfo);
         return NormalResponseDTO.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
     @PutMapping()
     public NormalResponseDTO<Boolean> modifyFundRecord(FundsRecordRequestDTO fundsRecordReq) {
-        FundsRecordInfo fundsRecordInfo = FundsRecordConverter.fundsRecordReq2FundsRecordInfo(fundsRecordReq);
+        FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordAppService.modifyFundRecord(fundsRecordInfo);
 
         return NormalResponseDTO.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
