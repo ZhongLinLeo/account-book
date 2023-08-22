@@ -27,7 +27,6 @@ public class PageResponseDTO<T> extends ResponseDTO<T>{
         response.setResponseMessage(responseStatus.getResponseMessage());
 
         response.setResponseContent(content);
-
         response.setPageSize(page.getSize());
         response.setPageNumber(page.getNumber());
         response.setTotalSize(page.getTotalElements());
