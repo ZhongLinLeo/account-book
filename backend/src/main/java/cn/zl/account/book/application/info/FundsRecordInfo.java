@@ -2,6 +2,8 @@ package cn.zl.account.book.application.info;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
@@ -10,19 +12,17 @@ public class FundsRecordInfo {
 
     private Long fundsRecordId;
 
-    private Long balance;
+    private Long fundsRecordBalance;
 
-    private String fundsRemark;
+    private LocalDateTime fundsRecordTime;
 
-    private String fundsTime;
+    private String fundsRecordDescribe;
 
-    /**
-     * fund code
-     */
-    private Integer fundsCode;
+    private String fundsRecordRemark;
 
-    /**
-     * account relation
-     */
-    private Long accountId;
+    private Long fundsRecordClassifyId;
+
+    private Long fundsAccountId;
+
+    private Long fundsUserId;
 }

@@ -11,22 +11,22 @@ public final class FundsRecordEntityConverter {
     public static FundsRecordInfo entity2Info(FundsRecordEntity entity){
         FundsRecordInfo info = new FundsRecordInfo();
         info.setFundsRecordId(entity.getFundsRecordId());
-        info.setFundsCode(entity.getFundsCode());
-        info.setFundsRemark(entity.getFundsRemark());
-        info.setFundsTime(entity.getFundsTime());
-        info.setBalance(entity.getBalance());
-        info.setAccountId(entity.getAccountId());
+        info.setFundsRecordClassifyId(entity.getFundsRecordClassifyId());
+        info.setFundsRecordDescribe(entity.getFundsRecordDescribe());
+        info.setFundsRecordRemark(entity.getFundsRecordRemark());
+        info.setFundsRecordBalance(entity.getFundsRecordBalance());
+        info.setFundsAccountId(entity.getFundsAccountId());
         return info;
     }
 
     public static FundsRecordEntity info2Entity(FundsRecordInfo info){
         FundsRecordEntity entity = new FundsRecordEntity();
         entity.setFundsRecordId(info.getFundsRecordId());
-        entity.setFundsCode(info.getFundsCode());
-        entity.setFundsRemark(info.getFundsRemark());
-        entity.setFundsTime(info.getFundsTime());
-        entity.setBalance(info.getBalance());
-        entity.setAccountId(info.getAccountId());
+        entity.setFundsRecordClassifyId(info.getFundsRecordClassifyId());
+        entity.setFundsRecordRemark(info.getFundsRecordRemark());
+        entity.setFundsRecordTime(info.getFundsRecordTime());
+        entity.setFundsRecordBalance(info.getFundsRecordBalance());
+        entity.setFundsAccountId(info.getFundsAccountId());
         return entity;
     }
 

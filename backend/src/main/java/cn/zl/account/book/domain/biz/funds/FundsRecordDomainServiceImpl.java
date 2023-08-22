@@ -5,7 +5,7 @@ import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
-import cn.zl.account.book.infrastructure.utils.SnowIdUtil;
+import cn.zl.account.book.domain.utils.SnowIdUtil;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;

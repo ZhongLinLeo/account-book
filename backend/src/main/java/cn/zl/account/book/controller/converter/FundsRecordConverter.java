@@ -12,29 +12,25 @@ public final class FundsRecordConverter {
     public static FundsRecordResponseDTO fundsRecordInfo2FundsRecord(FundsRecordInfo fundsRecordInfo){
 
         FundsRecordResponseDTO resp = new FundsRecordResponseDTO();
-        resp.setFundsRecordId(fundsRecordInfo.getFundsRecordId());
-        resp.setFundsCode(fundsRecordInfo.getFundsCode());
-        resp.setFundsRemark(fundsRecordInfo.getFundsRemark());
-        resp.setFundsTime(fundsRecordInfo.getFundsTime());
-        resp.setBalance(fundsRecordInfo.getBalance());
-        resp.setAccountId(fundsRecordInfo.getAccountId());
+        resp.setFundsAccountId(fundsRecordInfo.getFundsAccountId());
+        resp.setFundsRecordRemark(fundsRecordInfo.getFundsRecordRemark());
+        resp.setFundsRecordBalance(fundsRecordInfo.getFundsRecordBalance());
+        resp.setFundsRecordClassifyId(fundsRecordInfo.getFundsRecordClassifyId());
+        resp.setFundsRecordTime(fundsRecordInfo.getFundsRecordTime());
+        resp.setFundsRecordDescribe(fundsRecordInfo.getFundsRecordDescribe());
 
         return resp;
     }
 
     public static FundsRecordInfo fundsRecordReq2FundsRecordInfo(FundsRecordRequestDTO fundsRecordReq){
-
         FundsRecordInfo info = new FundsRecordInfo();
-        info.setFundsCode(fundsRecordReq.getFundsCode());
-        info.setFundsRemark(fundsRecordReq.getFundsRemark());
-        info.setFundsTime(fundsRecordReq.getFundsTime());
-        info.setBalance(fundsRecordReq.getBalance());
-        info.setAccountId(fundsRecordReq.getAccountId());
+        info.setFundsRecordClassifyId(fundsRecordReq.getFundsRecordClassifyId());
+        info.setFundsRecordTime(fundsRecordReq.getFundsRecordTime());
 
         return info;
     }
 
-
     private FundsRecordConverter() {
+        // non
     }
 }

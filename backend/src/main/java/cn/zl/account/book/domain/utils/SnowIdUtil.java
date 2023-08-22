@@ -1,4 +1,4 @@
-package cn.zl.account.book.infrastructure.utils;
+package cn.zl.account.book.domain.utils;
 
 /**
  * snow id

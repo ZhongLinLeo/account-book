@@ -5,7 +5,7 @@ import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.infrastructure.biz.account.AccountRepository;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
-import cn.zl.account.book.infrastructure.utils.SnowIdUtil;
+import cn.zl.account.book.domain.utils.SnowIdUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 

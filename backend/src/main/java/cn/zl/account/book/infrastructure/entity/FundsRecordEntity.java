@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 /**
  * @author lin.zl
@@ -19,13 +20,17 @@ public class FundsRecordEntity extends EntityBase{
     @Id
     private Long fundsRecordId;
 
-    private Long balance;
+    private Long fundsRecordBalance;
 
-    private String fundsRemark;
+    private LocalDateTime fundsRecordTime;
 
-    private String fundsTime;
+    private String fundsRecordDescribe;
 
-    private Integer fundsCode;
+    private String fundsRecordRemark;
 
-    private Long accountId;
+    private Long fundsRecordClassifyId;
+
+    private Long fundsAccountId;
+
+    private Long fundsUserId;
 }

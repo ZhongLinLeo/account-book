@@ -2,27 +2,25 @@ package cn.zl.account.book.controller.response;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
 @Data
 public class FundsRecordResponseDTO {
 
-    private Long fundsRecordId;
+    private Long fundsRecordBalance;
 
-    private Long balance;
+    private LocalDateTime fundsRecordTime;
 
-    private String fundsRemark;
+    private String fundsRecordDescribe;
 
-    private String fundsTime;
+    private String fundsRecordRemark;
 
-    /**
-     * fund code
-     */
-    private Integer fundsCode;
+    private Long fundsRecordClassifyId;
 
-    /**
-     * account relation
-     */
-    private Long accountId;
+    private Long fundsAccountId;
+
+    private Long fundsUserId;
 }
