@@ -30,7 +30,7 @@
 | funds_record_balance     | bigint       | not null | 资金记录金额                 |
 | funds_record_time        | timestamp    | not null | 资金记录时间                 |
 | funds_record_describe    | varchar(128) | not null | 资金记录描述                 |
-| funds_record_remark      | varchar(128) |          | 资金记录备注                 |
+| funds_record_remark      | varchar(128) |  null        | 资金记录备注                 |
 | funds_record_classify_id | bigint       | not null | 资金记录分类ID               |
 | funds_account_id         | bigint       | null     | 资金来源账户ID               |
 | funds_user_id            | bigint       | not null | 资金使用人                  |
@@ -47,8 +47,8 @@
 | ------------- | ----------- | -------- | -------------------------- |
 | user_id       | bigint      | not null | 用户ID                     |
 | user_name     | varchar(8)  | not null | 用户名称                    |
-| user_remark   | varchar(32) | not null | 用户备注                    |
-| user_password | varchar(32) | not null | 用户密码                    |
+| user_remark   | varchar(32) |  null | 用户备注                    |
+| user_password | varchar(32) |  null | 用户密码                    |
 | create_time   | timestamp   | not null | 创建时间                    |
 | modify_time   | timestamp   | not null | 修改时间                    |
 | invalid       | tinyint     | 0        | 删除标识位，0：未删除，1：删除 |
