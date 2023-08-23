@@ -37,7 +37,6 @@ public class FundsRecordClassifyController {
 
         fundsRecordClassifyAppService.modifyClassify(fundsRecordClassifyInfo);
 
-
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
@@ -49,7 +48,6 @@ public class FundsRecordClassifyController {
 
     @DeleteMapping("list")
     public NormalResponse<List<FundsRecordClassifyResponseDTO>> listClassify() {
-
         List<FundsRecordClassifyInfo> classifyInfos = fundsRecordClassifyAppService.listClassify();
         List<FundsRecordClassifyResponseDTO> responseList = classifyInfos.stream()
                 .map(FundsRecordClassifyConverter::info2Resp)
@@ -57,6 +55,4 @@ public class FundsRecordClassifyController {
 
         return NormalResponse.wrapSuccessResponse(responseList);
     }
-
-
 }
