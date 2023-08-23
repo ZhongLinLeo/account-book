@@ -11,7 +11,7 @@ import java.util.List;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class PageBaseResponseDTO<T> extends BaseResponseDTO {
+public class PageBaseResponse<T> extends BaseResponse {
     private Integer pageSize;
 
     private Integer pageNumber;
@@ -20,10 +20,10 @@ public class PageBaseResponseDTO<T> extends BaseResponseDTO {
 
     private List<T> responseContent;
 
-    public static <T> PageBaseResponseDTO<T> wrapPageResponse(ResponseStatusEnum responseStatus,
-                                                              Integer pageSize, Integer pageNumber,
-                                                              Long totalSize, List<T> content) {
-        PageBaseResponseDTO<T> response = new PageBaseResponseDTO<>();
+    public static <T> PageBaseResponse<T> wrapPageResponse(ResponseStatusEnum responseStatus,
+                                                           Integer pageSize, Integer pageNumber,
+                                                           Long totalSize, List<T> content) {
+        PageBaseResponse<T> response = new PageBaseResponse<>();
         response.setResponseCode(responseStatus.getResponseCode());
         response.setResponseMessage(responseStatus.getResponseMessage());
 
@@ -34,8 +34,8 @@ public class PageBaseResponseDTO<T> extends BaseResponseDTO {
         return response;
     }
 
-    public static <T> PageBaseResponseDTO<T> wrapSuccessPageResponse(Integer pageSize, Integer pageNumber,
-                                                                     Long totalSize, List<T> content) {
+    public static <T> PageBaseResponse<T> wrapSuccessPageResponse(Integer pageSize, Integer pageNumber,
+                                                                  Long totalSize, List<T> content) {
         return wrapPageResponse(ResponseStatusEnum.SUCCESS, pageSize, pageNumber, totalSize, content);
     }
 }

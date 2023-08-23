@@ -9,30 +9,30 @@ import lombok.EqualsAndHashCode;
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
-public class NormalResponseDTO<T> extends BaseResponseDTO{
+public class NormalResponse<T> extends BaseResponse {
 
     private T responseContent;
 
-    public NormalResponseDTO() {
+    public NormalResponse() {
     }
 
-    public static <T> NormalResponseDTO<T> wrapResponse(Integer responseCode, String responseMessage, T responseContent){
-        NormalResponseDTO<T> response = new NormalResponseDTO<>();
+    public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage, T responseContent){
+        NormalResponse<T> response = new NormalResponse<>();
         response.setResponseCode(responseCode);
         response.setResponseMessage(responseMessage);
         response.setResponseContent(responseContent);
         return  response;
     }
 
-    public static <T> NormalResponseDTO<T> wrapResponse(ResponseStatusEnum responseStatus, T responseContent){
-        NormalResponseDTO<T> response = new NormalResponseDTO<>();
+    public static <T> NormalResponse<T> wrapResponse(ResponseStatusEnum responseStatus, T responseContent){
+        NormalResponse<T> response = new NormalResponse<>();
         response.setResponseCode(responseStatus.getResponseCode());
         response.setResponseMessage(responseStatus.getResponseMessage());
         response.setResponseContent(responseContent);
         return  response;
     }
 
-    public static <T> NormalResponseDTO<T> wrapSuccessResponse(T responseContent){
+    public static <T> NormalResponse<T> wrapSuccessResponse(T responseContent){
         return  wrapResponse(ResponseStatusEnum.SUCCESS,responseContent);
     }
 }

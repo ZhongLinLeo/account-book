@@ -5,7 +5,7 @@ import cn.zl.account.book.controller.application.FundsRecordClassifyAppService;
 import cn.zl.account.book.controller.converter.FundsRecordClassifyConverter;
 import cn.zl.account.book.controller.request.FundsRecordClassifyRequestDTO;
 import cn.zl.account.book.controller.response.FundsRecordClassifyResponseDTO;
-import cn.zl.account.book.controller.response.NormalResponseDTO;
+import cn.zl.account.book.controller.response.NormalResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -22,40 +22,40 @@ public class FundsRecordClassifyController {
     private FundsRecordClassifyAppService fundsRecordClassifyAppService;
 
     @PostMapping()
-    public NormalResponseDTO<Boolean> addClassify(FundsRecordClassifyRequestDTO fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> addClassify(FundsRecordClassifyRequestDTO fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.addClassify(fundsRecordClassifyInfo);
 
-        return NormalResponseDTO.wrapSuccessResponse(Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
 
     @PutMapping()
-    public NormalResponseDTO<Boolean> modifyClassify(FundsRecordClassifyRequestDTO fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> modifyClassify(FundsRecordClassifyRequestDTO fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.modifyClassify(fundsRecordClassifyInfo);
 
 
-        return NormalResponseDTO.wrapSuccessResponse(Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     @DeleteMapping("{classifyId}")
-    public NormalResponseDTO<Boolean> delClassify(@PathVariable Long classifyId) {
+    public NormalResponse<Boolean> delClassify(@PathVariable Long classifyId) {
         fundsRecordClassifyAppService.delClassify(classifyId);
-        return NormalResponseDTO.wrapSuccessResponse(Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     @DeleteMapping("list")
-    public NormalResponseDTO<List<FundsRecordClassifyResponseDTO>> listClassify() {
+    public NormalResponse<List<FundsRecordClassifyResponseDTO>> listClassify() {
 
         List<FundsRecordClassifyInfo> classifyInfos = fundsRecordClassifyAppService.listClassify();
         List<FundsRecordClassifyResponseDTO> responseList = classifyInfos.stream()
                 .map(FundsRecordClassifyConverter::info2Resp)
                 .collect(Collectors.toList());
 
-        return NormalResponseDTO.wrapSuccessResponse(responseList);
+        return NormalResponse.wrapSuccessResponse(responseList);
     }
 
 
