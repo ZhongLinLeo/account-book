@@ -3,6 +3,7 @@ package cn.zl.account.book.controller.application;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.request.PaginationFundsRecordRequestDTO;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author lin.zl
@@ -37,4 +38,11 @@ public interface FundsRecordAppService {
      * @return page info
      */
     Page<FundsRecordInfo> paginationFundsRecord(PaginationFundsRecordRequestDTO paginationReq);
+
+    /**
+     * import funds records
+     *
+     * @param excelFile excel file
+     */
+    void importFundsRecord(MultipartFile excelFile);
 }

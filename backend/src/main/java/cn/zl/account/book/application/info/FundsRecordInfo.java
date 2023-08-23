@@ -22,7 +22,11 @@ public class FundsRecordInfo {
 
     private Long fundsRecordClassifyId;
 
+    private String fundsRecordClassifyName;
+
     private Long fundsAccountId;
 
     private Long fundsUserId;
+
+    private Long fundsUserName;
 }

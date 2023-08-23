@@ -9,10 +9,16 @@ import cn.zl.account.book.controller.request.PaginationFundsRecordRequestDTO;
 import cn.zl.account.book.controller.response.FundsRecordResponseDTO;
 import cn.zl.account.book.controller.response.NormalResponse;
 import cn.zl.account.book.controller.response.PageBaseResponse;
+import org.apache.poi.xssf.usermodel.XSSFCell;
+import org.apache.poi.xssf.usermodel.XSSFRow;
+import org.apache.poi.xssf.usermodel.XSSFSheet;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -61,9 +67,8 @@ public class FundsRecordController {
     }
 
     @PostMapping("import")
-    public NormalResponse<Boolean> importFundsRecord() {
-        // todo
-
+    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file")MultipartFile excelFile) throws IOException {
+        fundsRecordAppService.importFundsRecord(excelFile);
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 

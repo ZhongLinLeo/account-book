@@ -11,6 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
@@ -54,5 +55,10 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
                 .collect(Collectors.toList());
 
         return new PageImpl<>(content,pageRequest,fundsRecords.getTotalElements());
+    }
+
+    @Override
+    public void importFundsRecord(MultipartFile excelFile) {
+        fundsRecordDomainService.importFundsRecord(excelFile);
     }
 }
