@@ -5,8 +5,12 @@ import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.domain.util.FundsRecordConstants;
 import cn.zl.account.book.domain.utils.SnowIdUtil;
+import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
+import cn.zl.account.book.infrastructure.biz.user.UserRepository;
+import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
+import cn.zl.account.book.infrastructure.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
@@ -18,6 +22,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 import static cn.zl.account.book.domain.util.FundsRecordConstants.*;
 
@@ -30,6 +35,12 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
 
     @Resource
     private FundsRecordRepository fundsRecordRepository;
+
+    @Resource
+    private UserRepository userRepository;
+
+    @Resource
+    private FundsRecordClassifyRepository fundsRecordClassifyRepository;
 
     @Override
     public void recordFunds(FundsRecordInfo fundsRecordInfo) {
@@ -73,8 +84,8 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
 
         initExcelField(worksheet);
 
-        Map<String, Long> classifyMap = new HashMap<>();
-        Map<String, Long> userMap = new HashMap<>();
+        Map<String, Long> classifyMap = findClassifyMap();
+        Map<String, Long> userMap = findUserMap();
 
         List<FundsRecordEntity> entities = new ArrayList<>();
         int number = worksheet.getPhysicalNumberOfRows();
@@ -109,13 +120,27 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
         return entities;
     }
 
+    private Map<String, Long> findUserMap() {
+        return userRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(UserEntity::getUserName, UserEntity::getUserId, (o, n) -> n));
+    }
+
+    private Map<String, Long> findClassifyMap() {
+        return fundsRecordClassifyRepository.findAll()
+                .stream()
+                .collect(Collectors.toMap(FundsRecordClassifyEntity::getClassifyName,
+                        FundsRecordClassifyEntity::getClassifyId, (o, n) -> n));
+
+    }
+
     private void initExcelField(XSSFSheet worksheet) {
         XSSFRow fieldRow = worksheet.getRow(0);
         int cellNum = fieldRow.getPhysicalNumberOfCells();
         for (int i = 0; i < cellNum; i++) {
             XSSFCell cell = fieldRow.getCell(i);
             String cellName = cell.getStringCellValue();
-            FundsRecordConstants.putValue(cellName,i);
+            FundsRecordConstants.putValue(cellName, i);
         }
     }
 
