@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("user")
+@CrossOrigin
 public class UserController {
 
     @Resource

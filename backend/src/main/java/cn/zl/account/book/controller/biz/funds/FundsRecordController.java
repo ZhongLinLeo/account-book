@@ -9,10 +9,6 @@ import cn.zl.account.book.controller.request.PaginationFundsRecordRequestDTO;
 import cn.zl.account.book.controller.response.FundsRecordResponseDTO;
 import cn.zl.account.book.controller.response.NormalResponse;
 import cn.zl.account.book.controller.response.PageBaseResponse;
-import org.apache.poi.xssf.usermodel.XSSFCell;
-import org.apache.poi.xssf.usermodel.XSSFRow;
-import org.apache.poi.xssf.usermodel.XSSFSheet;
-import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +23,7 @@ import java.util.stream.Collectors;
  */
 @RestController
 @RequestMapping("funds_record")
+@CrossOrigin
 public class FundsRecordController {
 
     @Resource
