@@ -6,6 +6,8 @@ import cn.zl.account.book.domain.converter.UserEntityConverter;
 import cn.zl.account.book.domain.utils.SnowIdUtil;
 import cn.zl.account.book.infrastructure.biz.user.UserRepository;
 import cn.zl.account.book.infrastructure.entity.UserEntity;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
