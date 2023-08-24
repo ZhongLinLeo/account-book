@@ -15,7 +15,9 @@ import java.util.stream.Collectors;
 /**
  * @author lin.zl
  */
-@RestController("funds_record_classify")
+@RestController()
+@RequestMapping("funds_record_classify")
+@CrossOrigin
 public class FundsRecordClassifyController {
 
     @Resource
