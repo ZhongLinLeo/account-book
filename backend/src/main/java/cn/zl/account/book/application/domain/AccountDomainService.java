@@ -2,10 +2,19 @@ package cn.zl.account.book.application.domain;
 
 import cn.zl.account.book.application.info.AccountInfo;
 
+import java.util.List;
+
 /**
  * @author lin.zl
  */
 public interface AccountDomainService {
+
+    /**
+     * list accounts
+     *
+     * @return list of account
+     */
+    List<AccountInfo> listAccounts();
 
     /**
      * create account info
