@@ -1,5 +1,7 @@
 package cn.zl.account.book.controller.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
 import lombok.Data;
 
@@ -12,6 +14,7 @@ import lombok.Data;
 @Data
 public class AccountInfoResponseDTO {
 
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long accountId;
 
     private String accountName;
