@@ -12,15 +12,17 @@ import lombok.Data;
 @Data
 public class AccountInfoResponseDTO {
 
-    private Long  accountId;
+    private Long accountId;
 
-    private String  accountName;
+    private String accountName;
 
-    private String  accountDescribe;
+    private String accountDescribe;
 
-    private Long  accountBalance;
+    private String accountOwner;
 
-    private Long  accountIncome;
+    private Long accountBalance;
 
-    private Long  accountExpenditure;
+    private Long accountIncome;
+
+    private Long accountExpenditure;
 }

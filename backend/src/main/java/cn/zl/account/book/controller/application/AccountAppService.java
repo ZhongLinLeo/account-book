@@ -15,7 +15,7 @@ public interface AccountAppService {
      * @param accountInfo account info
      * @return true if success
      */
-    Boolean createAccount(AccountInfo accountInfo);
+    void createAccount(AccountInfo accountInfo);
 
     /**
      * list account info
@@ -30,7 +30,7 @@ public interface AccountAppService {
      * @param accountInfo account info
      * @return true if success
      */
-    Boolean modifyAccount(AccountInfo accountInfo);
+    void modifyAccount(AccountInfo accountInfo);
 
     /**
      * del account
@@ -38,5 +38,5 @@ public interface AccountAppService {
      * @param accountId account id
      * @return true if success
      */
-    Boolean delAccount(Long accountId);
+    void delAccount(Long accountId);
 }

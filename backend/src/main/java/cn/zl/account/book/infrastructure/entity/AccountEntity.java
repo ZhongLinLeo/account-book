@@ -23,6 +23,8 @@ public class AccountEntity extends EntityBase{
 
     private String  accountDescribe;
 
+    private Long  accountOwnershipId;
+
     private Long  accountBalance;
 
     private Long  accountIncome;

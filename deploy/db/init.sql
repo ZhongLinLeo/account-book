@@ -10,7 +10,6 @@ create table account
     account_name         varchar(32) not null comment '账户名称',
     account_describe     varchar(128) comment '账户描述',
     account_ownership_id bigint      not null comment '账户归属人ID',
-    account_creator_id   bigint      not null comment '账户创建人ID',
     account_balance      bigint               default 0 comment '账户余额',
     account_income       bigint               default 0 comment '账户收入',
     account_expenditure  bigint               default 0 comment '账户支出',

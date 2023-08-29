@@ -8,8 +8,8 @@ import cn.zl.account.book.infrastructure.entity.AccountEntity;
  */
 public final class AccountEntityConverter {
 
-    public static AccountInfo accountEntity2AccountInfo(AccountEntity accountEntity){
-       return AccountInfo.builder()
+    public static AccountInfo accountEntity2AccountInfo(AccountEntity accountEntity) {
+        return AccountInfo.builder()
                 .accountId(accountEntity.getAccountId())
                 .accountName(accountEntity.getAccountName())
                 .accountDescribe(accountEntity.getAccountDescribe())
@@ -19,19 +19,18 @@ public final class AccountEntityConverter {
                 .build();
     }
 
-    public static AccountEntity accountInfo2AccountEntity(AccountInfo accountInfo){
+    public static AccountEntity accountInfo2AccountEntity(AccountInfo accountInfo) {
         final AccountEntity accountEntity = new AccountEntity();
         accountEntity.setAccountId(accountInfo.getAccountId());
         accountEntity.setAccountName(accountInfo.getAccountName());
         accountEntity.setAccountDescribe(accountInfo.getAccountDescribe());
         accountEntity.setAccountBalance(accountInfo.getAccountBalance());
+        accountEntity.setAccountOwnershipId(accountInfo.getAccountOwnershipId());
         accountEntity.setAccountIncome(accountInfo.getAccountIncome());
         accountEntity.setAccountExpenditure(accountEntity.getAccountExpenditure());
 
         return accountEntity;
     }
-
-
 
 
     private AccountEntityConverter() {

@@ -16,6 +16,9 @@ public final class AccountConverter {
                 .accountName(accountRequest.getAccountName())
                 .accountDescribe(accountRequest.getAccountDescribe())
                 .accountBalance(accountRequest.getAccountBalance())
+                .accountIncome(accountRequest.getAccountIncome())
+                .accountExpenditure(accountRequest.getAccountExpenditure())
+                .accountOwnershipId(accountRequest.getAccountOwnershipId())
                 .build();
     }
 
@@ -23,6 +26,7 @@ public final class AccountConverter {
         return AccountInfoResponseDTO.builder()
                 .accountId(accountInfo.getAccountId())
                 .accountName(accountInfo.getAccountName())
+                .accountOwner(accountInfo.getAccountOwner())
                 .accountDescribe(accountInfo.getAccountDescribe())
                 .accountBalance(accountInfo.getAccountBalance())
                 .accountIncome(accountInfo.getAccountIncome())

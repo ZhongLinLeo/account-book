@@ -5,6 +5,7 @@ import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.converter.AccountConverter;
 import cn.zl.account.book.controller.response.AccountInfoResponseDTO;
 import cn.zl.account.book.controller.request.AccountRequestDTO;
+import cn.zl.account.book.controller.response.NormalResponse;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -28,11 +29,13 @@ public class AccountController {
      * list all account info
      */
     @GetMapping("list")
-    public List<AccountInfoResponseDTO> listAccount() {
-
+    public NormalResponse<List<AccountInfoResponseDTO>> listAccount() {
         List<AccountInfo> accountInfos = accountAppService.listAccount();
 
-       return accountInfos.stream().map(AccountConverter::info2Resp).collect(Collectors.toList());
+        List<AccountInfoResponseDTO> responseList = accountInfos.stream()
+                .map(AccountConverter::info2Resp)
+                .collect(Collectors.toList());
+        return NormalResponse.wrapSuccessResponse(responseList);
     }
 
     /**
@@ -41,10 +44,12 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PostMapping()
-    public Boolean createAccount(@RequestBody AccountRequestDTO accountReq) {
+    public NormalResponse<Boolean> createAccount(@RequestBody AccountRequestDTO accountReq) {
         final AccountInfo accountInfo = AccountConverter.req2Info(accountReq);
 
-        return accountAppService.createAccount(accountInfo);
+        accountAppService.createAccount(accountInfo);
+
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     /**
@@ -54,10 +59,11 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PutMapping("{accountId}")
-    public Boolean modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequestDTO accountReq) {
+    public NormalResponse<Boolean> modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequestDTO accountReq) {
         final AccountInfo accountInfo = AccountConverter.req2Info(accountReq);
         accountInfo.setAccountId(accountId);
-        return accountAppService.modifyAccount(accountInfo);
+        accountAppService.modifyAccount(accountInfo);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     /**
@@ -66,7 +72,8 @@ public class AccountController {
      * @param accountId account id
      */
     @DeleteMapping("{accountId}")
-    public Boolean delAccount(@PathVariable Long accountId) {
-        return accountAppService.delAccount(accountId);
+    public NormalResponse<Boolean> delAccount(@PathVariable Long accountId) {
+        accountAppService.delAccount(accountId);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 }

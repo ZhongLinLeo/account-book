@@ -10,15 +10,19 @@ import lombok.Data;
 @Builder
 public class AccountInfo {
 
-    private Long  accountId;
+    private Long accountId;
 
-    private String  accountName;
+    private String accountName;
 
-    private String  accountDescribe;
+    private String accountDescribe;
 
-    private Long  accountBalance;
+    private Long accountOwnershipId;
 
-    private Long  accountIncome;
+    private String accountOwner;
 
-    private Long  accountExpenditure;
+    private Long accountBalance;
+
+    private Long accountIncome;
+
+    private Long accountExpenditure;
 }

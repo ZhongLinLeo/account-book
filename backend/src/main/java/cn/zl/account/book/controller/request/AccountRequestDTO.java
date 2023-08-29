@@ -10,10 +10,15 @@ import lombok.Data;
 @Data
 public class AccountRequestDTO {
 
-    private String  accountName;
+    private String accountName;
 
-    private String  accountDescribe;
+    private String accountDescribe;
 
-    private Long  accountBalance;
+    private Long accountOwnershipId;
 
+    private Long accountBalance;
+
+    private Long accountIncome;
+
+    private Long accountExpenditure;
 }

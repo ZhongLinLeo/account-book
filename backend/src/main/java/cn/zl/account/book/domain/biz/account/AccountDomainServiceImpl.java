@@ -25,7 +25,7 @@ public class AccountDomainServiceImpl implements AccountDomainService {
     private AccountRepository accountRepository;
 
     @Override
-    public Boolean createAccount(AccountInfo accountInfo) {
+    public void createAccount(AccountInfo accountInfo) {
         final AccountEntity accountEntity = AccountEntityConverter.accountInfo2AccountEntity(accountInfo);
 
         // generate account id
@@ -38,25 +38,19 @@ public class AccountDomainServiceImpl implements AccountDomainService {
         accountEntity.setInvalid(0);
 
         accountRepository.save(accountEntity);
-
-        return Boolean.TRUE;
     }
 
     @Override
-    public Boolean modifyAccount(AccountInfo accountInfo) {
-
+    public void modifyAccount(AccountInfo accountInfo) {
         final AccountEntity accountEntity = AccountEntityConverter.accountInfo2AccountEntity(accountInfo);
 
         final LocalDateTime now = LocalDateTime.now();
         accountEntity.setModifyTime(now);
         accountRepository.save(accountEntity);
-
-        return Boolean.TRUE;
     }
 
     @Override
-    public Boolean delAccount(Long accountId) {
+    public void delAccount(Long accountId) {
         accountRepository.deleteById(accountId);
-        return Boolean.TRUE;
     }
 }

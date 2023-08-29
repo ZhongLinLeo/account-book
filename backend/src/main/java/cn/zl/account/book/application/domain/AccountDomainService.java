@@ -13,7 +13,7 @@ public interface AccountDomainService {
      * @param accountInfo account info
      * @return true if success
      */
-    Boolean createAccount(AccountInfo accountInfo);
+    void createAccount(AccountInfo accountInfo);
 
     /**
      * modify account
@@ -21,7 +21,7 @@ public interface AccountDomainService {
      * @param accountInfo account info
      * @return true if success
      */
-    Boolean modifyAccount(AccountInfo accountInfo);
+    void modifyAccount(AccountInfo accountInfo);
 
     /**
      * del account
@@ -29,5 +29,5 @@ public interface AccountDomainService {
      * @param accountId account id
      * @return true if success
      */
-    Boolean delAccount(Long accountId);
+    void delAccount(Long accountId);
 }
