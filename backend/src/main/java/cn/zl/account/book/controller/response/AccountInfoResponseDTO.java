@@ -23,6 +23,9 @@ public class AccountInfoResponseDTO {
 
     private String accountOwner;
 
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long accountOwnershipId;
+
     private Long accountBalance;
 
     private Long accountIncome;

@@ -27,7 +27,7 @@ public final class AccountEntityConverter {
         accountEntity.setAccountBalance(accountInfo.getAccountBalance());
         accountEntity.setAccountOwnershipId(accountInfo.getAccountOwnershipId());
         accountEntity.setAccountIncome(accountInfo.getAccountIncome());
-        accountEntity.setAccountExpenditure(accountEntity.getAccountExpenditure());
+        accountEntity.setAccountExpenditure(accountInfo.getAccountExpenditure());
 
         return accountEntity;
     }

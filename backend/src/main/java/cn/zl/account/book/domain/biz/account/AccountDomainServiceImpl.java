@@ -10,13 +10,12 @@ import cn.zl.account.book.infrastructure.entity.AccountEntity;
 import cn.zl.account.book.infrastructure.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections4.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -72,11 +71,35 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
     @Override
     public void modifyAccount(AccountInfo accountInfo) {
-        final AccountEntity accountEntity = AccountEntityConverter.accountInfo2AccountEntity(accountInfo);
+        final Optional<AccountEntity> originOptional = accountRepository.findById(accountInfo.getAccountId());
 
+        if (!originOptional.isPresent()) {
+            return;
+        }
+
+        final AccountEntity origin = originOptional.get();
+        final String accountName = accountInfo.getAccountName();
+        if (StringUtils.isNoneBlank(accountName)) {
+            origin.setAccountName(accountName);
+        }
+
+        final String accountDescribe = accountInfo.getAccountDescribe();
+        if (StringUtils.isNoneBlank(accountDescribe)){
+            origin.setAccountDescribe(accountDescribe);
+        }
+
+        final Long accountOwnershipId = accountInfo.getAccountOwnershipId();
+        if (Objects.nonNull(accountOwnershipId)){
+            origin.setAccountOwnershipId(accountOwnershipId);
+        }
+
+        final Long accountBalance = accountInfo.getAccountBalance();
+        if (Objects.nonNull(accountBalance)){
+            origin.setAccountBalance(accountBalance);
+        }
         final LocalDateTime now = LocalDateTime.now();
-        accountEntity.setModifyTime(now);
-        accountRepository.save(accountEntity);
+        origin.setModifyTime(now);
+        accountRepository.save(origin);
     }
 
     @Override

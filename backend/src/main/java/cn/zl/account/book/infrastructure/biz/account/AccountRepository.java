@@ -23,7 +23,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long>, J
      */
     default List<AccountEntity> findAccountEntities() {
         Specification<AccountEntity> specification = (root, query, criteriaBuilder) -> query
-                .where(criteriaBuilder.equal(root.get("invalid"), 1)).getRestriction();
+                .where(criteriaBuilder.equal(root.get("invalid"), 0)).getRestriction();
         return findAll(specification);
     }
 }

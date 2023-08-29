@@ -27,6 +27,7 @@ public final class AccountConverter {
                 .accountId(accountInfo.getAccountId())
                 .accountName(accountInfo.getAccountName())
                 .accountOwner(accountInfo.getAccountOwner())
+                .accountOwnershipId(accountInfo.getAccountOwnershipId())
                 .accountDescribe(accountInfo.getAccountDescribe())
                 .accountBalance(accountInfo.getAccountBalance())
                 .accountIncome(accountInfo.getAccountIncome())

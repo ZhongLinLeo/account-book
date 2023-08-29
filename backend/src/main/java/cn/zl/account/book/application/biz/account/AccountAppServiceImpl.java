@@ -23,6 +23,8 @@ public class AccountAppServiceImpl implements AccountAppService {
 
     @Override
     public void createAccount(AccountInfo accountInfo) {
+        accountInfo.setAccountIncome(0L);
+        accountInfo.setAccountExpenditure(0L);
         accountDomainService.createAccount(accountInfo);
     }
 
