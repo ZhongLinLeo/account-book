@@ -84,17 +84,17 @@ public class AccountDomainServiceImpl implements AccountDomainService {
         }
 
         final String accountDescribe = accountInfo.getAccountDescribe();
-        if (StringUtils.isNoneBlank(accountDescribe)){
+        if (StringUtils.isNoneBlank(accountDescribe)) {
             origin.setAccountDescribe(accountDescribe);
         }
 
         final Long accountOwnershipId = accountInfo.getAccountOwnershipId();
-        if (Objects.nonNull(accountOwnershipId)){
+        if (Objects.nonNull(accountOwnershipId)) {
             origin.setAccountOwnershipId(accountOwnershipId);
         }
 
         final Long accountBalance = accountInfo.getAccountBalance();
-        if (Objects.nonNull(accountBalance)){
+        if (Objects.nonNull(accountBalance)) {
             origin.setAccountBalance(accountBalance);
         }
         final LocalDateTime now = LocalDateTime.now();
@@ -104,9 +104,14 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
     @Override
     public void delAccount(Long accountId) {
-        AccountEntity entity = new AccountEntity();
+        final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
+
+        if (!originOptional.isPresent()) {
+            return;
+        }
+        AccountEntity entity = originOptional.get();
         entity.setInvalid(1);
-        entity.setAccountId(accountId);
+        entity.setModifyTime(LocalDateTime.now());
         accountRepository.save(entity);
     }
 }
