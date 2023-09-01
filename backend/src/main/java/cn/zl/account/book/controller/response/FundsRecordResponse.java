@@ -20,6 +20,7 @@ public class FundsRecordResponse {
 
     private String fundsRecordRemark;
 
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long fundsRecordClassifyId;
 
     @JsonSerialize(using= ToStringSerializer.class)

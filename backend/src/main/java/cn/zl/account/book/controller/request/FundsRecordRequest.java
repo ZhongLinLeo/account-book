@@ -26,7 +26,6 @@ public class FundsRecordRequest {
      */
     private Long fundsAccountId;
 
-
     private String fundsRecordDescribe;
 
     private Long fundsUserId;
