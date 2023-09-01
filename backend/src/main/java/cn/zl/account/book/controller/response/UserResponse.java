@@ -10,7 +10,7 @@ import lombok.Data;
  */
 @Data
 @Builder
-public class UserResponseDTO {
+public class UserResponse {
 
     @JsonSerialize(using= ToStringSerializer.class)
     private Long userId;

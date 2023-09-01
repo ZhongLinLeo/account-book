@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @Builder
 @Data
-public class AccountInfoResponseDTO {
+public class AccountInfoResponse {
 
     @JsonSerialize(using= ToStringSerializer.class)
     private Long accountId;

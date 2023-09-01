@@ -1,7 +1,7 @@
 package cn.zl.account.book.controller.application;
 
 import cn.zl.account.book.application.info.FundsRecordInfo;
-import cn.zl.account.book.controller.request.PaginationFundsRecordRequestDTO;
+import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -37,7 +37,7 @@ public interface FundsRecordAppService {
      * @param paginationReq query funds record conditions
      * @return page info
      */
-    Page<FundsRecordInfo> paginationFundsRecord(PaginationFundsRecordRequestDTO paginationReq);
+    Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq);
 
     /**
      * import funds records

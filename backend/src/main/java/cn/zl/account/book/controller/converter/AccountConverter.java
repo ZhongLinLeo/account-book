@@ -1,8 +1,8 @@
 package cn.zl.account.book.controller.converter;
 
 import cn.zl.account.book.application.info.AccountInfo;
-import cn.zl.account.book.controller.response.AccountInfoResponseDTO;
-import cn.zl.account.book.controller.request.AccountRequestDTO;
+import cn.zl.account.book.controller.response.AccountInfoResponse;
+import cn.zl.account.book.controller.request.AccountRequest;
 
 /**
  * 账户信息转换器
@@ -11,7 +11,7 @@ import cn.zl.account.book.controller.request.AccountRequestDTO;
  */
 public final class AccountConverter {
 
-    public static AccountInfo req2Info(AccountRequestDTO accountRequest) {
+    public static AccountInfo req2Info(AccountRequest accountRequest) {
         return AccountInfo.builder()
                 .accountName(accountRequest.getAccountName())
                 .accountDescribe(accountRequest.getAccountDescribe())
@@ -22,8 +22,8 @@ public final class AccountConverter {
                 .build();
     }
 
-    public static AccountInfoResponseDTO info2Resp(AccountInfo accountInfo) {
-        return AccountInfoResponseDTO.builder()
+    public static AccountInfoResponse info2Resp(AccountInfo accountInfo) {
+        return AccountInfoResponse.builder()
                 .accountId(accountInfo.getAccountId())
                 .accountName(accountInfo.getAccountName())
                 .accountOwner(accountInfo.getAccountOwner())

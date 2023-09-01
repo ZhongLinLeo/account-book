@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
  * @author lin.zl
  */
 @Data
-public class FundsRecordResponseDTO {
+public class FundsRecordResponse {
 
     private Long fundsRecordBalance;
 

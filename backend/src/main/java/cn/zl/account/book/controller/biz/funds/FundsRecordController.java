@@ -4,9 +4,9 @@ import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
 import cn.zl.account.book.controller.converter.FundsRecordConverter;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
-import cn.zl.account.book.controller.request.FundsRecordRequestDTO;
-import cn.zl.account.book.controller.request.PaginationFundsRecordRequestDTO;
-import cn.zl.account.book.controller.response.FundsRecordResponseDTO;
+import cn.zl.account.book.controller.request.FundsRecordRequest;
+import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
+import cn.zl.account.book.controller.response.FundsRecordResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
 import cn.zl.account.book.controller.response.PageBaseResponse;
 import org.springframework.data.domain.Page;
@@ -31,10 +31,10 @@ public class FundsRecordController {
 
 
     @GetMapping()
-    public PageBaseResponse<FundsRecordResponseDTO> paginationFundsRecord(PaginationFundsRecordRequestDTO paginationReq) {
+    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
         Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(paginationReq);
 
-        List<FundsRecordResponseDTO> content = fundsRecords.get()
+        List<FundsRecordResponse> content = fundsRecords.get()
                 .map(FundsRecordConverter::info2Resp)
                 .collect(Collectors.toList());
 
@@ -43,14 +43,14 @@ public class FundsRecordController {
     }
 
     @PostMapping()
-    public NormalResponse<Boolean> recordFunds(FundsRecordRequestDTO fundsRecordReq) {
+    public NormalResponse<Boolean> recordFunds(FundsRecordRequest fundsRecordReq) {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordAppService.recordFunds(fundsRecordInfo);
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
     @PutMapping()
-    public NormalResponse<Boolean> modifyFundsRecord(FundsRecordRequestDTO fundsRecordReq) {
+    public NormalResponse<Boolean> modifyFundsRecord(FundsRecordRequest fundsRecordReq) {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordAppService.modifyFundsRecord(fundsRecordInfo);
 

@@ -3,8 +3,8 @@ package cn.zl.account.book.controller.biz.funds;
 import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.controller.application.FundsRecordClassifyAppService;
 import cn.zl.account.book.controller.converter.FundsRecordClassifyConverter;
-import cn.zl.account.book.controller.request.FundsRecordClassifyRequestDTO;
-import cn.zl.account.book.controller.response.FundsRecordClassifyResponseDTO;
+import cn.zl.account.book.controller.request.FundsRecordClassifyRequest;
+import cn.zl.account.book.controller.response.FundsRecordClassifyResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,7 +24,7 @@ public class FundsRecordClassifyController {
     private FundsRecordClassifyAppService fundsRecordClassifyAppService;
 
     @PostMapping()
-    public NormalResponse<Boolean> addClassify(FundsRecordClassifyRequestDTO fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> addClassify(FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.addClassify(fundsRecordClassifyInfo);
@@ -34,7 +34,7 @@ public class FundsRecordClassifyController {
 
 
     @PutMapping()
-    public NormalResponse<Boolean> modifyClassify(FundsRecordClassifyRequestDTO fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> modifyClassify(FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.modifyClassify(fundsRecordClassifyInfo);
@@ -49,9 +49,9 @@ public class FundsRecordClassifyController {
     }
 
     @DeleteMapping("list")
-    public NormalResponse<List<FundsRecordClassifyResponseDTO>> listClassify() {
+    public NormalResponse<List<FundsRecordClassifyResponse>> listClassify() {
         List<FundsRecordClassifyInfo> classifyInfos = fundsRecordClassifyAppService.listClassify();
-        List<FundsRecordClassifyResponseDTO> responseList = classifyInfos.stream()
+        List<FundsRecordClassifyResponse> responseList = classifyInfos.stream()
                 .map(FundsRecordClassifyConverter::info2Resp)
                 .collect(Collectors.toList());
 

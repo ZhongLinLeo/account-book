@@ -1,12 +1,19 @@
-package cn.zl.account.book.controller.request;
+package cn.zl.account.book.controller.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
+import lombok.Builder;
 import lombok.Data;
 
 /**
  * @author lin.zl
  */
 @Data
-public class FundsRecordClassifyRequestDTO {
+@Builder
+public class FundsRecordClassifyResponse {
+
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long classifyId;
 
     /**
      * 分类名称
@@ -29,4 +36,6 @@ public class FundsRecordClassifyRequestDTO {
      * 父分类ID，可以为空
      */
     private Long parentClassifyId;
+
+    private String parentClassifyName;
 }

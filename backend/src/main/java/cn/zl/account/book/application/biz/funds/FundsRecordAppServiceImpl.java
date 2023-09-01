@@ -3,7 +3,7 @@ package cn.zl.account.book.application.biz.funds;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
-import cn.zl.account.book.controller.request.PaginationFundsRecordRequestDTO;
+import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
@@ -45,7 +45,7 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     }
 
     @Override
-    public Page<FundsRecordInfo> paginationFundsRecord(PaginationFundsRecordRequestDTO paginationReq) {
+    public Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
         PageRequest pageRequest = PageRequest.of(paginationReq.getPageNumber(), paginationReq.getPageSize());
 
         Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.findAll(pageRequest);

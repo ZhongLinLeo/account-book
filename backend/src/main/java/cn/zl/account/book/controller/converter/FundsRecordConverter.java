@@ -1,17 +1,17 @@
 package cn.zl.account.book.controller.converter;
 
 import cn.zl.account.book.application.info.FundsRecordInfo;
-import cn.zl.account.book.controller.request.FundsRecordRequestDTO;
-import cn.zl.account.book.controller.response.FundsRecordResponseDTO;
+import cn.zl.account.book.controller.request.FundsRecordRequest;
+import cn.zl.account.book.controller.response.FundsRecordResponse;
 
 /**
  * @author lin.zl
  */
 public final class FundsRecordConverter {
 
-    public static FundsRecordResponseDTO info2Resp(FundsRecordInfo fundsRecordInfo){
+    public static FundsRecordResponse info2Resp(FundsRecordInfo fundsRecordInfo){
 
-        FundsRecordResponseDTO resp = new FundsRecordResponseDTO();
+        FundsRecordResponse resp = new FundsRecordResponse();
         resp.setFundsAccountId(fundsRecordInfo.getFundsAccountId());
         resp.setFundsRecordRemark(fundsRecordInfo.getFundsRecordRemark());
         resp.setFundsRecordBalance(fundsRecordInfo.getFundsRecordBalance());
@@ -22,7 +22,7 @@ public final class FundsRecordConverter {
         return resp;
     }
 
-    public static FundsRecordInfo req2Info(FundsRecordRequestDTO fundsRecordReq){
+    public static FundsRecordInfo req2Info(FundsRecordRequest fundsRecordReq){
         FundsRecordInfo info = new FundsRecordInfo();
         info.setFundsRecordClassifyId(fundsRecordReq.getFundsRecordClassifyId());
         info.setFundsRecordTime(fundsRecordReq.getFundsRecordTime());

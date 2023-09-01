@@ -6,7 +6,7 @@ import lombok.Data;
  * @author lin.zl
  */
 @Data
-public class UserRequestDTO {
+public class UserRequest {
 
     private Long userId;
 

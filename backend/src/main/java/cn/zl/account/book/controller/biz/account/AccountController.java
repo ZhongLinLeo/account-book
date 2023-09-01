@@ -3,8 +3,8 @@ package cn.zl.account.book.controller.biz.account;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.converter.AccountConverter;
-import cn.zl.account.book.controller.response.AccountInfoResponseDTO;
-import cn.zl.account.book.controller.request.AccountRequestDTO;
+import cn.zl.account.book.controller.response.AccountInfoResponse;
+import cn.zl.account.book.controller.request.AccountRequest;
 import cn.zl.account.book.controller.response.NormalResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -29,10 +29,10 @@ public class AccountController {
      * list all account info
      */
     @GetMapping("list")
-    public NormalResponse<List<AccountInfoResponseDTO>> listAccount() {
+    public NormalResponse<List<AccountInfoResponse>> listAccount() {
         List<AccountInfo> accountInfos = accountAppService.listAccount();
 
-        List<AccountInfoResponseDTO> responseList = accountInfos.stream()
+        List<AccountInfoResponse> responseList = accountInfos.stream()
                 .map(AccountConverter::info2Resp)
                 .collect(Collectors.toList());
         return NormalResponse.wrapSuccessResponse(responseList);
@@ -44,7 +44,7 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PostMapping()
-    public NormalResponse<Boolean> createAccount(@RequestBody AccountRequestDTO accountReq) {
+    public NormalResponse<Boolean> createAccount(@RequestBody AccountRequest accountReq) {
         final AccountInfo accountInfo = AccountConverter.req2Info(accountReq);
 
         accountAppService.createAccount(accountInfo);
@@ -59,7 +59,7 @@ public class AccountController {
      * @param accountReq account base info
      */
     @PutMapping("{accountId}")
-    public NormalResponse<Boolean> modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequestDTO accountReq) {
+    public NormalResponse<Boolean> modifyAccount(@PathVariable Long accountId, @RequestBody AccountRequest accountReq) {
         final AccountInfo accountInfo = AccountConverter.req2Info(accountReq);
         accountInfo.setAccountId(accountId);
         accountAppService.modifyAccount(accountInfo);
