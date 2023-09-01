@@ -1,5 +1,7 @@
 package cn.zl.account.book.controller.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import java.time.LocalDateTime;
@@ -20,7 +22,9 @@ public class FundsRecordResponse {
 
     private Long fundsRecordClassifyId;
 
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long fundsAccountId;
 
+    @JsonSerialize(using= ToStringSerializer.class)
     private Long fundsUserId;
 }

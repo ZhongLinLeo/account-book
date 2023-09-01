@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -56,6 +57,9 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
     @Override
     public void modifyFundRecord(FundsRecordInfo fundsRecordInfo) {
         FundsRecordEntity entity = FundsRecordEntityConverter.info2Entity(fundsRecordInfo);
+
+        entity.setModifyTime(LocalDateTime.now());
+
         fundsRecordRepository.save(entity);
     }
 

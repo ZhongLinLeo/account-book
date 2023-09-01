@@ -8,7 +8,7 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
  */
 public final class FundsRecordEntityConverter {
 
-    public static FundsRecordInfo entity2Info(FundsRecordEntity entity){
+    public static FundsRecordInfo entity2Info(FundsRecordEntity entity) {
         FundsRecordInfo info = new FundsRecordInfo();
         info.setFundsRecordId(entity.getFundsRecordId());
         info.setFundsRecordClassifyId(entity.getFundsRecordClassifyId());
