@@ -46,7 +46,7 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
 
     @Override
     public Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
-        PageRequest pageRequest = PageRequest.of(paginationReq.getPageNumber(), paginationReq.getPageSize());
+        PageRequest pageRequest = PageRequest.of(paginationReq.getPageNumber() - 1, paginationReq.getPageSize());
 
         Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.findAll(pageRequest);
 
@@ -54,7 +54,7 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
                 .map(FundsRecordEntityConverter::entity2Info)
                 .collect(Collectors.toList());
 
-        return new PageImpl<>(content,pageRequest,fundsRecords.getTotalElements());
+        return new PageImpl<>(content, pageRequest, fundsRecords.getTotalElements());
     }
 
     @Override

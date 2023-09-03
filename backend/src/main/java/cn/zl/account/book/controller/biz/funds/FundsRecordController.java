@@ -30,15 +30,15 @@ public class FundsRecordController {
     private FundsRecordAppService fundsRecordAppService;
 
 
-    @GetMapping()
-    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
-        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(paginationReq);
+    @GetMapping("pagination")
+    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(FundsRecordQueryRequest pagination) {
+        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pagination);
 
         List<FundsRecordResponse> content = fundsRecords.get()
                 .map(FundsRecordConverter::info2Resp)
                 .collect(Collectors.toList());
 
-        return PageBaseResponse.wrapSuccessPageResponse(paginationReq.getPageSize(), paginationReq.getPageNumber(),
+        return PageBaseResponse.wrapSuccessPageResponse(pagination.getPageSize(), pagination.getPageNumber(),
                 fundsRecords.getTotalElements(), content);
     }
 
@@ -64,7 +64,7 @@ public class FundsRecordController {
     }
 
     @PostMapping("import")
-    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file")MultipartFile excelFile) throws IOException {
+    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file") MultipartFile excelFile) throws IOException {
         fundsRecordAppService.importFundsRecord(excelFile);
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
