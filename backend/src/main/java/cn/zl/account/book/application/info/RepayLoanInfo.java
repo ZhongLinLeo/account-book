@@ -21,4 +21,16 @@ public class RepayLoanInfo {
     private Double repayPrincipal;
 
     private Double remainingPrincipal;
+
+    @Override
+    public String toString() {
+        return "{" +
+                "\"repayTimes\":" + repayTimes +
+                ", \"repayDate\":\"" + repayDate + "\"" +
+                ", \"repayAmount\":" + repayAmount +
+                ", \"repayInterest\":" + repayInterest +
+                ", \"repayPrincipal\":" + repayPrincipal +
+                ", \"remainingPrincipal\":" + remainingPrincipal +
+                '}';
+    }
 }
