@@ -8,7 +8,7 @@ import java.time.LocalDate;
  * @author lin.zl
  */
 @Data
-public class RepayLoanInfo {
+public class RepayAmountPreMonthInfo {
 
     private Integer repayTimes;
 
@@ -20,7 +20,7 @@ public class RepayLoanInfo {
 
     private Double repayPrincipal;
 
-    private Double remainingPrincipal;
+    private Double remainsPrincipal;
 
     @Override
     public String toString() {
@@ -30,7 +30,7 @@ public class RepayLoanInfo {
                 ", \"repayAmount\":" + repayAmount +
                 ", \"repayInterest\":" + repayInterest +
                 ", \"repayPrincipal\":" + repayPrincipal +
-                ", \"remainingPrincipal\":" + remainingPrincipal +
+                ", \"remainsPrincipal\":" + remainsPrincipal +
                 '}';
     }
 }

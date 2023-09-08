@@ -2,7 +2,7 @@ package cn.zl.account.book.domain.biz.loan;
 
 import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.LoanLprInfo;
-import cn.zl.account.book.application.info.RepayLoanInfo;
+import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,17 +23,17 @@ public class LoanDomain {
 
     public void calculatePrepayment(LoanInfo loanInfo) {
         // calculate Interest
-        final List<RepayLoanInfo> repayLoanInfos = calculateRepayInfo(loanInfo);
-        System.out.println(repayLoanInfos);
+        final List<RepayAmountPreMonthInfo> originRepayInfos = calculateRepayInfo(loanInfo);
+
+
+
+
     }
 
-    private List<RepayLoanInfo> calculateRepayInfo(LoanInfo loanInfo) {
+    private List<RepayAmountPreMonthInfo> calculateRepayInfo(LoanInfo loanInfo) {
+        ArrayList<RepayAmountPreMonthInfo> repayAmountPreMonthInfos = new ArrayList<>();
 
-        ArrayList<RepayLoanInfo> repayLoanInfos = new ArrayList<>();
-
-        Map<LocalDate, Double> rateMap = loanInfo
-                .getLoanLprInfos()
-                .stream()
+        Map<LocalDate, Double> rateMap = loanInfo.getLoanLprInfos().stream()
                 .collect(Collectors.toMap(LoanLprInfo::getLprDate, LoanLprInfo::getLpr));
 
         LocalDate loanStartDate = loanInfo.getLoanStartDate();
@@ -43,46 +43,41 @@ public class LoanDomain {
         double currentRate = 5.1;
         Integer loanPeriod = loanInfo.getLoanPeriod();
 
-        double remainingPrincipal = loanAmount;
+        double remainsPrincipal = loanAmount;
         for (int times = 1; times <= loanPeriod; times++) {
-
             LocalDate currentRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay)
                     .plusMonths(times);
             currentRate = Optional.ofNullable(rateMap.get(currentRepayDate)).orElse(currentRate);
-            RepayLoanInfo repayLoanInfo = new RepayLoanInfo();
-            repayLoanInfo.setRepayDate(currentRepayDate);
-            repayLoanInfo.setRepayTimes(times);
+            RepayAmountPreMonthInfo repayAmountPreMonthInfo = new RepayAmountPreMonthInfo();
+            repayAmountPreMonthInfo.setRepayDate(currentRepayDate);
+            repayAmountPreMonthInfo.setRepayTimes(times);
             final double principalPreMonth = calculatePrincipalPreMonth(currentRate, loanAmount, loanPeriod, times);
-            repayLoanInfo.setRepayPrincipal(principalPreMonth);
+            repayAmountPreMonthInfo.setRepayPrincipal(principalPreMonth);
 
-            remainingPrincipal =
-                    convert2Double(BigDecimal.valueOf(remainingPrincipal).add(BigDecimal.valueOf(principalPreMonth).negate()));
-            repayLoanInfo.setRemainingPrincipal(remainingPrincipal);
+            remainsPrincipal =
+                    convert2Double(BigDecimal.valueOf(remainsPrincipal).add(BigDecimal.valueOf(principalPreMonth).negate()));
+            repayAmountPreMonthInfo.setRemainsPrincipal(remainsPrincipal);
 
-            repayLoanInfos.add(repayLoanInfo);
+            repayAmountPreMonthInfos.add(repayAmountPreMonthInfo);
 
             // 第一期利息需要特殊计算
             if (times == 1) {
                 final double firstPeriodInterest = firstPeriodInterest(currentRate, loanAmount, loanStartDate,
                         loanRepayDay);
-                repayLoanInfo.setRepayInterest(firstPeriodInterest);
-                repayLoanInfo.setRepayAmount(principalPreMonth + firstPeriodInterest);
+                repayAmountPreMonthInfo.setRepayInterest(firstPeriodInterest);
+                repayAmountPreMonthInfo.setRepayAmount(principalPreMonth + firstPeriodInterest);
                 continue;
             }
 
             final double amountPreMonth = calculateRepayAmountPreMonth(currentRate, loanAmount, loanPeriod);
-            repayLoanInfo.setRepayAmount(amountPreMonth);
+            repayAmountPreMonthInfo.setRepayAmount(amountPreMonth);
 
             // 每月还款利息 = 每月还款金额 - 每月还款本金
-            repayLoanInfo.setRepayInterest(convert2Double(BigDecimal.valueOf(amountPreMonth)
+            repayAmountPreMonthInfo.setRepayInterest(convert2Double(BigDecimal.valueOf(amountPreMonth)
                     .add(BigDecimal.valueOf(principalPreMonth).negate())));
-
-
         }
 
-
-        return repayLoanInfos;
-
+        return repayAmountPreMonthInfos;
     }
 
     /**
