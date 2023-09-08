@@ -60,17 +60,20 @@ public class LoanDomain {
             repayLoanInfo.setRemainingPrincipal(remainingPrincipal);
 
             repayLoanInfos.add(repayLoanInfo);
+
+            // 第一期利息需要特殊计算
             if (times == 1) {
                 final double firstPeriodInterest = firstPeriodInterest(currentRate, loanAmount, loanStartDate,
                         loanRepayDay);
                 repayLoanInfo.setRepayInterest(firstPeriodInterest);
-
                 repayLoanInfo.setRepayAmount(principalPreMonth + firstPeriodInterest);
                 continue;
             }
 
             final double amountPreMonth = calculateRepayAmountPreMonth(currentRate, loanAmount, loanPeriod);
             repayLoanInfo.setRepayAmount(amountPreMonth);
+
+            // 每月还款利息 = 每月还款金额 - 每月还款本金
             repayLoanInfo.setRepayInterest(convert2Double(BigDecimal.valueOf(amountPreMonth)
                     .add(BigDecimal.valueOf(principalPreMonth).negate())));
 
