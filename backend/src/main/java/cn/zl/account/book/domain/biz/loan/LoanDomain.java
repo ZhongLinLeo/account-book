@@ -3,6 +3,7 @@ package cn.zl.account.book.domain.biz.loan;
 import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.LoanLprInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
+import cn.zl.account.book.application.info.RepayInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -25,9 +26,26 @@ public class LoanDomain {
         // calculate Interest
         final List<RepayAmountPreMonthInfo> originRepayInfos = calculateRepayInfo(loanInfo);
 
+        RepayInfo repayInfo = new RepayInfo();
 
+        repayInfo.setLoanAmount(loanInfo.getLoanAmount());
+        repayInfo.setInstallmentsNumber(loanInfo.getLoanPeriod());
 
+        LocalDate now = LocalDate.now();
+        List<RepayAmountPreMonthInfo> repaidList = originRepayInfos.stream()
+                .filter(repayAmount -> repayAmount.getRepayDate().isBefore(now)).collect(Collectors.toList());
 
+        repayInfo.setRepaidNumber(repaidList.size());
+        repayInfo.setRepaidInterest(repaidList.stream().mapToDouble(RepayAmountPreMonthInfo::getRepayInterest).sum());
+        double repaidPrincipal = repaidList.stream().mapToDouble(RepayAmountPreMonthInfo::getRepayPrincipal).sum();
+        repayInfo.setRepaidPrincipal(repaidPrincipal);
+        repayInfo.setRemainsPrincipal(BigDecimal.valueOf(loanInfo.getLoanAmount())
+                .add(BigDecimal.valueOf(repaidPrincipal).negate()).doubleValue());
+
+        repayInfo.setTotalInterest(originRepayInfos.stream()
+                .mapToDouble(RepayAmountPreMonthInfo::getRepayInterest).sum());
+
+        System.out.println(repayInfo);
     }
 
     private List<RepayAmountPreMonthInfo> calculateRepayInfo(LoanInfo loanInfo) {
