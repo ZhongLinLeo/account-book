@@ -5,6 +5,8 @@ import lombok.Data;
 import java.time.LocalDate;
 
 /**
+ * lpr 信息
+ *
  * @author lin.zl
  */
 @Data

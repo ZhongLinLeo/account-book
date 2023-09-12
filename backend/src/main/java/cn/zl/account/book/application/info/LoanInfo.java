@@ -43,6 +43,11 @@ public class LoanInfo {
     private List<PrepaymentInfo> prepaymentInfos;
 
     /**
+     * 还款金额变更
+     */
+    private List<RepayAmountChangeInfo> repayAmountChangeInfos;
+
+    /**
      * todo
      */
     private String prepaymentType;

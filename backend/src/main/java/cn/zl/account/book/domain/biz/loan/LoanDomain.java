@@ -1,21 +1,25 @@
 package cn.zl.account.book.domain.biz.loan;
 
-import cn.zl.account.book.application.info.LoanInfo;
-import cn.zl.account.book.application.info.LoanLprInfo;
-import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
-import cn.zl.account.book.application.info.RepayInfo;
+import cn.zl.account.book.application.info.*;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
  * loan calculate
+ * <p>
+ * 1. 只有利率、金额有变更的时候，才会重新计算还款金额
+ * 2. 杭州银行只能减少整年的
+ * <p>
+ * <p>
+ * 想了解的信息
+ * 1、每月还款金额 -- done
+ * 2、已还金额、已还本金、已还利息、已还期数、剩余期数，这个可以通过计算已还信息得来
+ * 3、利率、本金、还款金额变更后 每月还款信息 -- 变更后重新计算还款金额
  *
  * @author lin.zl
  */
@@ -47,6 +51,135 @@ public class LoanDomain {
 
         System.out.println(repayInfo);
     }
+
+    public void calculatePrepaymentInfo(LoanInfo loanInfo) {
+        // 贷款金额是不变的
+        Double loanAmount = loanInfo.getLoanAmount();
+
+        // lpr信息，即利率变更
+        Map<LocalDate, Double> lprMap = convertLprMap(loanInfo);
+
+        // 提前还款信息
+        Map<LocalDate, Double> prepaymentMap = convertPrepaymentMap(loanInfo);
+
+        // 还款金额变更信息
+        Map<LocalDate, Double> repayAmountChangeMap = convertRepayAmountChangeMap(loanInfo);
+
+        ArrayList<RepayAmountPreMonthInfo> repayAmountPreMonthInfos = new ArrayList<>();
+
+        LocalDate loanStartDate = loanInfo.getLoanStartDate();
+        Integer loanRepayDay = loanInfo.getLoanRepayDay();
+
+        // 遍历还款期数
+        Double payAmount = null;
+        double currentRate = 5.1;
+        double remainsPrincipal = loanAmount;
+
+        int repaidPeriod;
+        Integer loanPeriod = loanInfo.getLoanPeriod();
+        for (repaidPeriod = 1; repaidPeriod <= loanPeriod; repaidPeriod++) {
+            // 计算当前还款日
+            LocalDate currentRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay)
+                    .plusMonths(repaidPeriod);
+
+            // 查询利率
+            Double currentLpr = lprMap.get(currentRepayDate);
+
+            // 第一次需要计算 每月还款金额
+            if (Objects.isNull(payAmount)) {
+                currentRate = Optional.ofNullable(currentLpr).orElse(currentRate);
+                payAmount = calculatePrincipalPreMonth(currentRate, loanAmount, loanPeriod, repaidPeriod);
+            }
+
+            Double prepayAmount = prepaymentMap.get(currentRepayDate);
+
+            Double repayAmountChange = repayAmountChangeMap.get(currentRepayDate);
+
+            // 利率变更、提前还款 三种场景需要重新计算还款金额
+            if (Objects.equals(currentLpr,currentRate) || Objects.nonNull(prepayAmount)){
+
+            }
+
+            // 还款金额变更，需要重新计算缩短的年限
+            if (Objects.nonNull(repayAmountChange)){
+                payAmount = repayAmountChange;
+
+                // todo
+
+
+            }
+
+
+            RepayAmountPreMonthInfo repayAmountPreMonthInfo = new RepayAmountPreMonthInfo();
+            repayAmountPreMonthInfo.setRepayDate(currentRepayDate);
+            repayAmountPreMonthInfo.setRepayTimes(repaidPeriod);
+            repayAmountPreMonthInfo.setRepayPrincipal(payAmount);
+
+            remainsPrincipal =
+                    convert2Double(BigDecimal.valueOf(remainsPrincipal).add(BigDecimal.valueOf(payAmount).negate()));
+            repayAmountPreMonthInfo.setRemainsPrincipal(remainsPrincipal);
+
+            repayAmountPreMonthInfos.add(repayAmountPreMonthInfo);
+
+            // 第一期利息需要特殊计算
+            if (repaidPeriod == 1) {
+                final double firstPeriodInterest = firstPeriodInterest(currentRate, loanAmount, loanStartDate,
+                        loanRepayDay);
+                repayAmountPreMonthInfo.setRepayInterest(firstPeriodInterest);
+                repayAmountPreMonthInfo.setRepayAmount(payAmount + firstPeriodInterest);
+                continue;
+            }
+
+            final double amountPreMonth = calculateRepayAmountPreMonth(currentRate, loanAmount, loanPeriod);
+            repayAmountPreMonthInfo.setRepayAmount(amountPreMonth);
+
+            // 每月还款利息 = 每月还款金额 - 每月还款本金
+            repayAmountPreMonthInfo.setRepayInterest(convert2Double(BigDecimal.valueOf(amountPreMonth)
+                    .add(BigDecimal.valueOf(payAmount).negate())));
+
+        }
+    }
+
+    private Map<LocalDate, Double> convertLprMap(LoanInfo loanInfo) {
+        List<LoanLprInfo> loanLprInfos = loanInfo.getLoanLprInfos();
+        if (CollectionUtils.isEmpty(loanLprInfos)) {
+            return Collections.emptyMap();
+        }
+
+        return loanLprInfos.stream()
+                .collect(Collectors.toMap(LoanLprInfo::getLprDate, LoanLprInfo::getLpr));
+    }
+
+    private Map<LocalDate, Double> convertPrepaymentMap(LoanInfo loanInfo) {
+        List<PrepaymentInfo> prepaymentInfos = loanInfo.getPrepaymentInfos();
+        if (CollectionUtils.isEmpty(prepaymentInfos)) {
+            return Collections.emptyMap();
+        }
+
+        return prepaymentInfos.stream()
+                .collect(Collectors.toMap(PrepaymentInfo::getPrepaymentDate, PrepaymentInfo::getPrepaymentAmount));
+    }
+
+
+    private Map<LocalDate, Double> convertRepayAmountChangeMap(LoanInfo loanInfo) {
+        List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();
+        if (CollectionUtils.isEmpty(repayAmountChangeInfos)) {
+            return Collections.emptyMap();
+        }
+
+        return repayAmountChangeInfos.stream()
+                .collect(Collectors.toMap(RepayAmountChangeInfo::getChangeDate, RepayAmountChangeInfo::getRepayAmount));
+    }
+
+
+    public static void main(String[] args) {
+        LoanInfo loanInfo = new LoanInfo();
+        Map<LocalDate, Double> lprMap = loanInfo.getLoanLprInfos().stream()
+                .collect(Collectors.toMap(LoanLprInfo::getLprDate, LoanLprInfo::getLpr));
+
+        System.out.println(lprMap);
+    }
+
 
     private List<RepayAmountPreMonthInfo> calculateRepayInfo(LoanInfo loanInfo) {
         ArrayList<RepayAmountPreMonthInfo> repayAmountPreMonthInfos = new ArrayList<>();
@@ -136,12 +269,6 @@ public class LoanDomain {
         return convert2Double(principal);
     }
 
-    private double calculateRepayPrincipalPreMonth(double rate, double totalAmount, Integer loanRepayDay) {
-
-
-        return 1;
-    }
-
     private double firstPeriodInterest(double rate, double totalAmount, LocalDate loanStartDate,
                                        Integer loanRepayDay) {
         final LocalDate lastRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay);
@@ -155,28 +282,8 @@ public class LoanDomain {
         return convert2Double(firstPeriodInterest);
     }
 
-
-    private void payAmountPreMonth(double rate, double totalAmount) {
-
-    }
-
     private static double convert2Double(BigDecimal bigDecimal) {
         return bigDecimal.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-    }
-
-    private BigDecimal convert2Approximate(BigDecimal value) {
-        return value.divide(BigDecimal.valueOf(100), 0, BigDecimal.ROUND_HALF_UP);
-    }
-
-    private BigDecimal repayAmountWithDays(double currentRate, BigDecimal remainingPrincipal, Integer days) {
-        final BigDecimal lprDecimal = BigDecimal.valueOf(currentRate);
-        BigDecimal dayRate = lprDecimal.divide(BigDecimal.valueOf(360), 5, BigDecimal.ROUND_HALF_UP);
-        return remainingPrincipal.multiply(dayRate).multiply(BigDecimal.valueOf(days));
-    }
-
-    private BigDecimal calculateMonthInterest(double currentRate, BigDecimal remainingPrincipal) {
-        final BigDecimal monthRate = monthRate(currentRate);
-        return remainingPrincipal.multiply(monthRate);
     }
 
     private static BigDecimal monthRate(double currentRate) {
