@@ -1,34 +1,28 @@
 package cn.zl.account.book.domain.biz.loan;
 
 import cn.zl.account.book.application.info.LoanInfo;
-import cn.zl.account.book.application.info.LoanLprInfo;
+import com.alibaba.fastjson2.JSON;
+import org.apache.commons.io.FileUtils;
 import org.junit.Test;
+import org.springframework.util.ResourceUtils;
 
-import java.time.LocalDate;
-import java.util.Collections;
-
-import static org.junit.Assert.*;
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.Charset;
 
 public class LoanDomainTest {
 
     @Test
-    public void calculatePrepayment() {
+    public void calculatePrepayment() throws Exception {
         LoanDomain loanDomain = new LoanDomain();
 
-
-        LoanInfo loanInfo = new LoanInfo();
-        loanInfo.setLoanStartDate(LocalDate.parse("2020-09-27"));
-        loanInfo.setLoanAmount(1988000d);
-        loanInfo.setLoanPeriod(360);
-        loanInfo.setLoanRepayDay(16);
-        LoanLprInfo loanLprInfo = new LoanLprInfo();
-        loanLprInfo.setLpr(0.051);
-        loanLprInfo.setLprDate(LocalDate.parse("2020-10-16"));
-
-        loanInfo.setLoanLprInfos(Collections.singletonList(loanLprInfo));
-
+        LoanInfo loanInfo = JSON.parseObject(readFile(), LoanInfo.class);
 
         loanDomain.calculatePrepayment(loanInfo);
+    }
 
+    public String readFile() throws IOException {
+        File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "loan/LoanInfo.json");
+        return FileUtils.readFileToString(file, Charset.defaultCharset());
     }
 }

@@ -1,0 +1,32 @@
+{
+  "loanAmount": 1980000,
+  "loanPeriod": 360,
+  "loanStartDate": "2020-10-27",
+  "loanRepayDay": 16,
+  "loanLprInfos": [
+    {
+      "lprDate": "2020-10-16",
+      "lpr": 5.1
+    },
+    {
+      "lprDate": "2022-09-16",
+      "lpr": 4.75
+    },
+    {
+      "lprDate": "2023-09-25",
+      "lpr": 4.2
+    }
+  ],
+  "prepaymentInfos": [
+    {
+      "prepaymentDate": "2022-09-16",
+      "prepaymentAmount": 100000
+    }
+  ],
+  "repayAmountChangeInfos": [
+    {
+      "changeDate": "2023-09-16",
+      "repayAmount": 10810
+    }
+  ]
+}
