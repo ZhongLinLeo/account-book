@@ -6,6 +6,7 @@ import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
 
 /**
  * 抽象方法
@@ -17,7 +18,7 @@ public abstract class BaseLoanCalculate {
     /**
      * 还款计算
      *
-     * @param loanInfo loan info
+     * @param loanInfo      loan info
      * @param calculateInfo 计算信息
      * @return 还款信息
      */
@@ -59,7 +60,7 @@ public abstract class BaseLoanCalculate {
     }
 
     public static BigDecimal monthRate(double currentRate) {
-        return BigDecimal.valueOf(currentRate/100/12);
+        return BigDecimal.valueOf(currentRate / 100 / 12);
     }
 
 
@@ -85,11 +86,8 @@ public abstract class BaseLoanCalculate {
         return convert2Double(principal);
     }
 
-
-
-
-
-
-
-
+    protected static boolean isCurrentPeriod(LocalDate targetDate, LocalDate currentRepayDate) {
+        LocalDate lastRepayDate = currentRepayDate.plusMonths(-1);
+        return targetDate.compareTo(lastRepayDate) >= 0 && targetDate.compareTo(currentRepayDate) < 0;
+    }
 }
