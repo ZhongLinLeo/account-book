@@ -19,14 +19,18 @@
   ],
   "prepaymentInfos": [
     {
-      "prepaymentDate": "2022-09-16",
+      "prepaymentDate": "2022-05-13",
       "prepaymentAmount": 100000
+    },
+    {
+      "prepaymentDate": "2022-08-26",
+      "prepaymentAmount": 120000
     }
   ],
   "repayAmountChangeInfos": [
     {
       "changeDate": "2023-09-16",
-      "repayAmount": 10810
+      "repayAmount": 10810.89
     }
   ]
 }
