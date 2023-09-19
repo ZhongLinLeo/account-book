@@ -29,7 +29,9 @@ public class PrepayChangeCalculate extends BaseLoanCalculate {
         double prepayAmount = findPrepayAmount(loanInfo, currentRepayDate);
         int reduceMonths = reduceMonths(currentRate, totalAmount, prepayAmount, loanPeriod, repayAmount);
 
-        repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod - reduceMonths);
+        // 还款金额大概率会变，重新计算
+        repayAmount = repayAmountPreMonth(currentRate, totalAmount - prepayAmount, loanPeriod - reduceMonths);
+
         // 设置还款金额
         calculateInfo.setRepayAmount(repayAmount);
 
@@ -46,6 +48,7 @@ public class PrepayChangeCalculate extends BaseLoanCalculate {
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
                 .currentRate(currentRate)
+                .remainsPrincipal(totalAmount - prepayAmount - principalPreMonth)
                 .reduceMonths(reduceMonths)
                 .build();
     }

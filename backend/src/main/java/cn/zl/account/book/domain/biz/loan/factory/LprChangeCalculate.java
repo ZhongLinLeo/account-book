@@ -8,7 +8,6 @@ import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -24,14 +23,12 @@ public class LprChangeCalculate extends BaseLoanCalculate {
         int loanPeriod = calculateInfo.getLoanPeriod();
         LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
 
-        double currentRate = findCurrentRate(loanInfo,currentRepayDate);
+        double currentRate = findCurrentRate(loanInfo, currentRepayDate);
 
-        Double repayAmount = calculateInfo.getRepayAmount();
-        if (Objects.isNull(repayAmount)) {
-            repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
-            // 设置还款金额
-            calculateInfo.setRepayAmount(repayAmount);
-        }
+        // lpr 变更，还款金额会变更
+        double  repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
+        // 设置还款金额
+        calculateInfo.setRepayAmount(repayAmount);
 
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
 
@@ -45,6 +42,7 @@ public class LprChangeCalculate extends BaseLoanCalculate {
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
+                .remainsPrincipal(totalAmount  - principalPreMonth)
                 .currentRate(currentRate)
                 .build();
     }
@@ -56,7 +54,7 @@ public class LprChangeCalculate extends BaseLoanCalculate {
             return lprDate.isBefore(currentRepayDate) && lprDate.isAfter(lastRepayDate);
         }).findFirst();
 
-        if (lprInfo.isPresent()){
+        if (lprInfo.isPresent()) {
             return lprInfo.get().getLpr();
         }
 

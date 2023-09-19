@@ -36,6 +36,7 @@ public class LastInstallmentCalculate extends BaseLoanCalculate {
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
+                .remainsPrincipal(totalAmount  - principalPreMonth)
                 .currentRate(currentRate)
                 .build();
     }

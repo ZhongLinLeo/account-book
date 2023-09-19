@@ -6,11 +6,7 @@
   "loanRate": 5.1,
   "loanLprInfos": [
     {
-      "lprDate": "2020-10-16",
-      "lpr": 5.1
-    },
-    {
-      "lprDate": "2022-10-16",
+      "lprDate": "2022-09-27",
       "lpr": 4.75
     },
     {

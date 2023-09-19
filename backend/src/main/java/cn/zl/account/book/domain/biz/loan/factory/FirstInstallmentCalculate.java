@@ -42,6 +42,7 @@ public class FirstInstallmentCalculate extends BaseLoanCalculate {
                 .repayAmount(principalPreMonth + interest)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
+                .remainsPrincipal(totalAmount  - principalPreMonth)
                 .currentRate(currentRate)
                 .build();
     }
