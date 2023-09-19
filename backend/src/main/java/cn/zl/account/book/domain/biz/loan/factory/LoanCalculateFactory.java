@@ -1,26 +1,34 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
-import cn.zl.account.book.application.enums.LoanChangeEnum;
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.LoanCalculateInfo;
+import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.util.concurrent.ConcurrentHashMap;
 
-import static cn.zl.account.book.application.enums.LoanChangeEnum.*;
+import static cn.zl.account.book.application.enums.CalculateEnum.*;
 
 /**
  * @author lin.zl
  */
 public class LoanCalculateFactory {
 
-    static final ConcurrentHashMap<LoanChangeEnum, BaseLoanCalculate> calMap = new ConcurrentHashMap<>();
+    static final ConcurrentHashMap<CalculateEnum, BaseLoanCalculate> CAL_MAP = new ConcurrentHashMap<>();
 
     static {
-        calMap.put(FIRST_INSTALLMENT, new FirstInstallmentCalculate());
+        CAL_MAP.put(FIRST_INSTALLMENT, new FirstInstallmentCalculate());
+        CAL_MAP.put(NORMAL, new NormalInstallmentCalculate());
+        CAL_MAP.put(LAST_INSTALLMENT, new LastInstallmentCalculate());
+        CAL_MAP.put(LPR_CHANGE, new LprChangeCalculate());
+        CAL_MAP.put(PAY_AMOUNT_CHANGE, new PayAmountChangeCalculate());
+        CAL_MAP.put(PREPAY, new PrepayChangeCalculate());
     }
 
-    public static RepayAmountPreMonthInfo calculatePayInfo(LoanCalculateInfo calculateInfo, LoanChangeEnum loanChange) {
-        return calMap.get(loanChange).repayCalculate(calculateInfo);
+    public static RepayAmountPreMonthInfo calculatePayInfo(LoanInfo loanInfo, LoanCalculateInfo calculateInfo, CalculateEnum calculateEnum) {
+        return CAL_MAP.get(calculateEnum).repayCalculate(loanInfo,calculateInfo);
     }
 
+    private LoanCalculateFactory() {
+    }
 }

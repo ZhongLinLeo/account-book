@@ -1,41 +1,47 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
-import cn.zl.account.book.application.enums.LoanChangeEnum;
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.LoanCalculateInfo;
+import cn.zl.account.book.application.info.LoanInfo;
+import cn.zl.account.book.application.info.LoanLprInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Period;
 import java.util.Objects;
+import java.util.Optional;
 
 /**
+ * 利率变更，不会缩短期数，只会缩短每月还款金额
+ *
  * @author lin.zl
  */
 public class LprChangeCalculate extends BaseLoanCalculate {
 
     @Override
-    public RepayAmountPreMonthInfo repayCalculate(LoanCalculateInfo calculateInfo) {
-        // calculate interest
-        double currentRate = calculateInfo.getCurrentRate();
+    public RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo) {
         double totalAmount = calculateInfo.getRemainsPrincipal();
-        int loanRepayDay = calculateInfo.getLoanRepayDay();
-        LocalDate loanStartDate = calculateInfo.getLoanStartDate();
         int loanPeriod = calculateInfo.getLoanPeriod();
+        LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
 
-        // 利息
-        double interest = interestCal(currentRate, totalAmount, loanStartDate, loanRepayDay);
+        double currentRate = findCurrentRate(loanInfo,currentRepayDate);
 
         Double repayAmount = calculateInfo.getRepayAmount();
         if (Objects.isNull(repayAmount)) {
             repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
+            // 设置还款金额
+            calculateInfo.setRepayAmount(repayAmount);
         }
 
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
 
+        // 每月还款利息 = 每月还款金额 - 每月还款本金
+        double interest = convert2Double(BigDecimal.valueOf(repayAmount)
+                .add(BigDecimal.valueOf(principalPreMonth).negate()));
+
         return RepayAmountPreMonthInfo.builder()
                 .repayTimes(1)
-                .repayDate(calculateInfo.getCurrentRepayDate())
+                .repayDate(currentRepayDate)
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
@@ -43,21 +49,22 @@ public class LprChangeCalculate extends BaseLoanCalculate {
                 .build();
     }
 
-    private double interestCal(double rate, double totalAmount, LocalDate loanStartDate,
-                               Integer loanRepayDay) {
-        final LocalDate lastRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay);
-        Period period = Period.between(loanStartDate, lastRepayDate);
-        int interestDay = 30 + period.getDays();
+    private double findCurrentRate(LoanInfo loanInfo, LocalDate currentRepayDate) {
+        Optional<LoanLprInfo> lprInfo = loanInfo.getLoanLprInfos().stream().filter(e -> {
+            LocalDate lprDate = e.getLprDate();
+            LocalDate lastRepayDate = currentRepayDate.plusMonths(-1);
+            return lprDate.isBefore(currentRepayDate) && lprDate.isAfter(lastRepayDate);
+        }).findFirst();
 
-        final BigDecimal firstPeriodInterest = BigDecimal.valueOf(totalAmount)
-                .multiply(monthRate(rate))
-                .multiply(BigDecimal.valueOf(interestDay))
-                .divide(BigDecimal.valueOf(30), 4, BigDecimal.ROUND_HALF_UP);
-        return convert2Double(firstPeriodInterest);
+        if (lprInfo.isPresent()){
+            return lprInfo.get().getLpr();
+        }
+
+        throw new RuntimeException();
     }
 
     @Override
-    public LoanChangeEnum calculateType() {
-        return LoanChangeEnum.FIRST_INSTALLMENT;
+    public CalculateEnum calculateType() {
+        return CalculateEnum.FIRST_INSTALLMENT;
     }
 }

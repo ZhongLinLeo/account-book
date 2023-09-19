@@ -1,63 +1,90 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
-import cn.zl.account.book.application.enums.LoanChangeEnum;
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.LoanCalculateInfo;
+import cn.zl.account.book.application.info.LoanInfo;
+import cn.zl.account.book.application.info.PrepaymentInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
-import java.time.Period;
-import java.util.Objects;
+import java.util.Optional;
 
 /**
+ * 提前还款
+ *
  * @author lin.zl
  */
 public class PrepayChangeCalculate extends BaseLoanCalculate {
 
     @Override
-    public RepayAmountPreMonthInfo repayCalculate(LoanCalculateInfo calculateInfo) {
-        // calculate interest
+    public RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo) {
         double currentRate = calculateInfo.getCurrentRate();
         double totalAmount = calculateInfo.getRemainsPrincipal();
-        int loanRepayDay = calculateInfo.getLoanRepayDay();
-        LocalDate loanStartDate = calculateInfo.getLoanStartDate();
         int loanPeriod = calculateInfo.getLoanPeriod();
 
-        // 利息
-        double interest = interestCal(currentRate, totalAmount, loanStartDate, loanRepayDay);
-
         Double repayAmount = calculateInfo.getRepayAmount();
-        if (Objects.isNull(repayAmount)) {
-            repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
-        }
+
+        LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
+        double prepayAmount = findPrepayAmount(loanInfo, currentRepayDate);
+        int reduceMonths = reduceMonths(currentRate, totalAmount, prepayAmount, loanPeriod, repayAmount);
+
+        repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod - reduceMonths);
+        // 设置还款金额
+        calculateInfo.setRepayAmount(repayAmount);
 
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
 
+        // 每月还款利息 = 每月还款金额 - 每月还款本金
+        double interest = convert2Double(BigDecimal.valueOf(repayAmount)
+                .add(BigDecimal.valueOf(principalPreMonth).negate()));
+
         return RepayAmountPreMonthInfo.builder()
                 .repayTimes(1)
-                .repayDate(calculateInfo.getCurrentRepayDate())
+                .repayDate(currentRepayDate)
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
                 .currentRate(currentRate)
+                .reduceMonths(reduceMonths)
                 .build();
     }
 
-    private double interestCal(double rate, double totalAmount, LocalDate loanStartDate,
-                               Integer loanRepayDay) {
-        final LocalDate lastRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay);
-        Period period = Period.between(loanStartDate, lastRepayDate);
-        int interestDay = 30 + period.getDays();
+    private double findPrepayAmount(LoanInfo loanInfo, LocalDate currentRepayDate) {
+        Optional<PrepaymentInfo> prepaymentInfo = loanInfo.getPrepaymentInfos().stream().filter(e -> {
+            LocalDate prepaymentDate = e.getPrepaymentDate();
+            LocalDate lastRepayDate = currentRepayDate.plusMonths(-1);
+            return prepaymentDate.isBefore(currentRepayDate) && prepaymentDate.isAfter(lastRepayDate);
+        }).findFirst();
 
-        final BigDecimal firstPeriodInterest = BigDecimal.valueOf(totalAmount)
-                .multiply(monthRate(rate))
-                .multiply(BigDecimal.valueOf(interestDay))
-                .divide(BigDecimal.valueOf(30), 4, BigDecimal.ROUND_HALF_UP);
-        return convert2Double(firstPeriodInterest);
+        if (prepaymentInfo.isPresent()) {
+            return prepaymentInfo.get().getPrepaymentAmount();
+        }
+
+        throw new RuntimeException();
+    }
+
+    private int reduceMonths(double rate, double originLoanAmount, double prepayAmount, int loanPeriod, double originPayAmount) {
+        if (prepayAmount >= originLoanAmount) {
+            return loanPeriod;
+        }
+
+        // 暴力破解
+        double loanAmount = originLoanAmount - prepayAmount;
+        int reduceMonths = 0;
+        for (int period = loanPeriod; period > 0; period--) {
+            double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
+            if (amountPreMonth > originPayAmount) {
+                reduceMonths = period + 1;
+            }
+        }
+
+        // 杭州银行只能缩短整年的
+        return reduceMonths / 12 * 12;
     }
 
     @Override
-    public LoanChangeEnum calculateType() {
-        return LoanChangeEnum.FIRST_INSTALLMENT;
+    public CalculateEnum calculateType() {
+        return CalculateEnum.FIRST_INSTALLMENT;
     }
 }

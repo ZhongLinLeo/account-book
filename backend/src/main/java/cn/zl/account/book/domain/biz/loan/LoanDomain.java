@@ -1,6 +1,8 @@
 package cn.zl.account.book.domain.biz.loan;
 
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.*;
+import cn.zl.account.book.domain.biz.loan.factory.LoanCalculateFactory;
 import com.alibaba.fastjson2.JSON;
 import org.apache.commons.collections4.CollectionUtils;
 
@@ -29,7 +31,7 @@ public class LoanDomain {
 
     public void calculatePrepayment(LoanInfo loanInfo) {
         // calculate Interest
-        final List<RepayAmountPreMonthInfo> originRepayInfos = calculatePrepaymentInfo(loanInfo);
+        final List<RepayAmountPreMonthInfo> originRepayInfos = calRepayInfo(loanInfo);
 
         System.out.println(JSON.toJSONString(originRepayInfos));
 
@@ -55,10 +57,44 @@ public class LoanDomain {
         System.out.println(repayInfo);
     }
 
-    public void calRepayInfo(){
+    public List<RepayAmountPreMonthInfo> calRepayInfo(LoanInfo loanInfo) {
 
+        List<RepayAmountPreMonthInfo> repayAmountPreMonthInfos = new ArrayList<>();
 
+        LocalDate loanStartDate = loanInfo.getLoanStartDate();
+        Integer loanRepayDay = loanInfo.getLoanRepayDay();
 
+        int repaidPeriod;
+        Integer loanPeriod = loanInfo.getLoanPeriod();
+
+        LoanCalculateInfo calInfo = new LoanCalculateInfo();
+        calInfo.setLoanStartDate(loanInfo.getLoanStartDate());
+        calInfo.setCurrentRate(loanInfo.getLoanRate());
+        calInfo.setLoanRepayDay(loanInfo.getLoanRepayDay());
+
+        double remainsPrincipal = loanInfo.getLoanAmount();
+
+        // 遍历还款期数
+        for (repaidPeriod = 1; repaidPeriod <= loanPeriod; repaidPeriod++) {
+            // 计算当前还款日
+            LocalDate currentRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay)
+                    .plusMonths(repaidPeriod);
+
+            CalculateEnum calType = CalculateEnum.findCalType(currentRepayDate, loanInfo, repaidPeriod);
+
+            calInfo.setCurrentRepayDate(currentRepayDate);
+            calInfo.setLoanPeriod(loanPeriod - repaidPeriod + 1);
+            calInfo.setRemainsPrincipal(remainsPrincipal);
+
+            RepayAmountPreMonthInfo repayAmountPreMonthInfo = LoanCalculateFactory.calculatePayInfo(loanInfo,calInfo, calType);
+
+            repayAmountPreMonthInfo.setRepayTimes(repaidPeriod);
+            remainsPrincipal -= repayAmountPreMonthInfo.getRepayPrincipal();
+            repayAmountPreMonthInfo.setRemainsPrincipal(remainsPrincipal);
+
+            repayAmountPreMonthInfos.add(repayAmountPreMonthInfo);
+        }
+        return repayAmountPreMonthInfos;
     }
 
     public List<RepayAmountPreMonthInfo> calculatePrepaymentInfo(LoanInfo loanInfo) {
@@ -166,12 +202,6 @@ public class LoanDomain {
         }
 
         return repayAmountPreMonthInfos;
-    }
-
-    private RepayAmountPreMonthInfo fistInstallment(LoanCalculateInfo calculateInfo){
-
-
-        return null;
     }
 
     private static double rateChange(double originRate, double currentRate, double remainsPrincipal, int loanPeriod) {
@@ -343,7 +373,7 @@ public class LoanDomain {
      */
     private double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
 
-        final BigDecimal monthRate = BigDecimal.valueOf(rate/100/12);
+        final BigDecimal monthRate = BigDecimal.valueOf(rate / 100 / 12);
 
         final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(loanPeriod);
 

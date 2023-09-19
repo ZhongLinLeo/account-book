@@ -1,13 +1,11 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
-import cn.zl.account.book.application.enums.LoanChangeEnum;
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.LoanCalculateInfo;
+import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
-import java.time.Period;
-import java.util.Objects;
 
 /**
  * @author lin.zl
@@ -15,23 +13,16 @@ import java.util.Objects;
 public class NormalInstallmentCalculate extends BaseLoanCalculate {
 
     @Override
-    public RepayAmountPreMonthInfo repayCalculate(LoanCalculateInfo calculateInfo) {
-        // calculate interest
+    public RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo) {
         double currentRate = calculateInfo.getCurrentRate();
         double totalAmount = calculateInfo.getRemainsPrincipal();
-        int loanRepayDay = calculateInfo.getLoanRepayDay();
-        LocalDate loanStartDate = calculateInfo.getLoanStartDate();
-        int loanPeriod = calculateInfo.getLoanPeriod();
-
-        // 利息
-        double interest = interestCal(currentRate, totalAmount, loanStartDate, loanRepayDay);
 
         Double repayAmount = calculateInfo.getRepayAmount();
-        if (Objects.isNull(repayAmount)) {
-            repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
-        }
-
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
+
+        // 每月还款利息 = 每月还款金额 - 每月还款本金
+        double interest = convert2Double(BigDecimal.valueOf(repayAmount)
+                .add(BigDecimal.valueOf(principalPreMonth).negate()));
 
         return RepayAmountPreMonthInfo.builder()
                 .repayTimes(1)
@@ -43,21 +34,8 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
                 .build();
     }
 
-    private double interestCal(double rate, double totalAmount, LocalDate loanStartDate,
-                               Integer loanRepayDay) {
-        final LocalDate lastRepayDate = LocalDate.of(loanStartDate.getYear(), loanStartDate.getMonth(), loanRepayDay);
-        Period period = Period.between(loanStartDate, lastRepayDate);
-        int interestDay = 30 + period.getDays();
-
-        final BigDecimal firstPeriodInterest = BigDecimal.valueOf(totalAmount)
-                .multiply(monthRate(rate))
-                .multiply(BigDecimal.valueOf(interestDay))
-                .divide(BigDecimal.valueOf(30), 4, BigDecimal.ROUND_HALF_UP);
-        return convert2Double(firstPeriodInterest);
-    }
-
     @Override
-    public LoanChangeEnum calculateType() {
-        return LoanChangeEnum.FIRST_INSTALLMENT;
+    public CalculateEnum calculateType() {
+        return CalculateEnum.FIRST_INSTALLMENT;
     }
 }

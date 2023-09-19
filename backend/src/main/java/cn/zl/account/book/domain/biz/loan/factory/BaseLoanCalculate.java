@@ -1,7 +1,8 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
-import cn.zl.account.book.application.enums.LoanChangeEnum;
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.LoanCalculateInfo;
+import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
@@ -16,17 +17,18 @@ public abstract class BaseLoanCalculate {
     /**
      * 还款计算
      *
+     * @param loanInfo loan info
      * @param calculateInfo 计算信息
      * @return 还款信息
      */
-    public abstract RepayAmountPreMonthInfo repayCalculate(LoanCalculateInfo calculateInfo);
+    public abstract RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo);
 
     /**
      * 计算类型
      *
      * @return 返回计算类型
      */
-    public abstract LoanChangeEnum calculateType();
+    public abstract CalculateEnum calculateType();
 
     /**
      * x = A * β * (1 + β) ^ k / [(1 + β) ^ k - 1]
@@ -82,6 +84,9 @@ public abstract class BaseLoanCalculate {
         final BigDecimal principal = firstPrincipal.multiply(BigDecimal.ONE.add(monthRate).pow(times - 1));
         return convert2Double(principal);
     }
+
+
+
 
 
 

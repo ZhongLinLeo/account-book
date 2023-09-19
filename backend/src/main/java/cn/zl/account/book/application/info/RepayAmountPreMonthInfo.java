@@ -1,5 +1,6 @@
 package cn.zl.account.book.application.info;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -12,6 +13,7 @@ import java.time.LocalDate;
 @Data
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class RepayAmountPreMonthInfo {
 
     private Integer repayTimes;
@@ -27,6 +29,8 @@ public class RepayAmountPreMonthInfo {
     private Double remainsPrincipal;
 
     private Double currentRate;
+
+    private Integer reduceMonths;
 
     @Override
     public String toString() {

@@ -1,7 +1,8 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
-import cn.zl.account.book.application.enums.LoanChangeEnum;
+import cn.zl.account.book.application.enums.CalculateEnum;
 import cn.zl.account.book.application.info.LoanCalculateInfo;
+import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
 import java.math.BigDecimal;
@@ -15,7 +16,7 @@ import java.util.Objects;
 public class FirstInstallmentCalculate extends BaseLoanCalculate {
 
     @Override
-    public RepayAmountPreMonthInfo repayCalculate(LoanCalculateInfo calculateInfo) {
+    public RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo) {
         // calculate interest
         double currentRate = calculateInfo.getCurrentRate();
         double totalAmount = calculateInfo.getRemainsPrincipal();
@@ -29,14 +30,16 @@ public class FirstInstallmentCalculate extends BaseLoanCalculate {
         Double repayAmount = calculateInfo.getRepayAmount();
         if (Objects.isNull(repayAmount)) {
             repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
+
+            // 设置还款金额
+            calculateInfo.setRepayAmount(repayAmount);
         }
 
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
 
         return RepayAmountPreMonthInfo.builder()
-                .repayTimes(1)
                 .repayDate(calculateInfo.getCurrentRepayDate())
-                .repayAmount(repayAmount)
+                .repayAmount(principalPreMonth + interest)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
                 .currentRate(currentRate)
@@ -57,7 +60,7 @@ public class FirstInstallmentCalculate extends BaseLoanCalculate {
     }
 
     @Override
-    public LoanChangeEnum calculateType() {
-        return LoanChangeEnum.FIRST_INSTALLMENT;
+    public CalculateEnum calculateType() {
+        return CalculateEnum.FIRST_INSTALLMENT;
     }
 }

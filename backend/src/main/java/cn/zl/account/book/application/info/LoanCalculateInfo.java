@@ -1,6 +1,5 @@
 package cn.zl.account.book.application.info;
 
-import lombok.Builder;
 import lombok.Data;
 
 import java.time.LocalDate;
@@ -9,7 +8,6 @@ import java.time.LocalDate;
  * @author lin.zl
  */
 @Data
-@Builder
 public class LoanCalculateInfo {
 
     private double currentRate;
