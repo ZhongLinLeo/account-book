@@ -15,10 +15,26 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
 
     @Override
     public RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo) {
+        //  获取 LPR 信息
         double currentRate = calculateInfo.getCurrentRate();
-        double totalAmount = calculateInfo.getRemainsPrincipal();
 
+        // 获取 剩余待还金额
+        double totalAmount = getRemainsPrincipal(calculateInfo, loanInfo);
+
+        // 每月还款金额
         Double repayAmount = calculateInfo.getRepayAmount();
+
+        if (isRepayChange(calculateInfo.getCurrentRepayDate(), loanInfo)) {
+            //  获取 LPR 信息
+            currentRate = getCurrentRate(calculateInfo, loanInfo);
+
+            // 获取 剩余待还金额
+            totalAmount = getRemainsPrincipal(calculateInfo, loanInfo);
+
+            // 每月还款金额
+            repayAmount = getRepayAmount(calculateInfo, loanInfo, currentRate, totalAmount);
+        }
+
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
 
         // 每月还款利息 = 每月还款金额 - 每月还款本金
@@ -36,13 +52,67 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
                 .build();
     }
 
+    private double getRepayAmount(LoanCalculateInfo calculateInfo, LoanInfo loanInfo
+            , double currentRate, double totalAmount) {
+        List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();
+        double repayAmount = calculateInfo.getRepayAmount();
+        if (CollectionUtils.isEmpty(repayAmountChangeInfos)) {
+            return repayAmount;
+        }
 
-    private void repayChange() {
-
-
+        final LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
+        for (RepayAmountChangeInfo repayAmountChangeInfo : repayAmountChangeInfos) {
+            LocalDate changeDate = repayAmountChangeInfo.getChangeDate();
+            if (isCurrentPeriod(changeDate, currentRepayDate)) {
+                repayAmount = repayAmountChangeInfo.getRepayAmount();
+                calculateInfo.setRepayAmount(repayAmount);
+            }
+        }
+        return repayAmount;
     }
 
-    private static boolean isRepayChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
+    private double getRemainsPrincipal(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
+        List<PrepaymentInfo> prepaymentInfos = loanInfo.getPrepaymentInfos();
+        double remainsPrincipal = calculateInfo.getRemainsPrincipal();
+        if (CollectionUtils.isEmpty(prepaymentInfos)) {
+            return remainsPrincipal;
+        }
+
+        final LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
+        for (PrepaymentInfo prepaymentInfo : prepaymentInfos) {
+            LocalDate prepaymentDate = prepaymentInfo.getPrepaymentDate();
+            if (isCurrentPeriod(prepaymentDate, currentRepayDate)) {
+                remainsPrincipal -= prepaymentInfo.getPrepaymentAmount();
+            }
+        }
+        return remainsPrincipal;
+    }
+
+    private double getCurrentRate(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
+        List<LoanLprInfo> loanLprInfos = loanInfo.getLoanLprInfos();
+        double currentRate = calculateInfo.getCurrentRate();
+        if (CollectionUtils.isEmpty(loanLprInfos)) {
+            return currentRate;
+        }
+
+        final LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
+        for (LoanLprInfo loanLprInfo : loanLprInfos) {
+            LocalDate lprDate = loanLprInfo.getLprDate();
+            if (isCurrentPeriod(lprDate, currentRepayDate)) {
+                currentRate = loanLprInfo.getLpr();
+                // 如果 lpr 改变，将新的LPR设置进去
+                calculateInfo.setCurrentRate(currentRate);
+            }
+        }
+        return currentRate;
+    }
+
+    private boolean isRepayChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
+        return isRepayAmountChange(currentRepayDate, loanInfo) || isPrepay(currentRepayDate, loanInfo)
+                || isLprChange(currentRepayDate, loanInfo);
+    }
+
+    private boolean isRepayAmountChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
         List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();
         if (CollectionUtils.isEmpty(repayAmountChangeInfos)) {
             return false;
@@ -50,11 +120,11 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
 
         return repayAmountChangeInfos.stream().anyMatch(e -> {
             LocalDate changeDate = e.getChangeDate();
-            return isCurrentPeriod(changeDate,currentRepayDate);
+            return isCurrentPeriod(changeDate, currentRepayDate);
         });
     }
 
-    private static boolean isPrepay(LocalDate currentRepayDate, LoanInfo loanInfo) {
+    private boolean isPrepay(LocalDate currentRepayDate, LoanInfo loanInfo) {
         List<PrepaymentInfo> prepaymentInfos = loanInfo.getPrepaymentInfos();
         if (CollectionUtils.isEmpty(prepaymentInfos)) {
             return false;
@@ -66,7 +136,8 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
         });
     }
 
-    private static boolean isLprChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
+
+    private boolean isLprChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
         List<LoanLprInfo> loanLprInfos = loanInfo.getLoanLprInfos();
         if (CollectionUtils.isEmpty(loanLprInfos)) {
             return false;
