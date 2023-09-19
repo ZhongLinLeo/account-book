@@ -55,6 +55,12 @@ public class LoanDomain {
         System.out.println(repayInfo);
     }
 
+    public void calRepayInfo(){
+
+
+
+    }
+
     public List<RepayAmountPreMonthInfo> calculatePrepaymentInfo(LoanInfo loanInfo) {
         // 贷款金额是不变的
         Double loanAmount = loanInfo.getLoanAmount();
@@ -92,13 +98,13 @@ public class LoanDomain {
             // 第一次需要计算 每月还款金额
             if (Objects.isNull(payAmount)) {
                 currentRate = Optional.ofNullable(currentLpr).orElse(currentRate);
-                payAmount = calculateRepayAmountPreMonth(currentRate, loanAmount, loanPeriod);
+                payAmount = repayAmountPreMonth(currentRate, remainsPrincipal, loanPeriod - repaidPeriod + 1);
             }
 
             // 利率变更，不会缩短期数，只会缩短每月还款金额
             if (Objects.nonNull(currentLpr) && !Objects.equals(currentLpr, currentRate)) {
                 currentRate = currentLpr;
-                payAmount = calculateRepayAmountPreMonth(currentRate, remainsPrincipal, loanPeriod - repaidPeriod+1);
+                payAmount = repayAmountPreMonth(currentRate, remainsPrincipal, loanPeriod - repaidPeriod + 1);
             }
 
             // 提前还款,目前只考虑缩短年限，杭州银行仅支持缩短整年
@@ -110,7 +116,7 @@ public class LoanDomain {
                 loanPeriod -= prepayReduceMonths;
 
                 // 提前还款后，当前金额
-                payAmount = calculateRepayAmountPreMonth(currentRate, loanAmount - prepayAmount, loanPeriod - repaidPeriod);
+                payAmount = repayAmountPreMonth(currentRate, loanAmount - prepayAmount, loanPeriod - repaidPeriod);
             }
 
             // 还款金额变更，会缩短期数
@@ -162,12 +168,10 @@ public class LoanDomain {
         return repayAmountPreMonthInfos;
     }
 
-    public static void main(String[] args) {
-        double remainsPrincipal = 1928885.68;
+    private RepayAmountPreMonthInfo fistInstallment(LoanCalculateInfo calculateInfo){
 
-        double v = rateChange(5.1, 4.75, remainsPrincipal, 336);
 
-        System.out.println(v);
+        return null;
     }
 
     private static double rateChange(double originRate, double currentRate, double remainsPrincipal, int loanPeriod) {
@@ -317,7 +321,7 @@ public class LoanDomain {
                 continue;
             }
 
-            final double amountPreMonth = calculateRepayAmountPreMonth(currentRate, loanAmount, loanPeriod);
+            final double amountPreMonth = repayAmountPreMonth(currentRate, loanAmount, loanPeriod);
             repayAmountPreMonthInfo.setRepayAmount(amountPreMonth);
 
             // 每月还款利息 = 每月还款金额 - 每月还款本金
@@ -337,9 +341,9 @@ public class LoanDomain {
      * @param loanPeriod 剩余期数
      * @return 每期还款金额
      */
-    private double calculateRepayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
+    private double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
 
-        final BigDecimal monthRate = monthRate(rate);
+        final BigDecimal monthRate = BigDecimal.valueOf(rate/100/12);
 
         final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(loanPeriod);
 
@@ -363,7 +367,7 @@ public class LoanDomain {
     private double calculatePrincipalPreMonth(double rate, double loanAmount, int loanPeriod, int times) {
         final BigDecimal monthRate = monthRate(rate);
 
-        final double amountPreMonth = calculateRepayAmountPreMonth(rate, loanAmount, loanPeriod);
+        final double amountPreMonth = repayAmountPreMonth(rate, loanAmount, loanPeriod);
 
         final BigDecimal tmp = BigDecimal.valueOf(loanAmount).multiply(monthRate);
 
@@ -383,7 +387,7 @@ public class LoanDomain {
         double loanAmount = originLoanAmount - prepayAmount;
         int reduceMonths = 0;
         for (int period = loanPeriod; period > 0; period--) {
-            double amountPreMonth = calculateRepayAmountPreMonth(rate, loanAmount, period);
+            double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
             if (amountPreMonth > originPayAmount) {
                 reduceMonths = period + 1;
             }

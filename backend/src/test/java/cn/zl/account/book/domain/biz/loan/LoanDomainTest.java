@@ -25,33 +25,30 @@ public class LoanDomainTest {
     @Test
     public void testMonth(){
 
-        final BigDecimal lprDecimal = BigDecimal.valueOf(5.1);
-        BigDecimal  monthRate = lprDecimal.divide(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(12), 5, BigDecimal.ROUND_HALF_UP);
+        BigDecimal loanRateMonth = BigDecimal.valueOf(4.75 / 100 / 12) ;
+        BigDecimal factor = BigDecimal.valueOf(Math.pow(1 + loanRateMonth.doubleValue(), 336));
+        BigDecimal avgRepayment = BigDecimal.valueOf(1928885.68).multiply(loanRateMonth)
+                .multiply(factor).divide(factor.subtract(new BigDecimal(1)), 2, BigDecimal.ROUND_HALF_UP);
 
-        final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(360);
-
-        final BigDecimal molecular = BigDecimal.valueOf(1988000).multiply(monthRate).multiply(tmpPow);
-
-        final BigDecimal denominator = tmpPow.add(BigDecimal.ONE.negate());
-
-        final BigDecimal repayAmount = molecular.divide(denominator, 4, BigDecimal.ROUND_HALF_UP);
-
+        System.out.println(avgRepayment);
     }
 
     @Test
     public void testDay(){
 
-        final BigDecimal lprDecimal = BigDecimal.valueOf(5.1);
-        BigDecimal  dayRate = lprDecimal.divide(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(360), 5, BigDecimal.ROUND_HALF_UP);
+        final BigDecimal lprDecimal = BigDecimal.valueOf(4.75);
+//        final BigDecimal monthRate = lprDecimal.divide(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(12));
+        final BigDecimal monthRate = BigDecimal.valueOf(4.75/100/12);
 
-        final BigDecimal tmpPow = BigDecimal.ONE.add(dayRate).pow(360);
 
-        final BigDecimal molecular = BigDecimal.valueOf(1988000).multiply(dayRate).multiply(tmpPow);
+        final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(336);
+
+        final BigDecimal molecular = BigDecimal.valueOf(1928885.68).multiply(monthRate).multiply(tmpPow);
 
         final BigDecimal denominator = tmpPow.add(BigDecimal.ONE.negate());
 
-        final BigDecimal repayAmount = molecular.divide(denominator, 4, BigDecimal.ROUND_HALF_UP);
-
+        final BigDecimal repayAmount = molecular.divide(denominator, 2, BigDecimal.ROUND_HALF_UP);
+        System.out.println(repayAmount);
     }
 
 

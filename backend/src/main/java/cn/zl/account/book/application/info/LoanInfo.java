@@ -33,6 +33,11 @@ public class LoanInfo {
     private Integer loanRepayDay;
 
     /**
+     * 贷款初始利率
+     */
+    private Double loanRate;
+
+    /**
      * 利率
      */
     private List<LoanLprInfo> loanLprInfos;

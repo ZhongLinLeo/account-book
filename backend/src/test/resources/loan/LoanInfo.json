@@ -3,6 +3,7 @@
   "loanPeriod": 360,
   "loanStartDate": "2020-09-27",
   "loanRepayDay": 16,
+  "loanRate": 5.1,
   "loanLprInfos": [
     {
       "lprDate": "2020-10-16",
