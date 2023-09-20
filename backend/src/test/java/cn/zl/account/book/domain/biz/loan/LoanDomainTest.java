@@ -36,10 +36,10 @@ public class LoanDomainTest {
     @Test
     public void testDay(){
 
-        int loanPeriod = 336;
+        int loanPeriod = 301;
 
         double rate = 4.75;
-        double loanAmount = 1797112.04;
+        double loanAmount = 1677112.82;
 
         double originPayAmount = 10227.85;
 

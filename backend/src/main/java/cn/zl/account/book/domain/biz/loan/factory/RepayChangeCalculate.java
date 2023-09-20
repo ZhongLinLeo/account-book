@@ -92,12 +92,17 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         double remainsPrincipal = calculateInfo.getRemainsPrincipal() - prepayInfo.getPrepaymentAmount();
 
         double currentRate = getCurrentRate(calculateInfo, loanInfo);
-        double repayAmount = getRepayAmount(calculateInfo, loanInfo);
+        double repayAmount = calculateInfo.getRepayAmount();
 
-        int reduceMonths = reduceMonths(currentRate, remainsPrincipal, calculateInfo.getLoanPeriod(), repayAmount);
+        int loanPeriod = calculateInfo.getLoanPeriod();
+        int reduceMonths = reduceMonths(currentRate, remainsPrincipal, loanPeriod, repayAmount);
 
         preMonthInfo.setReduceMonths(reduceMonths);
         preMonthInfo.setRemainsPrincipal(remainsPrincipal);
+
+        // 重新计算月还款金额
+        repayAmount = repayAmountPreMonth(currentRate, remainsPrincipal, loanPeriod - reduceMonths);
+        calculateInfo.setRepayAmount(repayAmount);
     }
 
     private PrepaymentInfo calculatePrepayInfo(LoanInfo loanInfo, LoanCalculateInfo calculateInfo, LocalDate currentRepayDate) {
