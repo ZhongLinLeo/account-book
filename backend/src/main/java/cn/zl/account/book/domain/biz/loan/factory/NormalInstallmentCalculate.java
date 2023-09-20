@@ -14,8 +14,8 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
 
     @Override
     public RepayAmountPreMonthInfo repayCalculate(LoanInfo loanInfo, LoanCalculateInfo calculateInfo) {
-        if (isRepayChange(calculateInfo.getCurrentRepayDate(),loanInfo)){
-            return LoanCalculateFactory.calculatePayInfo(loanInfo,calculateInfo,CalculateEnum.REPAY_CHANGE);
+        if (isRepayChange(calculateInfo.getCurrentRepayDate(), loanInfo)) {
+            return LoanCalculateFactory.calculatePayInfo(loanInfo, calculateInfo, CalculateEnum.REPAY_CHANGE);
         }
 
         //  获取 LPR 信息
@@ -33,7 +33,7 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
-                .remainsPrincipal(totalAmount  - principalPreMonth)
+                .remainsPrincipal(convert2Accuracy(totalAmount - principalPreMonth, 2))
                 .currentRate(currentRate)
                 .build();
     }

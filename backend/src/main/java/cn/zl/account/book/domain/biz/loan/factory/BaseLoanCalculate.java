@@ -5,6 +5,7 @@ import cn.zl.account.book.application.info.*;
 import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -131,6 +132,10 @@ public abstract class BaseLoanCalculate {
             LocalDate lprDate = e.getLprDate();
             return isCurrentPeriod(lprDate, currentRepayDate);
         });
+    }
+
+    protected double convert2Accuracy(double targetNum, int accuracy){
+        return BigDecimal.valueOf(targetNum).setScale(accuracy, RoundingMode.HALF_UP).doubleValue();
     }
 
 }

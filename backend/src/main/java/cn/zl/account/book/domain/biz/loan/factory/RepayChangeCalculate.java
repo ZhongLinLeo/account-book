@@ -58,7 +58,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         preMonthInfo.setRepayAmount(repayAmount);
         preMonthInfo.setRepayInterest(interest);
         preMonthInfo.setRepayPrincipal(principalPreMonth);
-        preMonthInfo.setRemainsPrincipal(totalAmount - principalPreMonth);
+        preMonthInfo.setRemainsPrincipal(convert2Accuracy(totalAmount - principalPreMonth,2));
         preMonthInfo.setCurrentRate(currentRate);
 
         return preMonthInfo;
