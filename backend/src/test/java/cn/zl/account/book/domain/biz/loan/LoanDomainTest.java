@@ -36,20 +36,43 @@ public class LoanDomainTest {
     @Test
     public void testDay(){
 
-        final BigDecimal lprDecimal = BigDecimal.valueOf(4.75);
-//        final BigDecimal monthRate = lprDecimal.divide(BigDecimal.valueOf(100)).divide(BigDecimal.valueOf(12));
-        final BigDecimal monthRate = BigDecimal.valueOf(4.75/100/12);
+        int loanPeriod = 336;
 
+        double rate = 4.75;
+        double loanAmount = 1797112.04;
 
-        final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(336);
+        double originPayAmount = 10227.85;
 
-        final BigDecimal molecular = BigDecimal.valueOf(1928885.68).multiply(monthRate).multiply(tmpPow);
+        // 暴力破解
+        int reduceMonths = 0;
+        for (int period = loanPeriod; period > 0; period--) {
+            double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
+            if (amountPreMonth > originPayAmount) {
+                reduceMonths = loanPeriod - period + 1;
+                break;
+            }
+        }
+
+        // 杭州银行只能缩短整年的
+        int i = reduceMonths / 12 * 12;
+
+        System.out.println(i);
+    }
+
+    private  double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
+
+        final BigDecimal monthRate = BigDecimal.valueOf(rate / 100 / 12);
+
+        final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(loanPeriod);
+
+        final BigDecimal molecular = BigDecimal.valueOf(loanAmount).multiply(monthRate).multiply(tmpPow);
 
         final BigDecimal denominator = tmpPow.add(BigDecimal.ONE.negate());
 
         final BigDecimal repayAmount = molecular.divide(denominator, 2, BigDecimal.ROUND_HALF_UP);
-        System.out.println(repayAmount);
+        return repayAmount.doubleValue();
     }
+
 
 
 
