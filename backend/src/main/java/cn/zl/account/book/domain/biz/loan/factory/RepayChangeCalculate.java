@@ -46,7 +46,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         int loanPeriod = calculateInfo.getLoanPeriod() - Optional.ofNullable(preMonthInfo.getReduceMonths()).orElse(0);
         if (Objects.isNull(repayAmount)) {
             repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
-
+            calculateInfo.setRepayAmount(repayAmount);
         }
 
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, calculateInfo.getRepaidPeriod());
@@ -70,27 +70,11 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
             return;
         }
 
-        double repayAmount = getRepayAmount(calculateInfo, loanInfo);
-        double currentRate = getCurrentRate(calculateInfo, loanInfo);
-        int loanPeriod = calculateInfo.getLoanPeriod();
-
-        double loanAmount = Optional.ofNullable(preMonthInfo.getRemainsPrincipal()).orElse(calculateInfo.getRemainsPrincipal());
-
-        int reduceMonths = 0;
-        for (int period = loanPeriod; period > 0; period--) {
-            double amountPreMonth = repayAmountPreMonth(currentRate, loanAmount, period);
-            if (BigDecimal.valueOf(amountPreMonth).equals(BigDecimal.valueOf(repayAmount))) {
-                reduceMonths = loanPeriod - period + 1;
-                break;
-            }
-        }
-
-        // 杭州银行只能缩短整年的
-        reduceMonths = reduceMonths / 12 * 12;
+        RepayAmountChangeInfo repayAmountChangeInfo = getRepayAmountChangeInfo(calculateInfo, loanInfo);
 
         Integer currentReduce = Optional.ofNullable(preMonthInfo.getReduceMonths()).orElse(0);
-        preMonthInfo.setReduceMonths(currentReduce + reduceMonths);
-        preMonthInfo.setRepayAmount(repayAmount);
+        preMonthInfo.setReduceMonths(repayAmountChangeInfo.getReduceMonths() + currentReduce);
+        preMonthInfo.setRepayAmount(repayAmountChangeInfo.getRepayAmount());
     }
 
     private void prepay(LoanInfo loanInfo, LoanCalculateInfo calculateInfo, RepayAmountPreMonthInfo preMonthInfo) {
@@ -195,6 +179,20 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         // 利率变更会导致每月还款金额变少
         calculateInfo.setRepayAmount(afterChangePayAmount);
     }
+
+    private RepayAmountChangeInfo getRepayAmountChangeInfo(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
+        List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();
+
+        final LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
+        for (RepayAmountChangeInfo repayAmountChangeInfo : repayAmountChangeInfos) {
+            LocalDate changeDate = repayAmountChangeInfo.getChangeDate();
+            if (isCurrentPeriod(changeDate, currentRepayDate)) {
+                return repayAmountChangeInfo;
+            }
+        }
+        throw new RuntimeException();
+    }
+
 
     private double getRepayAmount(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
         List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();

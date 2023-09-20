@@ -21,4 +21,6 @@ public class RepayAmountChangeInfo {
      * 更改日期
      */
     private LocalDate changeDate;
+
+    private Integer reduceMonths;
 }
