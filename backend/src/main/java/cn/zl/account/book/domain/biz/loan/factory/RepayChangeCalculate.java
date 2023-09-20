@@ -49,16 +49,17 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
             calculateInfo.setRepayAmount(repayAmount);
         }
 
-        double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, calculateInfo.getRepaidPeriod());
+        // 利息
+        double interest = calculateInterest(totalAmount,currentRate);
 
-        // 每月还款利息 = 每月还款金额 - 每月还款本金
-        double interest = convert2Double(BigDecimal.valueOf(repayAmount)
-                .add(BigDecimal.valueOf(principalPreMonth).negate()));
+        // 本金
+        double principalPreMonth = calculatePrincipal(repayAmount,interest);
+
 
         preMonthInfo.setRepayAmount(repayAmount);
         preMonthInfo.setRepayInterest(interest);
         preMonthInfo.setRepayPrincipal(principalPreMonth);
-        preMonthInfo.setRemainsPrincipal(convert2Accuracy(totalAmount - principalPreMonth,2));
+        preMonthInfo.setRemainsPrincipal(convert2Accuracy(totalAmount - principalPreMonth));
         preMonthInfo.setCurrentRate(currentRate);
 
         return preMonthInfo;
@@ -154,30 +155,26 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         }
 
         // lpr 改变的时候，不太清楚怎么计算，可以测试一些，变更前一半，变更后一半
-        double currentRate = getCurrentRate(calculateInfo, loanInfo);
         double totalAmount = calculateInfo.getRemainsPrincipal();
         int loanPeriod = calculateInfo.getLoanPeriod();
 
-        // 还款金额
-        double repayAmount = calculateInfo.getRepayAmount();
-        double afterChangePayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
-        preMonthInfo.setRepayAmount(repayAmount / 2 + afterChangePayAmount / 2);
+        // 变更前 还款金额、本金、利率
+        double beforeRepayAmount = calculateInfo.getRepayAmount();
+        double beforeInterest = calculateInterest(totalAmount,calculateInfo.getCurrentRate());
+        double beforePrincipal = calculatePrincipal(beforeRepayAmount,beforeInterest);
 
-        // 本金
-        double originPrincipal = calculatePrincipalPreMonth(calculateInfo.getCurrentRate(), totalAmount, repayAmount, 1);
-        double currentPrincipal = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
-        preMonthInfo.setRepayPrincipal((originPrincipal + currentPrincipal) / 2);
+        // 变更后 还款金额、本金、利率
+        double currentRate = getCurrentRate(calculateInfo, loanInfo);
+        double afterRepayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
+        double afterInterest = calculateInterest(totalAmount,currentRate);
+        double afterPrincipal = calculatePrincipal(afterRepayAmount,afterInterest);
 
-        // 利息
-        double originInterest = convert2Double(BigDecimal.valueOf(repayAmount)
-                .add(BigDecimal.valueOf(originPrincipal).negate()));
-
-        double currentInterest = convert2Double(BigDecimal.valueOf(afterChangePayAmount)
-                .add(BigDecimal.valueOf(currentPrincipal).negate()));
-        preMonthInfo.setRepayInterest((originInterest + currentInterest) / 2);
+        preMonthInfo.setRepayAmount(beforeRepayAmount / 2 + afterRepayAmount / 2);
+        preMonthInfo.setRepayPrincipal((beforePrincipal + afterPrincipal) / 2);
+        preMonthInfo.setRepayInterest((beforeInterest + afterInterest) / 2);
 
         // 利率变更会导致每月还款金额变少
-        calculateInfo.setRepayAmount(afterChangePayAmount);
+        calculateInfo.setRepayAmount(afterRepayAmount);
     }
 
     private RepayAmountChangeInfo getRepayAmountChangeInfo(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {

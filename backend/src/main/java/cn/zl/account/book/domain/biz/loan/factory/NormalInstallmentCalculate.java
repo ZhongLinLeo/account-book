@@ -5,8 +5,6 @@ import cn.zl.account.book.application.info.LoanCalculateInfo;
 import cn.zl.account.book.application.info.LoanInfo;
 import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
 
-import java.math.BigDecimal;
-
 /**
  * @author lin.zl
  */
@@ -23,17 +21,17 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
         double totalAmount = calculateInfo.getRemainsPrincipal();
         Double repayAmount = calculateInfo.getRepayAmount();
 
-        double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
+        // 利息
+        double interest = calculateInterest(totalAmount,currentRate);
 
-        // 每月还款利息 = 每月还款金额 - 每月还款本金
-        double interest = convert2Double(BigDecimal.valueOf(repayAmount)
-                .add(BigDecimal.valueOf(principalPreMonth).negate()));
+        // 本金
+        double principalPreMonth = calculatePrincipal(repayAmount,interest);
 
         return RepayAmountPreMonthInfo.builder()
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)
-                .remainsPrincipal(convert2Accuracy(totalAmount - principalPreMonth, 2))
+                .remainsPrincipal(convert2Accuracy(totalAmount - principalPreMonth))
                 .currentRate(currentRate)
                 .build();
     }

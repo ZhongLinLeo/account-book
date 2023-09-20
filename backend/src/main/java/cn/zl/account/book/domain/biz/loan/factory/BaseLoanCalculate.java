@@ -134,8 +134,16 @@ public abstract class BaseLoanCalculate {
         });
     }
 
-    protected double convert2Accuracy(double targetNum, int accuracy){
-        return BigDecimal.valueOf(targetNum).setScale(accuracy, RoundingMode.HALF_UP).doubleValue();
+    protected double convert2Accuracy(double targetNum) {
+        return BigDecimal.valueOf(targetNum).setScale(2, RoundingMode.HALF_UP).doubleValue();
+    }
+
+    protected double calculatePrincipal(double repayAmount, double interest) {
+        return convert2Double(BigDecimal.valueOf(repayAmount).add(BigDecimal.valueOf(interest).negate()));
+    }
+
+    protected double calculateInterest(double totalAmount, double currentRate) {
+        return convert2Double(BigDecimal.valueOf(totalAmount).multiply(monthRate(currentRate)));
     }
 
 }
