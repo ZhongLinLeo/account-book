@@ -20,9 +20,7 @@ public class LoanCalculateFactory {
         CAL_MAP.put(FIRST_INSTALLMENT, new FirstInstallmentCalculate());
         CAL_MAP.put(NORMAL, new NormalInstallmentCalculate());
         CAL_MAP.put(LAST_INSTALLMENT, new LastInstallmentCalculate());
-        CAL_MAP.put(LPR_CHANGE, new LprChangeCalculate());
-        CAL_MAP.put(PAY_AMOUNT_CHANGE, new PayAmountChangeCalculate());
-        CAL_MAP.put(PREPAY, new PrepayChangeCalculate());
+        CAL_MAP.put(REPAY_CHANGE, new RepayChangeCalculate());
     }
 
     public static RepayAmountPreMonthInfo calculatePayInfo(LoanInfo loanInfo, LoanCalculateInfo calculateInfo, CalculateEnum calculateEnum) {

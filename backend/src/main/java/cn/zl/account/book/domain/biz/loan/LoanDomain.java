@@ -88,11 +88,13 @@ public class LoanDomain {
             calInfo.setCurrentRepayDate(currentRepayDate);
             calInfo.setLoanPeriod(loanPeriod - repaidPeriod + 1);
             calInfo.setRemainsPrincipal(remainsPrincipal);
+            calInfo.setRepaidPeriod(repaidPeriod);
 
             RepayAmountPreMonthInfo repayAmountPreMonthInfo = LoanCalculateFactory.calculatePayInfo(loanInfo, calInfo
                     , calType);
 
             repayAmountPreMonthInfo.setRepayTimes(repaidPeriod);
+            repayAmountPreMonthInfo.setRepayDate(currentRepayDate);
             remainsPrincipal = repayAmountPreMonthInfo.getRemainsPrincipal();
 
             repayAmountPreMonthInfos.add(repayAmountPreMonthInfo);

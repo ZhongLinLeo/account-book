@@ -18,6 +18,8 @@ public class LoanCalculateInfo {
 
     private int loanPeriod;
 
+    private int repaidPeriod;
+
     private int loanRepayDay;
 
     private LocalDate currentRepayDate;

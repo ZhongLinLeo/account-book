@@ -31,8 +31,6 @@ public class LastInstallmentCalculate extends BaseLoanCalculate {
         double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, 1);
 
         return RepayAmountPreMonthInfo.builder()
-                .repayTimes(1)
-                .repayDate(calculateInfo.getCurrentRepayDate())
                 .repayAmount(repayAmount)
                 .repayInterest(interest)
                 .repayPrincipal(principalPreMonth)

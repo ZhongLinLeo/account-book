@@ -1,12 +1,12 @@
 package cn.zl.account.book.domain.biz.loan.factory;
 
 import cn.zl.account.book.application.enums.CalculateEnum;
-import cn.zl.account.book.application.info.LoanCalculateInfo;
-import cn.zl.account.book.application.info.LoanInfo;
-import cn.zl.account.book.application.info.RepayAmountPreMonthInfo;
+import cn.zl.account.book.application.info.*;
+import org.apache.commons.collections4.CollectionUtils;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * 抽象方法
@@ -90,4 +90,47 @@ public abstract class BaseLoanCalculate {
         LocalDate lastRepayDate = currentRepayDate.plusMonths(-1);
         return targetDate.compareTo(lastRepayDate) >= 0 && targetDate.compareTo(currentRepayDate) < 0;
     }
+
+
+    protected boolean isRepayChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
+        return isRepayAmountChange(currentRepayDate, loanInfo) || isPrepay(currentRepayDate, loanInfo)
+                || isLprChange(currentRepayDate, loanInfo);
+    }
+
+    protected boolean isRepayAmountChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
+        List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();
+        if (CollectionUtils.isEmpty(repayAmountChangeInfos)) {
+            return false;
+        }
+
+        return repayAmountChangeInfos.stream().anyMatch(e -> {
+            LocalDate changeDate = e.getChangeDate();
+            return isCurrentPeriod(changeDate, currentRepayDate);
+        });
+    }
+
+    protected boolean isPrepay(LocalDate currentRepayDate, LoanInfo loanInfo) {
+        List<PrepaymentInfo> prepaymentInfos = loanInfo.getPrepaymentInfos();
+        if (CollectionUtils.isEmpty(prepaymentInfos)) {
+            return false;
+        }
+
+        return prepaymentInfos.stream().anyMatch(e -> {
+            LocalDate prepaymentDate = e.getPrepaymentDate();
+            return isCurrentPeriod(prepaymentDate, currentRepayDate);
+        });
+    }
+
+    protected boolean isLprChange(LocalDate currentRepayDate, LoanInfo loanInfo) {
+        List<LoanLprInfo> loanLprInfos = loanInfo.getLoanLprInfos();
+        if (CollectionUtils.isEmpty(loanLprInfos)) {
+            return false;
+        }
+
+        return loanLprInfos.stream().anyMatch(e -> {
+            LocalDate lprDate = e.getLprDate();
+            return isCurrentPeriod(lprDate, currentRepayDate);
+        });
+    }
+
 }

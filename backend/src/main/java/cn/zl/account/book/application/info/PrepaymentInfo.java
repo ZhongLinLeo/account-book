@@ -14,4 +14,6 @@ public class PrepaymentInfo {
     private Double prepaymentAmount;
 
     private LocalDate prepaymentDate;
+
+    private Double prepayInterest;
 }

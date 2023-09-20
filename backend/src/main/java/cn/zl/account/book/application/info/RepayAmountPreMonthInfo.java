@@ -32,6 +32,8 @@ public class RepayAmountPreMonthInfo {
 
     private Integer reduceMonths;
 
+    private PrepaymentInfo prepaymentInfo;
+
     @Override
     public String toString() {
         return "{" +

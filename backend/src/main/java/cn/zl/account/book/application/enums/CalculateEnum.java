@@ -9,19 +9,9 @@ import java.util.Objects;
  */
 public enum CalculateEnum {
     /**
-     * LPR change
+     * repay change
      */
-    LPR_CHANGE,
-
-    /**
-     * prepay
-     */
-    PREPAY,
-
-    /**
-     * pay amount
-     */
-    PAY_AMOUNT_CHANGE,
+    REPAY_CHANGE,
 
     /**
      * normal
@@ -39,7 +29,7 @@ public enum CalculateEnum {
     LAST_INSTALLMENT,
     ;
 
-    public static CalculateEnum findCalType( LoanInfo loanInfo, int repaidPeriod) {
+    public static CalculateEnum findCalType(LoanInfo loanInfo, int repaidPeriod) {
          if (repaidPeriod == 1) {
             return FIRST_INSTALLMENT;
         } else if (Objects.equals(repaidPeriod, loanInfo.getLoanPeriod())) {
