@@ -39,7 +39,7 @@ public class LoanDomainTest {
         int loanPeriod = 301;
 
         double rate = 4.75;
-        double loanAmount = 1677112.82;
+        double loanAmount = 1677112.05;
 
         double originPayAmount = 10227.85;
 
@@ -48,7 +48,7 @@ public class LoanDomainTest {
         for (int period = loanPeriod; period > 0; period--) {
             double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
             if (amountPreMonth > originPayAmount) {
-                reduceMonths = loanPeriod - period + 1;
+                reduceMonths = loanPeriod - period - 1;
                 break;
             }
         }

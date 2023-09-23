@@ -250,7 +250,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         for (int period = loanPeriod; period > 0; period--) {
             double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
             if (amountPreMonth > originPayAmount) {
-                reduceMonths = loanPeriod - period + 1;
+                reduceMonths = loanPeriod - period - 1;
                 break;
             }
         }
