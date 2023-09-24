@@ -1,10 +1,10 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/account_book
+    url: jdbc:mysql://localhost:13306/account_book
     username: root
-    password: root
+    password: 123456
     driver-class-name: com.mysql.jdbc.Driver
-    hikari: # http://blog.didispace.com/Springboot-2-0-HikariCP-default-reason/
+    hikari:
       minimum-idle: 1
       maximum-pool-size: 5
       auto-commit: true

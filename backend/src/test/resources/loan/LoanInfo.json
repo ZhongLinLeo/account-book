@@ -11,7 +11,7 @@
     },
     {
       "lprDate": "2023-09-25",
-      "lpr": 4.2
+      "lpr": 4.3
     }
   ],
   "prepaymentInfos": [
@@ -25,7 +25,7 @@
     },
     {
       "prepaymentDate": "2023-11-26",
-      "prepaymentAmount": 180000
+      "prepaymentAmount": 170000
     }
   ],
   "repayAmountChangeInfos": [
