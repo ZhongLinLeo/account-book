@@ -1,6 +1,7 @@
 package cn.zl.account.book.domain.biz.loan;
 
 import cn.zl.account.book.application.info.LoanInfo;
+import cn.zl.account.book.application.info.LoanLprInfo;
 import com.alibaba.fastjson2.JSON;
 import org.apache.commons.io.FileUtils;
 import org.junit.Test;
@@ -10,6 +11,11 @@ import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.nio.charset.Charset;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 public class LoanDomainTest {
 
@@ -61,7 +67,9 @@ public class LoanDomainTest {
 
     private double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
 
-        final BigDecimal monthRate = BigDecimal.valueOf(rate / 100 / 12);
+//        final BigDecimal monthRate = BigDecimal.valueOf(rate / 100 / 12);
+        final BigDecimal monthRate = BigDecimal.valueOf(rate).divide(BigDecimal.valueOf(100 * 12), 7, BigDecimal.ROUND_HALF_UP);
+
 
         final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(loanPeriod);
 
@@ -69,8 +77,53 @@ public class LoanDomainTest {
 
         final BigDecimal denominator = tmpPow.add(BigDecimal.ONE.negate());
 
-        final BigDecimal repayAmount = molecular.divide(denominator, 2, BigDecimal.ROUND_HALF_UP);
-        return repayAmount.doubleValue();
+        final BigDecimal repayAmount = molecular.divide(denominator, 6, BigDecimal.ROUND_HALF_UP);
+        return repayAmount.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
+    }
+
+    @Test
+    public void lprChange() {
+
+        double loanAmount = 1672939.66;
+        int loanPeriod = 240;
+
+        Map<LocalDate, Double> rateMap = new HashMap<>(8);
+        rateMap.put(LocalDate.parse("2023-09-25"), 4.3);
+//        rateMap.put(LocalDate.parse("2023-10-01"),4.2);
+
+        ArrayList<LoanLprInfo> loanLprInfos = new ArrayList<>();
+        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-09-25"),4.3));
+        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-10-01"),4.2));
+
+
+
+        LocalDate currentRepayDate = LocalDate.parse("2023-10-16");
+
+        double originPayAmount = repayAmountPreMonth(4.75, loanAmount, loanPeriod);
+        BigDecimal beforeInterest = BigDecimal.valueOf(loanAmount).multiply(BigDecimal.valueOf(4.75 / 100 / 12));
+        BigDecimal beforePrincipal = BigDecimal.valueOf(originPayAmount).add(beforeInterest.negate());
+
+        int originRateDays = Period.between(currentRepayDate.plusMonths(-1), LocalDate.parse("2023-09-24")).getDays();
+
+        double afterPayAmount = repayAmountPreMonth(4.3, loanAmount, loanPeriod);
+        BigDecimal afterInterest = BigDecimal.valueOf(loanAmount).multiply(BigDecimal.valueOf(4.3 / 100 / 12));
+        BigDecimal afterPrincipal = BigDecimal.valueOf(afterPayAmount).add(afterInterest.negate());
+
+        double interest = beforeInterest.multiply(BigDecimal.valueOf(originRateDays / 30.0))
+                .add(afterInterest.multiply(BigDecimal.valueOf((30 - originRateDays) / 30.0))).doubleValue();
+
+        double principal = beforePrincipal.multiply(BigDecimal.valueOf(originRateDays / 30.0))
+                .add(afterPrincipal.multiply(BigDecimal.valueOf((30 - originRateDays) / 30.0))).doubleValue();
+
+
+        double amount = BigDecimal.valueOf(originPayAmount).multiply(BigDecimal.valueOf(originRateDays / 30.0))
+                .add(BigDecimal.valueOf(afterPayAmount).multiply(BigDecimal.valueOf((30 - originRateDays) / 30.0))).doubleValue();
+
+        System.out.println("interest:" + interest);
+        System.out.println("principal:" + principal);
+        System.out.println("amount:" + amount);
+
+
     }
 
 
