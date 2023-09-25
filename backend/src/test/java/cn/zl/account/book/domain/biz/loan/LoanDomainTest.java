@@ -15,7 +15,9 @@ import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class LoanDomainTest {
 
@@ -92,9 +94,8 @@ public class LoanDomainTest {
 //        rateMap.put(LocalDate.parse("2023-10-01"),4.2);
 
         ArrayList<LoanLprInfo> loanLprInfos = new ArrayList<>();
-        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-09-25"),4.3));
-        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-10-01"),4.2));
-
+        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-09-25"), 4.3));
+        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-10-01"), 4.2));
 
 
         LocalDate currentRepayDate = LocalDate.parse("2023-10-16");
@@ -118,6 +119,79 @@ public class LoanDomainTest {
 
         double amount = BigDecimal.valueOf(originPayAmount).multiply(BigDecimal.valueOf(originRateDays / 30.0))
                 .add(BigDecimal.valueOf(afterPayAmount).multiply(BigDecimal.valueOf((30 - originRateDays) / 30.0))).doubleValue();
+
+        System.out.println("interest:" + interest);
+        System.out.println("principal:" + principal);
+        System.out.println("amount:" + amount);
+
+
+    }
+
+    @Test
+    public void lprChange1() {
+
+        double loanAmount = 1672939.66;
+        int loanPeriod = 240;
+
+        Map<LocalDate, Double> rateMap = new HashMap<>(8);
+        rateMap.put(LocalDate.parse("2023-09-25"), 4.3);
+//        rateMap.put(LocalDate.parse("2023-10-01"),4.2);
+
+        ArrayList<LoanLprInfo> loanLprInfos = new ArrayList<>();
+        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-09-25"), 4.3));
+//        loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-10-01"), 4.2));
+
+        LocalDate currentRepayDate = LocalDate.parse("2023-10-16");
+
+        BigDecimal interest = BigDecimal.ZERO;
+        BigDecimal principal = BigDecimal.ZERO;
+        BigDecimal amount = BigDecimal.ZERO;
+
+
+        Map<LocalDate, BigDecimal> interestMap = new HashMap<>();
+        Map<LocalDate, BigDecimal> principalMap = new HashMap<>();
+        Map<LocalDate, Double> amountMap = new HashMap<>();
+
+        double lastRate = 4.75;
+
+        double originPayAmount = repayAmountPreMonth(lastRate, loanAmount, loanPeriod);
+        BigDecimal beforeInterest = BigDecimal.valueOf(loanAmount).multiply(BigDecimal.valueOf(4.75 / 100 / 12));
+        BigDecimal beforePrincipal = BigDecimal.valueOf(originPayAmount).add(beforeInterest.negate());
+
+        LocalDate lastRepayDate = currentRepayDate.plusMonths(-1);
+        interestMap.put(lastRepayDate, beforeInterest);
+        principalMap.put(lastRepayDate, beforePrincipal);
+        amountMap.put(lastRepayDate, originPayAmount);
+
+
+        for (LoanLprInfo loanLprInfo : loanLprInfos) {
+            double afterPayAmount = repayAmountPreMonth(loanLprInfo.getLpr(), loanAmount, loanPeriod);
+            BigDecimal afterInterest = BigDecimal.valueOf(loanAmount).multiply(BigDecimal.valueOf(4.3 / 100 / 12));
+            BigDecimal afterPrincipal = BigDecimal.valueOf(afterPayAmount).add(afterInterest.negate());
+            interestMap.put(loanLprInfo.getLprDate(), afterInterest);
+            principalMap.put(loanLprInfo.getLprDate(), afterPrincipal);
+            amountMap.put(loanLprInfo.getLprDate(), afterPayAmount);
+        }
+
+        List<LocalDate> dates = amountMap.keySet().stream().sorted().collect(Collectors.toList());
+
+        for (LocalDate date : dates) {
+
+            BigDecimal currentInterest = interestMap.get(date);
+            BigDecimal currentPrincipal = principalMap.get(date);
+            BigDecimal currentAmount = BigDecimal.valueOf(amountMap.get(date));
+
+
+            int days = Period.between(lastRepayDate, date).getDays();
+            interest = interest
+                    .add(currentInterest.multiply(BigDecimal.valueOf(days / 30.0)));
+            principal = principal
+                    .add(currentPrincipal.multiply(BigDecimal.valueOf(days / 30.0)));
+            amount = amount
+                    .add(currentAmount.multiply(BigDecimal.valueOf(days / 30.0)));
+
+
+        }
 
         System.out.println("interest:" + interest);
         System.out.println("principal:" + principal);
