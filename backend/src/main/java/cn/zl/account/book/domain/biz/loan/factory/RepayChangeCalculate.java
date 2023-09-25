@@ -195,24 +195,6 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         throw new RuntimeException();
     }
 
-
-    private double getRepayAmount(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
-        List<RepayAmountChangeInfo> repayAmountChangeInfos = loanInfo.getRepayAmountChangeInfos();
-        double repayAmount = calculateInfo.getRepayAmount();
-        if (CollectionUtils.isEmpty(repayAmountChangeInfos)) {
-            return repayAmount;
-        }
-
-        final LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
-        for (RepayAmountChangeInfo repayAmountChangeInfo : repayAmountChangeInfos) {
-            LocalDate changeDate = repayAmountChangeInfo.getChangeDate();
-            if (isCurrentPeriod(changeDate, currentRepayDate)) {
-                repayAmount = repayAmountChangeInfo.getRepayAmount();
-            }
-        }
-        return repayAmount;
-    }
-
     private PrepaymentInfo getPrepayInfo(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
         List<PrepaymentInfo> prepaymentInfos = loanInfo.getPrepaymentInfos();
         final LocalDate currentRepayDate = calculateInfo.getCurrentRepayDate();
@@ -250,9 +232,9 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         for (int period = loanPeriod; period > 0; period--) {
             double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
             if (amountPreMonth > originPayAmount) {
-                reduceMonths = loanPeriod - period - 1;
                 break;
             }
+            reduceMonths = loanPeriod - period;
         }
 
         // 杭州银行只能缩短整年的

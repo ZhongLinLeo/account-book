@@ -23,9 +23,9 @@ public class LoanDomainTest {
     }
 
     @Test
-    public void testMonth(){
+    public void testMonth() {
 
-        BigDecimal loanRateMonth = BigDecimal.valueOf(4.75 / 100 / 12) ;
+        BigDecimal loanRateMonth = BigDecimal.valueOf(4.75 / 100 / 12);
         BigDecimal factor = BigDecimal.valueOf(Math.pow(1 + loanRateMonth.doubleValue(), 336));
         BigDecimal avgRepayment = BigDecimal.valueOf(1928885.68).multiply(loanRateMonth)
                 .multiply(factor).divide(factor.subtract(new BigDecimal(1)), 2, BigDecimal.ROUND_HALF_UP);
@@ -34,7 +34,7 @@ public class LoanDomainTest {
     }
 
     @Test
-    public void testDay(){
+    public void testDay() {
 
         int loanPeriod = 301;
 
@@ -48,9 +48,9 @@ public class LoanDomainTest {
         for (int period = loanPeriod; period > 0; period--) {
             double amountPreMonth = repayAmountPreMonth(rate, loanAmount, period);
             if (amountPreMonth > originPayAmount) {
-                reduceMonths = loanPeriod - period - 1;
                 break;
             }
+            reduceMonths = loanPeriod - period;
         }
 
         // 杭州银行只能缩短整年的
@@ -59,7 +59,7 @@ public class LoanDomainTest {
         System.out.println(i);
     }
 
-    private  double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
+    private double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
 
         final BigDecimal monthRate = BigDecimal.valueOf(rate / 100 / 12);
 
@@ -72,8 +72,6 @@ public class LoanDomainTest {
         final BigDecimal repayAmount = molecular.divide(denominator, 2, BigDecimal.ROUND_HALF_UP);
         return repayAmount.doubleValue();
     }
-
-
 
 
     public String readFile() throws IOException {
