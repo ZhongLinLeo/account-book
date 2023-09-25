@@ -43,7 +43,7 @@ public abstract class BaseLoanCalculate {
      */
     protected double repayAmountPreMonth(double rate, double loanAmount, int loanPeriod) {
 
-        final BigDecimal monthRate = BigDecimal.valueOf(rate / 100 / 12);
+        final BigDecimal monthRate = BigDecimal.valueOf(rate).divide(BigDecimal.valueOf(100 * 12), 7, BigDecimal.ROUND_HALF_UP);
 
         final BigDecimal tmpPow = BigDecimal.ONE.add(monthRate).pow(loanPeriod);
 
