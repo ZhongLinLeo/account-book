@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * 抽象方法
@@ -144,6 +145,18 @@ public abstract class BaseLoanCalculate {
 
     protected double calculateInterest(double totalAmount, double currentRate) {
         return convert2Double(BigDecimal.valueOf(totalAmount).multiply(monthRate(currentRate)));
+    }
+
+    protected double getRepayAmount(LoanCalculateInfo calculateInfo) {
+        Double repayAmount = calculateInfo.getRepayAmount();
+        if (Objects.isNull(repayAmount)) {
+            repayAmount = repayAmountPreMonth(calculateInfo.getCurrentRate(), calculateInfo.getRemainsPrincipal(),
+                    calculateInfo.getLoanPeriod());
+            // 设置还款金额
+            calculateInfo.setRepayAmount(repayAmount);
+        }
+
+        return repayAmount;
     }
 
 }

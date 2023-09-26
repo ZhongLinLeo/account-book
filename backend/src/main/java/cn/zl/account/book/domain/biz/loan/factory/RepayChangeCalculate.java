@@ -92,7 +92,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         double remainsPrincipal = calculateInfo.getRemainsPrincipal() - prepayInfo.getPrepaymentAmount();
 
         double currentRate = getCurrentRate(calculateInfo, loanInfo);
-        double repayAmount = calculateInfo.getRepayAmount();
+        double repayAmount = getRepayAmount(calculateInfo);
 
         int loanPeriod = calculateInfo.getLoanPeriod();
         int reduceMonths = reduceMonths(currentRate, remainsPrincipal, loanPeriod, repayAmount);
@@ -179,7 +179,9 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         preMonthInfo.setRepayInterest(convert2Accuracy((beforeInterest + afterInterest) / 2));
 
         // 利率变更会导致每月还款金额变少
-        calculateInfo.setRepayAmount(afterRepayAmount);
+        double repayAmount = repayAmountPreMonth(currentRate, totalAmount - preMonthInfo.getRepayPrincipal(),
+                loanPeriod - 1);
+        calculateInfo.setRepayAmount(repayAmount);
     }
 
     private RepayAmountChangeInfo getRepayAmountChangeInfo(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {
