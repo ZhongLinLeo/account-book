@@ -25,6 +25,8 @@ public class LoanDomainTest {
         LoanInfo loanInfo = JSON.parseObject(readFile(), LoanInfo.class);
 
         loanDomain.calculatePrepayment(loanInfo);
+
+        // 2022-10-16 10592.12 7916.44 2675.68
     }
 
     @Test
