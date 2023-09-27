@@ -41,7 +41,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         double totalAmount = Optional.ofNullable(preMonthInfo.getRemainsPrincipal())
                 .orElse(calculateInfo.getRemainsPrincipal());
 
-        int loanPeriod = calculateInfo.getLoanPeriod() - Optional.ofNullable(preMonthInfo.getReduceMonths())
+        int loanPeriod = calculateInfo.getRemainsPeriod() - Optional.ofNullable(preMonthInfo.getReduceMonths())
                 .orElse(0);
 
         double repayAmount = Optional.ofNullable(calculateInfo.getRepayAmount())
@@ -94,7 +94,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         double currentRate = getCurrentRate(calculateInfo, loanInfo);
         double repayAmount = getRepayAmount(calculateInfo);
 
-        int loanPeriod = calculateInfo.getLoanPeriod();
+        int loanPeriod = calculateInfo.getRemainsPeriod();
         int reduceMonths = reduceMonths(currentRate, remainsPrincipal, loanPeriod, repayAmount);
 
         preMonthInfo.setReduceMonths(reduceMonths);
@@ -161,7 +161,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
 
         // lpr 改变的时候，不太清楚怎么计算，可以测试一些，变更前一半，变更后一半
         double totalAmount = calculateInfo.getRemainsPrincipal();
-        int loanPeriod = calculateInfo.getLoanPeriod();
+        int loanPeriod = calculateInfo.getRemainsPeriod();
 
         // 变更前 还款金额、本金、利率
         double beforeRepayAmount = calculateInfo.getRepayAmount();

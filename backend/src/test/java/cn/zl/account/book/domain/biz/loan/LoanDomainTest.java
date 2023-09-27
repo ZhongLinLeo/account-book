@@ -123,8 +123,6 @@ public class LoanDomainTest {
         System.out.println("interest:" + interest);
         System.out.println("principal:" + principal);
         System.out.println("amount:" + amount);
-
-
     }
 
     @Test

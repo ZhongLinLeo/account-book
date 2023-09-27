@@ -151,7 +151,7 @@ public abstract class BaseLoanCalculate {
         Double repayAmount = calculateInfo.getRepayAmount();
         if (Objects.isNull(repayAmount)) {
             repayAmount = repayAmountPreMonth(calculateInfo.getCurrentRate(), calculateInfo.getRemainsPrincipal(),
-                    calculateInfo.getLoanPeriod());
+                    calculateInfo.getRemainsPeriod());
             // 设置还款金额
             calculateInfo.setRepayAmount(repayAmount);
         }
