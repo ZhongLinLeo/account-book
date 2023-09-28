@@ -18,6 +18,17 @@ import java.util.stream.Collectors;
 
 public class LoanDomainTest {
 
+    /**
+     * init 10793.84
+     * 20221016 10592.12
+     * 20221116 10390.81
+     * 20230516 10227.85
+     * 20230916 10810.89
+     * 20231016 10512.54
+     * 20231116 10404.42
+     *
+     * @throws Exception
+     */
     @Test
     public void calculatePrepayment() throws Exception {
         LoanDomain loanDomain = new LoanDomain();
