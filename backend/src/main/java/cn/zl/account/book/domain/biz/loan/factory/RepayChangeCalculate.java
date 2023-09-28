@@ -230,7 +230,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
 
     private int lastRateDays(int remainsDay,LocalDate lastDate, LocalDate date, LocalDate currentRepayDate) {
         if (lastDate.getMonth().equals(date.getMonth())) {
-            return Period.between(lastDate, date).getDays();
+            return Period.between(lastDate, date.plusDays(-1)).getDays();
         }
 
         return remainsDay - Period.between(date, currentRepayDate).getDays();
