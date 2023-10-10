@@ -22,7 +22,7 @@ public class FirstInstallmentCalculate extends BaseLoanCalculate {
         double totalAmount = calculateInfo.getRemainsPrincipal();
         int loanRepayDay = calculateInfo.getLoanRepayDay();
         LocalDate loanStartDate = calculateInfo.getLoanStartDate();
-        int loanPeriod = calculateInfo.getLoanPeriod();
+        int loanPeriod = calculateInfo.getRemainsPeriod();
 
         // 利息
         double interest = interestCal(currentRate, totalAmount, loanStartDate, loanRepayDay);

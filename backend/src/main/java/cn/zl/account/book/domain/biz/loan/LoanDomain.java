@@ -86,9 +86,8 @@ public class LoanDomain {
             CalculateEnum calType = CalculateEnum.findCalType(loanInfo, repaidPeriod);
 
             calInfo.setCurrentRepayDate(currentRepayDate);
-            calInfo.setLoanPeriod(loanPeriod - repaidPeriod + 1);
+            calInfo.setRemainsPeriod(loanPeriod - repaidPeriod + 1);
             calInfo.setRemainsPrincipal(remainsPrincipal);
-            calInfo.setRepaidPeriod(repaidPeriod);
 
             RepayAmountPreMonthInfo repayAmountPreMonthInfo = LoanCalculateFactory.calculatePayInfo(loanInfo, calInfo
                     , calType);

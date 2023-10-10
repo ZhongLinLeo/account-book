@@ -6,12 +6,16 @@
   "loanRate": 5.1,
   "loanLprInfos": [
     {
-      "lprDate": "2022-09-27",
+      "lprDate": "2022-10-01",
       "lpr": 4.75
     },
     {
       "lprDate": "2023-09-25",
       "lpr": 4.3
+    },
+    {
+      "lprDate": "2023-10-01",
+      "lpr": 4.2
     }
   ],
   "prepaymentInfos": [
@@ -22,10 +26,6 @@
     {
       "prepaymentDate": "2023-08-26",
       "prepaymentAmount": 120000
-    },
-    {
-      "prepaymentDate": "2023-11-26",
-      "prepaymentAmount": 170000
     }
   ],
   "repayAmountChangeInfos": [

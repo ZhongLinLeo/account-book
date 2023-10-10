@@ -18,7 +18,7 @@ public class LastInstallmentCalculate extends BaseLoanCalculate {
         // calculate interest
         double currentRate = calculateInfo.getCurrentRate();
         double totalAmount = calculateInfo.getRemainsPrincipal();
-        int loanPeriod = calculateInfo.getLoanPeriod();
+        int loanPeriod = calculateInfo.getRemainsPeriod();
 
         // 利息
         double interest = lastPeriodInterest(currentRate, totalAmount);
@@ -28,7 +28,7 @@ public class LastInstallmentCalculate extends BaseLoanCalculate {
             repayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
         }
 
-        double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, calculateInfo.getLoanPeriod());
+        double principalPreMonth = calculatePrincipalPreMonth(currentRate, totalAmount, repayAmount, calculateInfo.getRemainsPeriod());
 
         return RepayAmountPreMonthInfo.builder()
                 .repayAmount(repayAmount)

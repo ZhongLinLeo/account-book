@@ -8,7 +8,9 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * 提前还款、利率变更、还款金额变更
@@ -41,7 +43,7 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         double totalAmount = Optional.ofNullable(preMonthInfo.getRemainsPrincipal())
                 .orElse(calculateInfo.getRemainsPrincipal());
 
-        int loanPeriod = calculateInfo.getLoanPeriod() - Optional.ofNullable(preMonthInfo.getReduceMonths())
+        int loanPeriod = calculateInfo.getRemainsPeriod() - Optional.ofNullable(preMonthInfo.getReduceMonths())
                 .orElse(0);
 
         double repayAmount = Optional.ofNullable(calculateInfo.getRepayAmount())
@@ -92,9 +94,9 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
         double remainsPrincipal = calculateInfo.getRemainsPrincipal() - prepayInfo.getPrepaymentAmount();
 
         double currentRate = getCurrentRate(calculateInfo, loanInfo);
-        double repayAmount = calculateInfo.getRepayAmount();
+        double repayAmount = getRepayAmount(calculateInfo);
 
-        int loanPeriod = calculateInfo.getLoanPeriod();
+        int loanPeriod = calculateInfo.getRemainsPeriod();
         int reduceMonths = reduceMonths(currentRate, remainsPrincipal, loanPeriod, repayAmount);
 
         preMonthInfo.setReduceMonths(reduceMonths);
@@ -159,27 +161,79 @@ public class RepayChangeCalculate extends BaseLoanCalculate {
             return;
         }
 
-        // lpr 改变的时候，不太清楚怎么计算，可以测试一些，变更前一半，变更后一半
-        double totalAmount = calculateInfo.getRemainsPrincipal();
-        int loanPeriod = calculateInfo.getLoanPeriod();
+        double loanAmount = calculateInfo.getRemainsPrincipal();
+        int loanPeriod = calculateInfo.getRemainsPeriod();
+        List<LoanLprInfo> loanLprInfos = loanInfo.getLoanLprInfos()
+                .stream()
+                .filter(e -> isCurrentPeriod(e.getLprDate(), currentRepayDate))
+                .collect(Collectors.toList());
 
-        // 变更前 还款金额、本金、利率
-        double beforeRepayAmount = calculateInfo.getRepayAmount();
-        double beforeInterest = calculateInterest(totalAmount, calculateInfo.getCurrentRate());
-        double beforePrincipal = calculatePrincipal(beforeRepayAmount, beforeInterest);
+        double lastRate = calculateInfo.getCurrentRate();
 
-        // 变更后 还款金额、本金、利率
-        double currentRate = getCurrentRate(calculateInfo, loanInfo);
-        double afterRepayAmount = repayAmountPreMonth(currentRate, totalAmount, loanPeriod);
-        double afterInterest = calculateInterest(totalAmount, currentRate);
-        double afterPrincipal = calculatePrincipal(afterRepayAmount, afterInterest);
+        Map<LocalDate, LoanLprInfo> changeMap = loanLprInfos.stream().collect(Collectors
+                .toMap(LoanLprInfo::getLprDate, e -> e, (o, n) -> n));
 
-        preMonthInfo.setRepayAmount(convert2Accuracy((beforeRepayAmount + afterRepayAmount) / 2));
-        preMonthInfo.setRepayPrincipal(convert2Accuracy((beforePrincipal + afterPrincipal) / 2));
-        preMonthInfo.setRepayInterest(convert2Accuracy((beforeInterest + afterInterest) / 2));
+        List<LocalDate> changeDate = loanLprInfos.stream().map(LoanLprInfo::getLprDate).sorted()
+                .collect(Collectors.toList());
+
+        BigDecimal repayAmount = BigDecimal.ZERO;
+        BigDecimal repayPrincipal = BigDecimal.ZERO;
+        BigDecimal repayInterest = BigDecimal.ZERO;
+
+        BigDecimal lastRepayAmount = BigDecimal.valueOf(repayAmountPreMonth(lastRate, loanAmount, loanPeriod));
+        BigDecimal lastRepayInterest = BigDecimal.valueOf(loanAmount).multiply(BigDecimal.valueOf(lastRate / 100 / 12));
+        BigDecimal lastRepayPrincipal = lastRepayAmount.add(lastRepayInterest.negate());
+
+        LocalDate lastDate = currentRepayDate.plusMonths(-1);
+
+        int remainsDay = 30;
+        double currentRate = lastRate;
+        for (LocalDate date : changeDate) {
+            LoanLprInfo loanLprInfo = changeMap.get(date);
+
+            int days = lastRateDays(remainsDay,lastDate, date, currentRepayDate);
+            repayInterest = repayInterest
+                    .add(lastRepayInterest.multiply(BigDecimal.valueOf(days / 30.0)));
+            repayPrincipal = repayPrincipal
+                    .add(lastRepayPrincipal.multiply(BigDecimal.valueOf(days / 30.0)));
+            repayAmount = repayAmount
+                    .add(lastRepayAmount.multiply(BigDecimal.valueOf(days / 30.0)));
+
+            Double lpr = loanLprInfo.getLpr();
+            lastRepayAmount = BigDecimal.valueOf(repayAmountPreMonth(lpr, loanAmount, loanPeriod));
+            lastRepayInterest = BigDecimal.valueOf(loanAmount).multiply(BigDecimal.valueOf(lpr / 100 / 12));
+            lastRepayPrincipal = lastRepayAmount.add(lastRepayInterest.negate());
+            lastDate = date;
+            remainsDay -= days;
+            currentRate = loanLprInfo.getLpr();
+        }
+
+        if (remainsDay >= 0) {
+            repayInterest = repayInterest
+                    .add(lastRepayInterest.multiply(BigDecimal.valueOf(remainsDay / 30.0)));
+            repayPrincipal = repayPrincipal
+                    .add(lastRepayPrincipal.multiply(BigDecimal.valueOf(remainsDay / 30.0)));
+            repayAmount = repayAmount
+                    .add(lastRepayAmount.multiply(BigDecimal.valueOf(remainsDay / 30.0)));
+        }
+
+
+        preMonthInfo.setRepayAmount(convert2Double(repayAmount));
+        preMonthInfo.setRepayPrincipal(convert2Double(repayPrincipal));
+        preMonthInfo.setRepayInterest(convert2Double(repayInterest));
 
         // 利率变更会导致每月还款金额变少
-        calculateInfo.setRepayAmount(afterRepayAmount);
+        double nextRepayAmount = repayAmountPreMonth(currentRate, loanAmount - preMonthInfo.getRepayPrincipal(),
+                loanPeriod - 1);
+        calculateInfo.setRepayAmount(nextRepayAmount);
+    }
+
+    private int lastRateDays(int remainsDay,LocalDate lastDate, LocalDate date, LocalDate currentRepayDate) {
+        if (lastDate.getMonth().equals(date.getMonth())) {
+            return Period.between(lastDate, date.plusDays(-1)).getDays();
+        }
+
+        return remainsDay - Period.between(date, currentRepayDate).getDays();
     }
 
     private RepayAmountChangeInfo getRepayAmountChangeInfo(LoanCalculateInfo calculateInfo, LoanInfo loanInfo) {

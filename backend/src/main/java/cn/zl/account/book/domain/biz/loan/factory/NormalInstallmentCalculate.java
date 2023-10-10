@@ -19,7 +19,7 @@ public class NormalInstallmentCalculate extends BaseLoanCalculate {
         //  获取 LPR 信息
         double currentRate = calculateInfo.getCurrentRate();
         double totalAmount = calculateInfo.getRemainsPrincipal();
-        Double repayAmount = calculateInfo.getRepayAmount();
+        double repayAmount = getRepayAmount(calculateInfo);
 
         // 利息
         double interest = calculateInterest(totalAmount,currentRate);
