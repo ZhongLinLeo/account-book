@@ -23,6 +23,7 @@ public final class FundsRecordClassifyConverter {
                 .classifyName(fundsRecordClassifyInfo.getClassifyName())
                 .classifyType(fundsRecordClassifyInfo.getClassifyType())
                 .classifyDescribe(fundsRecordClassifyInfo.getClassifyDescribe())
+                .createTime(fundsRecordClassifyInfo.getCreateTime())
                 .build();
     }
 

@@ -3,6 +3,8 @@ package cn.zl.account.book.application.info;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
@@ -29,4 +31,5 @@ public class FundsRecordClassifyInfo {
      */
     private String classifyDescribe;
 
+    private LocalDateTime createTime;
 }
