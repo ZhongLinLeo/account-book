@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
@@ -31,4 +33,9 @@ public class FundsRecordClassifyResponse {
      * 分类描述
      */
     private String classifyDescribe;
+
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
 }
