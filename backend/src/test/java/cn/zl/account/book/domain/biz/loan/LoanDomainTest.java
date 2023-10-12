@@ -27,6 +27,9 @@ public class LoanDomainTest {
      * 20231016 10512.54
      * 20231116 10404.42
      *
+     * 20231016 10562.88
+     * 20231116 10315.69
+     *
      * @throws Exception
      */
     @Test
@@ -101,7 +104,7 @@ public class LoanDomainTest {
 
         Map<LocalDate, Double> rateMap = new HashMap<>(8);
         rateMap.put(LocalDate.parse("2023-09-25"), 4.3);
-//        rateMap.put(LocalDate.parse("2023-10-01"),4.2);
+        rateMap.put(LocalDate.parse("2023-10-01"),4.2);
 
         ArrayList<LoanLprInfo> loanLprInfos = new ArrayList<>();
         loanLprInfos.add(new LoanLprInfo(LocalDate.parse("2023-09-25"), 4.3));
@@ -170,7 +173,7 @@ public class LoanDomainTest {
         for (LocalDate date : changeDate) {
             LoanLprInfo loanLprInfo = changeMap.get(date);
 
-            int days = Period.between(lastDate, date.plusDays(-1)).getDays();
+            int days = lastRateDays(remainsDay,lastDate, date, currentRepayDate);
             repayInterest = repayInterest
                     .add(lastRepayInterest.multiply(BigDecimal.valueOf(days / 30.0)));
             repayPrincipal = repayPrincipal
@@ -200,6 +203,14 @@ public class LoanDomainTest {
         System.out.println("principal:" + repayPrincipal);
         System.out.println("amount:" + repayAmount);
 
+    }
+
+    private int lastRateDays(int remainsDay,LocalDate lastDate, LocalDate date, LocalDate currentRepayDate) {
+        if (lastDate.getMonth().equals(date.getMonth())) {
+            return Period.between(lastDate, date.plusDays(-1)).getDays();
+        }
+
+        return remainsDay - Period.between(date, currentRepayDate).getDays();
     }
 
 
