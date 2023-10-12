@@ -24,9 +24,4 @@ public class FundsRecordClassifyRequest {
      * 分类描述
      */
     private String classifyDescribe;
-
-    /**
-     * 父分类ID，可以为空
-     */
-    private Long parentClassifyId;
 }

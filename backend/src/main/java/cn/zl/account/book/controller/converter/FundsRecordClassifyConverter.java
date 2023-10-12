@@ -14,7 +14,6 @@ public final class FundsRecordClassifyConverter {
                 .classifyName(fundsRecordClassifyReq.getClassifyName())
                 .classifyType(fundsRecordClassifyReq.getClassifyType())
                 .classifyDescribe(fundsRecordClassifyReq.getClassifyDescribe())
-                .parentClassifyId(fundsRecordClassifyReq.getParentClassifyId())
                 .build();
     }
 
@@ -24,7 +23,6 @@ public final class FundsRecordClassifyConverter {
                 .classifyName(fundsRecordClassifyInfo.getClassifyName())
                 .classifyType(fundsRecordClassifyInfo.getClassifyType())
                 .classifyDescribe(fundsRecordClassifyInfo.getClassifyDescribe())
-                .parentClassifyId(fundsRecordClassifyInfo.getParentClassifyId())
                 .parentClassifyName(fundsRecordClassifyInfo.getParentClassifyName())
                 .build();
     }

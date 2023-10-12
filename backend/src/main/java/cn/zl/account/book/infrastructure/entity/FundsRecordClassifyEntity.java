@@ -30,5 +30,4 @@ public class FundsRecordClassifyEntity extends EntityBase{
 
     private String classifyDescribe;
 
-    private Long parentClassifyId;
 }

@@ -48,7 +48,7 @@ public class FundsRecordClassifyController {
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
-    @DeleteMapping("list")
+    @GetMapping("list")
     public NormalResponse<List<FundsRecordClassifyResponse>> listClassify() {
         List<FundsRecordClassifyInfo> classifyInfos = fundsRecordClassifyAppService.listClassify();
         List<FundsRecordClassifyResponse> responseList = classifyInfos.stream()

@@ -29,10 +29,5 @@ public class FundsRecordClassifyInfo {
      */
     private String classifyDescribe;
 
-    /**
-     * 父分类ID，可以为空
-     */
-    private Long parentClassifyId;
-
     private String parentClassifyName;
 }

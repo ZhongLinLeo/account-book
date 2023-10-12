@@ -14,7 +14,6 @@ public final class FundsRecordClassifyEntityConverter {
                 .classifyName(entity.getClassifyName())
                 .classifyType(entity.getClassifyType())
                 .classifyDescribe(entity.getClassifyDescribe())
-                .parentClassifyId(entity.getParentClassifyId())
                 .build();
     }
 
