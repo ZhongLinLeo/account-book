@@ -56,7 +56,6 @@ create table funds_record_classify
     classify_name      varchar(8) not null comment '分类名称',
     classify_type      tinyint    not null comment '分类类型，0:支出，1:收入',
     classify_describe  varchar(128) null comment '分类描述',
-    parent_classify_id bigint null comment '父分类ID',
     create_time        timestamp  not null default current_timestamp comment '创建时间',
     modify_time        timestamp  not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
     invalid            tinyint    not null default 0 comment '删除标识位，0：未删除，1：删除'
