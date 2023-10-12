@@ -23,7 +23,6 @@ public final class FundsRecordClassifyEntityConverter {
         entity.setClassifyName(fundsRecordClassifyInfo.getClassifyName());
         entity.setClassifyType(fundsRecordClassifyInfo.getClassifyType());
         entity.setClassifyDescribe(fundsRecordClassifyInfo.getClassifyDescribe());
-        entity.setParentClassifyId(fundsRecordClassifyInfo.getParentClassifyId());
 
         return entity;
     }

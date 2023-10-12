@@ -1,6 +1,8 @@
 package cn.zl.account.book.controller.application;
 
 import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
+import cn.zl.account.book.controller.request.FundsClassifyQueryRequest;
+import org.springframework.data.domain.Page;
 
 import java.util.List;
 
@@ -37,4 +39,5 @@ public interface FundsRecordClassifyAppService {
      */
     List<FundsRecordClassifyInfo> listClassify();
 
+    Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery);
 }

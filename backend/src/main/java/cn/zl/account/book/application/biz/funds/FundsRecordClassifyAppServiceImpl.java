@@ -3,15 +3,17 @@ package cn.zl.account.book.application.biz.funds;
 import cn.zl.account.book.application.domain.FundsRecordClassifyDomainService;
 import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.controller.application.FundsRecordClassifyAppService;
+import cn.zl.account.book.controller.request.FundsClassifyQueryRequest;
 import cn.zl.account.book.domain.converter.FundsRecordClassifyEntityConverter;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
-import java.util.Map;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -44,17 +46,19 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
     @Override
     public List<FundsRecordClassifyInfo> listClassify() {
         List<FundsRecordClassifyEntity> classifyEntities = fundsRecordClassifyRepository.findAll();
+        return classifyEntities.stream().map(FundsRecordClassifyEntityConverter::entity2Info).collect(Collectors.toList());
+    }
 
-        Map<Long, String> classifyMap = classifyEntities.stream()
-                .filter(entity -> Objects.isNull(entity.getParentClassifyId()))
-                .collect(Collectors
-                        .toMap(FundsRecordClassifyEntity::getClassifyId, FundsRecordClassifyEntity::getClassifyName));
+    @Override
+    public Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery) {
+        PageRequest pageRequest = PageRequest.of(pageQuery.getPageNumber() - 1, pageQuery.getPageSize());
 
-        return classifyEntities.stream().map(entity -> {
-            FundsRecordClassifyInfo info = FundsRecordClassifyEntityConverter.entity2Info(entity);
-            String parentClassifyName = classifyMap.get(entity.getParentClassifyId());
-            info.setParentClassifyName(parentClassifyName);
-            return info;
-        }).collect(Collectors.toList());
+        Page<FundsRecordClassifyEntity> fundsClassifies = fundsRecordClassifyRepository.findAll(pageRequest);
+
+        List<FundsRecordClassifyInfo> fundsClassifyInfos = fundsClassifies.get()
+                .map(FundsRecordClassifyEntityConverter::entity2Info)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(fundsClassifyInfos, pageRequest, fundsClassifies.getTotalElements());
     }
 }

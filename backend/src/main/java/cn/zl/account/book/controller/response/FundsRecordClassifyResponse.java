@@ -31,6 +31,4 @@ public class FundsRecordClassifyResponse {
      * 分类描述
      */
     private String classifyDescribe;
-
-    private String parentClassifyName;
 }

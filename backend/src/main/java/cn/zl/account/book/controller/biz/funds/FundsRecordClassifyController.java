@@ -3,9 +3,12 @@ package cn.zl.account.book.controller.biz.funds;
 import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.controller.application.FundsRecordClassifyAppService;
 import cn.zl.account.book.controller.converter.FundsRecordClassifyConverter;
+import cn.zl.account.book.controller.request.FundsClassifyQueryRequest;
 import cn.zl.account.book.controller.request.FundsRecordClassifyRequest;
 import cn.zl.account.book.controller.response.FundsRecordClassifyResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
+import cn.zl.account.book.controller.response.PageBaseResponse;
+import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -32,7 +35,6 @@ public class FundsRecordClassifyController {
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
-
     @PutMapping()
     public NormalResponse<Boolean> modifyClassify(FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
@@ -56,5 +58,16 @@ public class FundsRecordClassifyController {
                 .collect(Collectors.toList());
 
         return NormalResponse.wrapSuccessResponse(responseList);
+    }
+
+    @GetMapping("pagination")
+    public PageBaseResponse<FundsRecordClassifyResponse> paginationClassify(FundsClassifyQueryRequest pageQuery) {
+        Page<FundsRecordClassifyInfo> fundsClassifyInfos = fundsRecordClassifyAppService.paginationClassify(pageQuery);
+        List<FundsRecordClassifyResponse> responseList = fundsClassifyInfos.stream()
+                .map(FundsRecordClassifyConverter::info2Resp)
+                .collect(Collectors.toList());
+
+        return PageBaseResponse.wrapSuccessPageResponse(pageQuery.getPageSize(), pageQuery.getPageNumber(),
+                fundsClassifyInfos.getTotalElements(), responseList);
     }
 }

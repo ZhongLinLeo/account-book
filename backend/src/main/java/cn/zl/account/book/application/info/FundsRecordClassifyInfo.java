@@ -29,5 +29,4 @@ public class FundsRecordClassifyInfo {
      */
     private String classifyDescribe;
 
-    private String parentClassifyName;
 }
