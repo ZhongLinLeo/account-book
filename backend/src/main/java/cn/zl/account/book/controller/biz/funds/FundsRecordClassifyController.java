@@ -27,7 +27,7 @@ public class FundsRecordClassifyController {
     private FundsRecordClassifyAppService fundsRecordClassifyAppService;
 
     @PostMapping()
-    public NormalResponse<Boolean> addClassify(FundsRecordClassifyRequest fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> addClassify(@RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.addClassify(fundsRecordClassifyInfo);
@@ -35,8 +35,9 @@ public class FundsRecordClassifyController {
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
-    @PutMapping()
-    public NormalResponse<Boolean> modifyClassify(FundsRecordClassifyRequest fundsRecordClassifyReq) {
+    @PutMapping("{classifyId}")
+    public NormalResponse<Boolean> modifyClassify(@PathVariable Long classifyId,
+                                                  @RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.modifyClassify(fundsRecordClassifyInfo);
