@@ -10,6 +10,7 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -51,7 +52,7 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
 
     @Override
     public Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery) {
-        PageRequest pageRequest = PageRequest.of(pageQuery.getPageNumber() - 1, pageQuery.getPageSize());
+        PageRequest pageRequest = PageRequest.of(pageQuery.getPageNumber(), pageQuery.getPageSize(), Sort.by("modifyTime"));
 
         Page<FundsRecordClassifyEntity> fundsClassifies = fundsRecordClassifyRepository.findAll(pageRequest);
 
