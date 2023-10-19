@@ -29,6 +29,9 @@ public class FundsRecordClassifyResponse {
      */
     private Integer classifyType;
 
+
+    private String classifyTypeName;
+
     /**
      * 分类描述
      */
