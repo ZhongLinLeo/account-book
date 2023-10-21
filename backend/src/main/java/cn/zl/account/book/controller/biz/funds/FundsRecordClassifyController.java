@@ -39,7 +39,7 @@ public class FundsRecordClassifyController {
     public NormalResponse<Boolean> modifyClassify(@PathVariable Long classifyId,
                                                   @RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
-
+        fundsRecordClassifyInfo.setClassifyId(classifyId);
         fundsRecordClassifyAppService.modifyClassify(fundsRecordClassifyInfo);
 
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
