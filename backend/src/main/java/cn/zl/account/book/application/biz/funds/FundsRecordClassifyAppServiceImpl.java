@@ -3,10 +3,13 @@ package cn.zl.account.book.application.biz.funds;
 import cn.zl.account.book.application.domain.FundsRecordClassifyDomainService;
 import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.controller.application.FundsRecordClassifyAppService;
+import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.controller.request.FundsClassifyQueryRequest;
 import cn.zl.account.book.domain.converter.FundsRecordClassifyEntityConverter;
+import cn.zl.account.book.infrastructure.architecture.BizAssert;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
+import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -30,6 +33,11 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
 
     @Override
     public void addClassify(FundsRecordClassifyInfo fundsRecordClassifyInfo) {
+        final FundsRecordClassifyEntity conditions = new FundsRecordClassifyEntity();
+        conditions.setClassifyName(fundsRecordClassifyInfo.getClassifyName());
+        final boolean exists = fundsRecordClassifyRepository.exists(Example.of(conditions));
+        BizAssert.isTrue(exists, ResponseStatusEnum.CLASSIFY_EXIST);
+
         fundsRecordClassifyDomainService.addClassify(fundsRecordClassifyInfo);
     }
 

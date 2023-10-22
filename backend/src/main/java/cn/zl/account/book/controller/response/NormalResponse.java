@@ -1,6 +1,7 @@
 package cn.zl.account.book.controller.response;
 
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
+import cn.zl.account.book.infrastructure.architecture.BizException;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
@@ -21,6 +22,20 @@ public class NormalResponse<T> extends BaseResponse {
         response.setResponseCode(responseCode);
         response.setResponseMessage(responseMessage);
         response.setResponseContent(responseContent);
+        return  response;
+    }
+
+    public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage){
+        NormalResponse<T> response = new NormalResponse<>();
+        response.setResponseCode(responseCode);
+        response.setResponseMessage(responseMessage);
+        return  response;
+    }
+
+    public static <T> NormalResponse<T> wrapBizExceptionResponse(BizException bizException){
+        NormalResponse<T> response = new NormalResponse<>();
+        response.setResponseCode(bizException.getMessageCode());
+        response.setResponseMessage(bizException.getMessage());
         return  response;
     }
 

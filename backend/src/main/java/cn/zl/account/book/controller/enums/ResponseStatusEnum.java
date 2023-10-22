@@ -8,12 +8,22 @@ import lombok.Getter;
  * @author lin.zl
  */
 @Getter
-public  enum ResponseStatusEnum {
+public enum ResponseStatusEnum {
 
     /**
      * success
      */
-    SUCCESS(952001,"success"),
+    SUCCESS(952001, "success"),
+
+    /**
+     * client error
+     */
+    CLASSIFY_EXIST(953001, "该分类已存在"),
+
+    /**
+     * server error
+     */
+    SYSTEM_ERROR(954001, "system error"),
     ;
 
 
