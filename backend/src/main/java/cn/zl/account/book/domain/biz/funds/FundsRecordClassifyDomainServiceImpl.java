@@ -10,6 +10,7 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 
 /**
  * @author lin.zl
@@ -26,6 +27,9 @@ public class FundsRecordClassifyDomainServiceImpl implements FundsRecordClassify
     @Override
     public void addClassify(FundsRecordClassifyInfo fundsRecordClassifyInfo) {
         FundsRecordClassifyEntity entity = FundsRecordClassifyEntityConverter.info2entity(fundsRecordClassifyInfo);
+
+        entity.setCreateTime(LocalDateTime.now());
+        entity.setModifyTime(LocalDateTime.now());
 
         long classifyId = SnowIdUtil.nextId();
         entity.setClassifyId(classifyId);
