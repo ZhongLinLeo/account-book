@@ -83,8 +83,6 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
         String keyword = pageQuery.getFundsClassifyNameKeyword();
         if (StringUtils.isNotBlank(keyword)) {
             keyword = "%" + keyword + "%";
-        } else {
-            keyword = null;
         }
 
         Page<FundsRecordClassifyEntity> fundsClassifies = fundsRecordClassifyRepository
