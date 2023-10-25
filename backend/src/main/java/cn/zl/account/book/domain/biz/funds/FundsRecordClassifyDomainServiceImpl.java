@@ -5,7 +5,6 @@ import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.domain.converter.FundsRecordClassifyEntityConverter;
 import cn.zl.account.book.domain.utils.SnowIdUtil;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository;
-import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import org.springframework.stereotype.Service;
 
@@ -21,9 +20,6 @@ public class FundsRecordClassifyDomainServiceImpl implements FundsRecordClassify
     @Resource
     private FundsRecordClassifyRepository fundsRecordClassifyRepository;
 
-    @Resource
-    private FundsRecordRepository fundsRecordRepository;
-
     @Override
     public void addClassify(FundsRecordClassifyInfo fundsRecordClassifyInfo) {
         FundsRecordClassifyEntity entity = FundsRecordClassifyEntityConverter.info2entity(fundsRecordClassifyInfo);
@@ -38,15 +34,16 @@ public class FundsRecordClassifyDomainServiceImpl implements FundsRecordClassify
     }
 
     @Override
-    public void modifyClassify(FundsRecordClassifyInfo fundsRecordClassifyInfo) {
-        FundsRecordClassifyEntity entity = FundsRecordClassifyEntityConverter.info2entity(fundsRecordClassifyInfo);
-
-        fundsRecordClassifyRepository.save(entity);
+    public void modifyClassify(FundsRecordClassifyInfo fundsRecordClassifyInfo, FundsRecordClassifyEntity classifyEntity) {
+        classifyEntity.setModifyTime(LocalDateTime.now());
+        classifyEntity.setClassifyType(fundsRecordClassifyInfo.getClassifyType());
+        classifyEntity.setClassifyName(fundsRecordClassifyInfo.getClassifyName());
+        classifyEntity.setClassifyDescribe(fundsRecordClassifyInfo.getClassifyDescribe());
+        fundsRecordClassifyRepository.save(classifyEntity);
     }
 
     @Override
     public void delClassify(Long classifyId) {
-        // check the classify id used,todo
-        fundsRecordClassifyRepository.deleteById(classifyId);
+        fundsRecordClassifyRepository.deleteLogical(classifyId);
     }
 }
