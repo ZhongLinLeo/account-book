@@ -12,7 +12,6 @@ import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -80,13 +79,8 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
     public Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery) {
         PageRequest pageRequest = PageRequest.of(pageQuery.getPageNumber(), pageQuery.getPageSize());
 
-        String keyword = pageQuery.getFundsClassifyNameKeyword();
-        if (StringUtils.isNotBlank(keyword)) {
-            keyword = "%" + keyword + "%";
-        }
-
         Page<FundsRecordClassifyEntity> fundsClassifies = fundsRecordClassifyRepository
-                .paginationClassify(keyword, pageRequest);
+                .paginationClassify(pageQuery.getFundsClassifyNameKeyword(), pageRequest);
 
         List<FundsRecordClassifyInfo> fundsClassifyInfos = fundsClassifies.get()
                 .map(FundsRecordClassifyEntityConverter::entity2Info)

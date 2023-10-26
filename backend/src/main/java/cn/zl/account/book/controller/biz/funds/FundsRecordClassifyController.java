@@ -8,7 +8,6 @@ import cn.zl.account.book.controller.request.FundsRecordClassifyRequest;
 import cn.zl.account.book.controller.response.FundsRecordClassifyResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
 import cn.zl.account.book.controller.response.PageBaseResponse;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,10 +65,6 @@ public class FundsRecordClassifyController {
 
     @GetMapping("pagination")
     public PageBaseResponse<FundsRecordClassifyResponse> paginationClassify(@Valid FundsClassifyQueryRequest pageQuery) {
-        String keyword = pageQuery.getFundsClassifyNameKeyword();
-        if (StringUtils.isBlank(keyword)) {
-            pageQuery.setFundsClassifyNameKeyword(null);
-        }
         Page<FundsRecordClassifyInfo> fundsClassifyInfos = fundsRecordClassifyAppService.paginationClassify(pageQuery);
         List<FundsRecordClassifyResponse> responseList = fundsClassifyInfos.stream()
                 .map(FundsRecordClassifyConverter::info2Resp)

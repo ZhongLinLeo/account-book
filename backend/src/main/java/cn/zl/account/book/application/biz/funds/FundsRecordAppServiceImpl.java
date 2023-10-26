@@ -48,7 +48,7 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     public Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
         PageRequest pageRequest = PageRequest.of(paginationReq.getPageNumber(), paginationReq.getPageSize());
 
-        Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.findAll(pageRequest);
+        Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.paginationRecord(paginationReq, pageRequest);
 
         List<FundsRecordInfo> content = fundsRecords.get()
                 .map(FundsRecordEntityConverter::entity2Info)
