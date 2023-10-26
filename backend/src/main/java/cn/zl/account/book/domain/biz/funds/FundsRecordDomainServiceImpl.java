@@ -3,6 +3,7 @@ package cn.zl.account.book.domain.biz.funds;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
+import cn.zl.account.book.domain.util.BeanCopyUtils;
 import cn.zl.account.book.domain.util.FundsRecordConstants;
 import cn.zl.account.book.domain.utils.SnowIdUtil;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository;
@@ -16,13 +17,16 @@ import org.apache.poi.xssf.usermodel.XSSFCell;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import static cn.zl.account.book.domain.util.FundsRecordConstants.*;
@@ -55,17 +59,16 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
     }
 
     @Override
-    public void modifyFundRecord(FundsRecordInfo fundsRecordInfo) {
-        FundsRecordEntity entity = FundsRecordEntityConverter.info2Entity(fundsRecordInfo);
+    public void modifyFundRecord(FundsRecordEntity classifyEntity, FundsRecordInfo fundsRecordInfo) {
+        BeanUtils.copyProperties(fundsRecordInfo,classifyEntity, BeanCopyUtils.getNullPropertyNames(fundsRecordInfo));
+        classifyEntity.setModifyTime(LocalDateTime.now());
 
-        entity.setModifyTime(LocalDateTime.now());
-
-        fundsRecordRepository.save(entity);
+        fundsRecordRepository.save(classifyEntity);
     }
 
     @Override
     public void delFundRecord(Long recordId) {
-        fundsRecordRepository.deleteById(recordId);
+        fundsRecordRepository.deleteLogical(recordId);
     }
 
     @Override

@@ -25,6 +25,7 @@ public enum ResponseStatusEnum {
 
     REQUEST_PARAM_ERROR(953004, "参数错误:{0}"),
 
+    FUNDS_RECORD_NONE_EXIST(953005, "该记录不存在"),
     /**
      * server error
      */

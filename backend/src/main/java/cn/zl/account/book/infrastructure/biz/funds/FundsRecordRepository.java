@@ -5,15 +5,27 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
+
+import javax.transaction.Transactional;
 
 /**
  * @author lin.zl
  */
 @Repository
 public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, Long> {
+    /**
+     * delete by logical
+     *
+     * @param fundsRecordId classify id
+     */
+    @Modifying
+    @Transactional(rollbackOn = Exception.class)
+    @Query("update FundsRecordEntity set invalid = 1 where fundsRecordId = :fundsRecordId")
+    void deleteLogical(@Param("fundsRecordId") Long fundsRecordId);
 
     /**
      * pagination

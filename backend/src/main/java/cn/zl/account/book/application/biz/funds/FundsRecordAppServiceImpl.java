@@ -3,8 +3,10 @@ package cn.zl.account.book.application.biz.funds;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
+import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
+import cn.zl.account.book.infrastructure.architecture.BizException;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
@@ -15,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 /**
@@ -36,7 +39,11 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
 
     @Override
     public void modifyFundsRecord(FundsRecordInfo fundsRecordInfo) {
-        fundsRecordDomainService.modifyFundRecord(fundsRecordInfo);
+        Optional<FundsRecordEntity> optional = fundsRecordRepository.findById(fundsRecordInfo.getFundsRecordId());
+        FundsRecordEntity classifyEntity = optional
+                .orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
+
+        fundsRecordDomainService.modifyFundRecord(classifyEntity,fundsRecordInfo);
     }
 
     @Override

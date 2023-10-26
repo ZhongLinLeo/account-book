@@ -1,6 +1,7 @@
 package cn.zl.account.book.application.domain;
 
 import cn.zl.account.book.application.info.FundsRecordInfo;
+import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.web.multipart.MultipartFile;
 
 /**
@@ -17,9 +18,10 @@ public interface FundsRecordDomainService {
     /**
      * modify record
      *
+     * @param classifyEntity classify info
      * @param fundsRecordInfo funds record info
      */
-    void modifyFundRecord(FundsRecordInfo fundsRecordInfo);
+    void modifyFundRecord(FundsRecordEntity classifyEntity, FundsRecordInfo fundsRecordInfo);
 
     /**
      * del record
