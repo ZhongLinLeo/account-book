@@ -4,8 +4,8 @@ import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
 import cn.zl.account.book.controller.converter.FundsRecordConverter;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
-import cn.zl.account.book.controller.request.FundsRecordRequest;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
+import cn.zl.account.book.controller.request.FundsRecordRequest;
 import cn.zl.account.book.controller.response.FundsRecordResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
 import cn.zl.account.book.controller.response.PageBaseResponse;
@@ -14,7 +14,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
-import java.io.IOException;
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -31,7 +32,7 @@ public class FundsRecordController {
 
 
     @GetMapping("pagination")
-    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(FundsRecordQueryRequest pagination) {
+    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(@RequestBody @Valid FundsRecordQueryRequest pagination) {
         Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pagination);
 
         List<FundsRecordResponse> content = fundsRecords.get()
@@ -43,31 +44,30 @@ public class FundsRecordController {
     }
 
     @PostMapping()
-    public NormalResponse<Boolean> recordFunds(FundsRecordRequest fundsRecordReq) {
+    public NormalResponse<Boolean> recordFunds(@RequestBody @Valid FundsRecordRequest fundsRecordReq) {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordAppService.recordFunds(fundsRecordInfo);
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
-    @PutMapping()
-    public NormalResponse<Boolean> modifyFundsRecord(FundsRecordRequest fundsRecordReq) {
+    @PutMapping("{recordId}")
+    public NormalResponse<Boolean> modifyFundsRecord(@PathVariable @NotNull(message = "记录ID不能为空") Long recordId,
+                                                     @RequestBody @Valid FundsRecordRequest fundsRecordReq) {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
+        fundsRecordInfo.setFundsRecordId(recordId);
         fundsRecordAppService.modifyFundsRecord(fundsRecordInfo);
-
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
     @DeleteMapping("{recordId}")
-    public NormalResponse<Boolean> delFundsRecord(@PathVariable Long recordId) {
+    public NormalResponse<Boolean> delFundsRecord(@PathVariable @NotNull(message = "记录ID不能为空") Long recordId) {
         fundsRecordAppService.delFundsRecord(recordId);
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
 
     @PostMapping("import")
-    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file") MultipartFile excelFile) throws IOException {
+    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file") MultipartFile excelFile) {
         fundsRecordAppService.importFundsRecord(excelFile);
         return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
     }
-
-
 }
