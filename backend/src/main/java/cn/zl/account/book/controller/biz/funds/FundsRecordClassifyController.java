@@ -13,6 +13,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.validation.Valid;
+import javax.validation.constraints.NotBlank;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,7 +30,7 @@ public class FundsRecordClassifyController {
     private FundsRecordClassifyAppService fundsRecordClassifyAppService;
 
     @PostMapping()
-    public NormalResponse<Boolean> addClassify(@RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> addClassify(@Valid @RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
 
         fundsRecordClassifyAppService.addClassify(fundsRecordClassifyInfo);
@@ -37,8 +39,8 @@ public class FundsRecordClassifyController {
     }
 
     @PutMapping("{classifyId}")
-    public NormalResponse<Boolean> modifyClassify(@PathVariable Long classifyId,
-                                                  @RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
+    public NormalResponse<Boolean> modifyClassify(@PathVariable @NotBlank(message = "classifyId不能为空") Long classifyId,
+                                                  @Valid @RequestBody FundsRecordClassifyRequest fundsRecordClassifyReq) {
         FundsRecordClassifyInfo fundsRecordClassifyInfo = FundsRecordClassifyConverter.req2Info(fundsRecordClassifyReq);
         fundsRecordClassifyInfo.setClassifyId(classifyId);
         fundsRecordClassifyAppService.modifyClassify(fundsRecordClassifyInfo);
@@ -47,7 +49,7 @@ public class FundsRecordClassifyController {
     }
 
     @DeleteMapping("{classifyId}")
-    public NormalResponse<Boolean> delClassify(@PathVariable Long classifyId) {
+    public NormalResponse<Boolean> delClassify(@PathVariable @NotBlank(message = "classifyId不能为空") Long classifyId) {
         fundsRecordClassifyAppService.delClassify(classifyId);
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
@@ -63,7 +65,7 @@ public class FundsRecordClassifyController {
     }
 
     @GetMapping("pagination")
-    public PageBaseResponse<FundsRecordClassifyResponse> paginationClassify(FundsClassifyQueryRequest pageQuery) {
+    public PageBaseResponse<FundsRecordClassifyResponse> paginationClassify(@Valid FundsClassifyQueryRequest pageQuery) {
         String keyword = pageQuery.getFundsClassifyNameKeyword();
         if (StringUtils.isBlank(keyword)) {
             pageQuery.setFundsClassifyNameKeyword(null);

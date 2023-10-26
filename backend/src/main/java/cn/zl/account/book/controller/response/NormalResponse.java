@@ -17,37 +17,38 @@ public class NormalResponse<T> extends BaseResponse {
     public NormalResponse() {
     }
 
-    public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage, T responseContent){
+    public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage, T responseContent) {
         NormalResponse<T> response = new NormalResponse<>();
         response.setResponseCode(responseCode);
         response.setResponseMessage(responseMessage);
         response.setResponseContent(responseContent);
-        return  response;
+        return response;
     }
 
-    public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage){
+    public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage) {
         NormalResponse<T> response = new NormalResponse<>();
         response.setResponseCode(responseCode);
         response.setResponseMessage(responseMessage);
-        return  response;
+        return response;
     }
 
-    public static <T> NormalResponse<T> wrapBizExceptionResponse(BizException bizException){
+    public static <T> NormalResponse<T> wrapBizExceptionResponse(BizException bizException,T responseContent) {
         NormalResponse<T> response = new NormalResponse<>();
         response.setResponseCode(bizException.getMessageCode());
         response.setResponseMessage(bizException.getMessage());
-        return  response;
+        response.setResponseContent(responseContent);
+        return response;
     }
 
-    public static <T> NormalResponse<T> wrapResponse(ResponseStatusEnum responseStatus, T responseContent){
+    public static <T> NormalResponse<T> wrapResponse(ResponseStatusEnum responseStatus, T responseContent) {
         NormalResponse<T> response = new NormalResponse<>();
         response.setResponseCode(responseStatus.getResponseCode());
         response.setResponseMessage(responseStatus.getResponseMessage());
         response.setResponseContent(responseContent);
-        return  response;
+        return response;
     }
 
-    public static <T> NormalResponse<T> wrapSuccessResponse(T responseContent){
-        return  wrapResponse(ResponseStatusEnum.SUCCESS,responseContent);
+    public static <T> NormalResponse<T> wrapSuccessResponse(T responseContent) {
+        return wrapResponse(ResponseStatusEnum.SUCCESS, responseContent);
     }
 }

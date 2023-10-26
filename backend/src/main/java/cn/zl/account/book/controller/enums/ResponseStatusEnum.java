@@ -22,6 +22,9 @@ public enum ResponseStatusEnum {
     CLASSIFY_NONE_EXIST(953002, "该分类不存在"),
     CLASSIFY_USING(953003, "分类已被使用，无法删除"),
 
+
+    REQUEST_PARAM_ERROR(953004, "参数错误:{0}"),
+
     /**
      * server error
      */
