@@ -12,6 +12,9 @@ import java.time.LocalDateTime;
 @Data
 public class FundsRecordResponse {
 
+    @JsonSerialize(using= ToStringSerializer.class)
+    private Long fundsRecordId;
+
     private Long fundsRecordBalance;
 
     private LocalDateTime fundsRecordTime;

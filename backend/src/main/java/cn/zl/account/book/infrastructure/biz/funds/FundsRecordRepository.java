@@ -35,17 +35,16 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      * @return page list
      */
     @Query(value = "SELECT * FROM funds_record WHERE invalid = 0 " +
-            "AND (funds_record_describe like :#{paginationReq.recordKeyword} or :#{paginationReq.recordKeyword} is null) " +
-            "AND (funds_record_time > :#{paginationReq.startTime} or :#{paginationReq.startTime} is null) " +
-            "AND (funds_record_time < :#{paginationReq.endTime} or :#{paginationReq.endTime} is null) " +
-            "AND (funds_record_classify_id = :#{paginationReq.classifyId} or :#{paginationReq.classifyId} is null) " +
-            "AND (funds_account_id = :#{paginationReq.accountId} or :#{paginationReq.accountId} is null)",
+            "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
+            "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
+            "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
+            "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
             countQuery = "SELECT COUNT(*) FROM funds_record WHERE invalid = 0 " +
-                    "AND (funds_record_describe like :#{paginationReq.recordKeyword} or :#{paginationReq.recordKeyword} is null) " +
-                    "AND (funds_record_time > :#{paginationReq.startTime} or :#{paginationReq.startTime} is null) " +
-                    "AND (funds_record_time < :#{paginationReq.endTime} or :#{paginationReq.endTime} is null) " +
-                    "AND (funds_record_classify_id = :#{paginationReq.classifyId} or :#{paginationReq.classifyId} is null) " +
-                    "AND (funds_account_id = :#{paginationReq.accountId} or :#{paginationReq.accountId} is null)",
+                    "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
+                    "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
+                    "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
+                    "AND (funds_record_classify_id = :#{#paginationReq.classifyId} or :#{#paginationReq.classifyId} is null) " +
+                    "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
             nativeQuery = true)
     Page<FundsRecordEntity> paginationRecord(@Param("paginationReq") FundsRecordQueryRequest paginationReq, Pageable pageable);
 }

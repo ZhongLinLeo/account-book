@@ -32,7 +32,7 @@ public class FundsRecordController {
 
 
     @GetMapping("pagination")
-    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(@RequestBody @Valid FundsRecordQueryRequest pagination) {
+    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(@Valid FundsRecordQueryRequest pagination) {
         Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pagination);
 
         List<FundsRecordResponse> content = fundsRecords.get()

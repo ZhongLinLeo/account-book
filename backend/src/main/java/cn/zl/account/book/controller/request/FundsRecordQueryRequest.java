@@ -15,8 +15,6 @@ public class FundsRecordQueryRequest extends BasePaginationRequest {
 
     private String recordKeyword;
 
-    private Long classifyId;
-
     private LocalDateTime startTime;
 
     private LocalDateTime endTime;
