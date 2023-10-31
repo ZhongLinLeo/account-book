@@ -77,7 +77,7 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
 
     @Override
     public Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery) {
-        PageRequest pageRequest = PageRequest.of(pageQuery.getPageNumber(), pageQuery.getPageSize());
+        PageRequest pageRequest = PageRequest.of(pageQuery.getCurrent(), pageQuery.getPageSize());
 
         Page<FundsRecordClassifyEntity> fundsClassifies = fundsRecordClassifyRepository
                 .paginationClassify(pageQuery.getFundsClassifyNameKeyword(), pageRequest);

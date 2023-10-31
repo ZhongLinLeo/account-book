@@ -39,7 +39,7 @@ public class FundsRecordController {
                 .map(FundsRecordConverter::info2Resp)
                 .collect(Collectors.toList());
 
-        return PageBaseResponse.wrapSuccessPageResponse(pagination.getPageSize(), pagination.getPageNumber(),
+        return PageBaseResponse.wrapSuccessPageResponse(pagination.getPageSize(), pagination.getCurrent(),
                 fundsRecords.getTotalElements(), content);
     }
 

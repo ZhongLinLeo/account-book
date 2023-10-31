@@ -70,7 +70,7 @@ public class FundsRecordClassifyController {
                 .map(FundsRecordClassifyConverter::info2Resp)
                 .collect(Collectors.toList());
 
-        return PageBaseResponse.wrapSuccessPageResponse(pageQuery.getPageSize(), pageQuery.getPageNumber(),
+        return PageBaseResponse.wrapSuccessPageResponse(pageQuery.getPageSize(), pageQuery.getCurrent(),
                 fundsClassifyInfos.getTotalElements(), responseList);
     }
 }
