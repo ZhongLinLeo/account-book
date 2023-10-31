@@ -8,7 +8,9 @@ import lombok.Data;
 @Data
 public abstract class BaseResponse {
 
-    private Integer responseCode;
+    private Integer code;
 
-    private String responseMessage;
+    private String message;
+
+    private Boolean success;
 }

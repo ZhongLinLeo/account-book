@@ -3,7 +3,6 @@ package cn.zl.account.book.controller.biz.funds;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
 import cn.zl.account.book.controller.converter.FundsRecordConverter;
-import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
 import cn.zl.account.book.controller.request.FundsRecordRequest;
 import cn.zl.account.book.controller.response.FundsRecordResponse;
@@ -39,15 +38,14 @@ public class FundsRecordController {
                 .map(FundsRecordConverter::info2Resp)
                 .collect(Collectors.toList());
 
-        return PageBaseResponse.wrapSuccessPageResponse(pagination.getPageSize(), pagination.getCurrent(),
-                fundsRecords.getTotalElements(), content);
+        return PageBaseResponse.wrapSuccessPageResponse(fundsRecords.getTotalElements(), content);
     }
 
     @PostMapping()
     public NormalResponse<Boolean> recordFunds(@RequestBody @Valid FundsRecordRequest fundsRecordReq) {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordAppService.recordFunds(fundsRecordInfo);
-        return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     @PutMapping("{recordId}")
@@ -56,18 +54,18 @@ public class FundsRecordController {
         FundsRecordInfo fundsRecordInfo = FundsRecordConverter.req2Info(fundsRecordReq);
         fundsRecordInfo.setFundsRecordId(recordId);
         fundsRecordAppService.modifyFundsRecord(fundsRecordInfo);
-        return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     @DeleteMapping("{recordId}")
     public NormalResponse<Boolean> delFundsRecord(@PathVariable @NotNull(message = "记录ID不能为空") Long recordId) {
         fundsRecordAppService.delFundsRecord(recordId);
-        return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
     @PostMapping("import")
     public NormalResponse<Boolean> importFundsRecord(@RequestParam("file") MultipartFile excelFile) {
         fundsRecordAppService.importFundsRecord(excelFile);
-        return NormalResponse.wrapResponse(ResponseStatusEnum.SUCCESS, Boolean.TRUE);
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 }

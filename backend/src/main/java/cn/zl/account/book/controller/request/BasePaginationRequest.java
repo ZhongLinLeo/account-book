@@ -16,4 +16,7 @@ public abstract class BasePaginationRequest {
     @NotNull(message = "pageNumber 不能为空")
     private Integer current;
 
+    public Integer getCurrent() {
+        return current - 1;
+    }
 }

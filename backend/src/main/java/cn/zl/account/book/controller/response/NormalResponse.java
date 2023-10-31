@@ -12,43 +12,47 @@ import lombok.EqualsAndHashCode;
 @Data
 public class NormalResponse<T> extends BaseResponse {
 
-    private T responseContent;
+    private T data;
 
     public NormalResponse() {
+        // none
     }
 
     public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage, T responseContent) {
         NormalResponse<T> response = new NormalResponse<>();
-        response.setResponseCode(responseCode);
-        response.setResponseMessage(responseMessage);
-        response.setResponseContent(responseContent);
+        response.setCode(responseCode);
+        response.setMessage(responseMessage);
+        response.setData(responseContent);
         return response;
     }
 
     public static <T> NormalResponse<T> wrapResponse(Integer responseCode, String responseMessage) {
         NormalResponse<T> response = new NormalResponse<>();
-        response.setResponseCode(responseCode);
-        response.setResponseMessage(responseMessage);
+        response.setCode(responseCode);
+        response.setMessage(responseMessage);
         return response;
     }
 
-    public static <T> NormalResponse<T> wrapBizExceptionResponse(BizException bizException,T responseContent) {
+    public static <T> NormalResponse<T> wrapBizExceptionResponse(BizException bizException, T responseContent) {
         NormalResponse<T> response = new NormalResponse<>();
-        response.setResponseCode(bizException.getMessageCode());
-        response.setResponseMessage(bizException.getMessage());
-        response.setResponseContent(responseContent);
+        response.setCode(bizException.getMessageCode());
+        response.setMessage(bizException.getMessage());
+        response.setData(responseContent);
         return response;
     }
 
     public static <T> NormalResponse<T> wrapResponse(ResponseStatusEnum responseStatus, T responseContent) {
         NormalResponse<T> response = new NormalResponse<>();
-        response.setResponseCode(responseStatus.getResponseCode());
-        response.setResponseMessage(responseStatus.getResponseMessage());
-        response.setResponseContent(responseContent);
+        response.setCode(responseStatus.getResponseCode());
+        response.setMessage(responseStatus.getResponseMessage());
+        response.setData(responseContent);
         return response;
     }
 
     public static <T> NormalResponse<T> wrapSuccessResponse(T responseContent) {
-        return wrapResponse(ResponseStatusEnum.SUCCESS, responseContent);
+        final NormalResponse<T> response = wrapResponse(ResponseStatusEnum.SUCCESS, responseContent);
+        response.setSuccess(Boolean.TRUE);
+
+        return response;
     }
 }

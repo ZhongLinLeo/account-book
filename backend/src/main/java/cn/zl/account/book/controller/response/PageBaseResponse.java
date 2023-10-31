@@ -12,30 +12,29 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 @Data
 public class PageBaseResponse<T> extends BaseResponse {
-    private Integer pageSize;
 
-    private Integer pageNumber;
+    private Boolean success;
 
-    private Long totalSize;
+    private Long total;
 
-    private List<T> responseContent;
+    private List<T> data;
 
     public static <T> PageBaseResponse<T> wrapPageResponse(ResponseStatusEnum responseStatus,
-                                                           Integer pageSize, Integer pageNumber,
                                                            Long totalSize, List<T> content) {
         PageBaseResponse<T> response = new PageBaseResponse<>();
-        response.setResponseCode(responseStatus.getResponseCode());
-        response.setResponseMessage(responseStatus.getResponseMessage());
+        response.setCode(responseStatus.getResponseCode());
+        response.setMessage(responseStatus.getResponseMessage());
 
-        response.setResponseContent(content);
-        response.setPageSize(pageSize);
-        response.setPageNumber(pageNumber);
-        response.setTotalSize(totalSize);
+        response.setData(content);
+        response.setTotal(totalSize);
         return response;
     }
 
-    public static <T> PageBaseResponse<T> wrapSuccessPageResponse(Integer pageSize, Integer pageNumber,
-                                                                  Long totalSize, List<T> content) {
-        return wrapPageResponse(ResponseStatusEnum.SUCCESS, pageSize, pageNumber, totalSize, content);
+    public static <T> PageBaseResponse<T> wrapSuccessPageResponse(Long totalSize, List<T> content) {
+        final PageBaseResponse<T> response = wrapPageResponse(ResponseStatusEnum.SUCCESS, totalSize, content);
+
+        response.setSuccess(Boolean.TRUE);
+
+        return response;
     }
 }
