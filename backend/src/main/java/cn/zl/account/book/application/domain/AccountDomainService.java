@@ -1,6 +1,7 @@
 package cn.zl.account.book.application.domain;
 
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.infrastructure.entity.AccountEntity;
 
 import java.util.List;
 
@@ -28,9 +29,10 @@ public interface AccountDomainService {
      * modify account
      *
      * @param accountInfo account info
+     * @param accountEntity entity
      * @return true if success
      */
-    void modifyAccount(AccountInfo accountInfo);
+    void modifyAccount(AccountInfo accountInfo, AccountEntity accountEntity);
 
     /**
      * del account
