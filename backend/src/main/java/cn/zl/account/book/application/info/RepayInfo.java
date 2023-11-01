@@ -10,7 +10,11 @@ public class RepayInfo {
 
     private Double loanAmount;
 
+
     private Integer installmentsNumber;
+    private Integer remainsInstallmentsNumber;
+
+
 
     private Integer repaidNumber;
 
@@ -19,6 +23,8 @@ public class RepayInfo {
     private Double repaidPrincipal;
 
     private Double remainsPrincipal;
+    private Double remainsInterest;
+
 
     private Double totalInterest;
 

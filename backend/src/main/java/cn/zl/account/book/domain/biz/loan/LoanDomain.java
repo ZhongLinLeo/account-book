@@ -8,7 +8,6 @@ import cn.zl.account.book.application.info.RepayInfo;
 import cn.zl.account.book.domain.biz.loan.factory.LoanCalculateFactory;
 import com.alibaba.fastjson2.JSON;
 
-import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +40,9 @@ public class LoanDomain {
         RepayInfo repayInfo = new RepayInfo();
 
         repayInfo.setLoanAmount(loanInfo.getLoanAmount());
+
         repayInfo.setInstallmentsNumber(loanInfo.getLoanPeriod());
+        repayInfo.setRemainsInstallmentsNumber(originRepayInfos.size());
 
         LocalDate now = LocalDate.now();
         List<RepayAmountPreMonthInfo> repaidList = originRepayInfos.stream()
@@ -51,8 +52,13 @@ public class LoanDomain {
         repayInfo.setRepaidInterest(repaidList.stream().mapToDouble(RepayAmountPreMonthInfo::getRepayInterest).sum());
         double repaidPrincipal = repaidList.stream().mapToDouble(RepayAmountPreMonthInfo::getRepayPrincipal).sum();
         repayInfo.setRepaidPrincipal(repaidPrincipal);
-        repayInfo.setRemainsPrincipal(BigDecimal.valueOf(loanInfo.getLoanAmount())
-                .add(BigDecimal.valueOf(repaidPrincipal).negate()).doubleValue());
+
+        List<RepayAmountPreMonthInfo> waitRepayInfo = originRepayInfos.stream()
+                .filter(repayAmount -> repayAmount.getRepayDate().isAfter(now)).collect(Collectors.toList());
+
+        double remainsPrincipal = waitRepayInfo.stream().mapToDouble(RepayAmountPreMonthInfo::getRepayPrincipal).sum();
+        repayInfo.setRemainsPrincipal(remainsPrincipal);
+        repayInfo.setRemainsInterest(waitRepayInfo.stream().mapToDouble(RepayAmountPreMonthInfo::getRepayInterest).sum());
 
         repayInfo.setTotalInterest(originRepayInfos.stream()
                 .mapToDouble(RepayAmountPreMonthInfo::getRepayInterest).sum());
