@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class FundsRecordResponse {
 
     private Long fundsRecordBalance;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fundsRecordTime;
 
     private String fundsRecordDescribe;
