@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.request;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
@@ -17,6 +18,7 @@ public class FundsRecordRequest {
 
     private String fundsRecordRemark;
 
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fundsRecordTime;
 
     /**

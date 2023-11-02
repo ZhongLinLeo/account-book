@@ -23,8 +23,13 @@ public final class FundsRecordConverter {
 
     public static FundsRecordInfo req2Info(FundsRecordRequest fundsRecordReq){
         FundsRecordInfo info = new FundsRecordInfo();
-        info.setFundsRecordClassifyId(fundsRecordReq.getFundsRecordClassifyId());
+        info.setFundsRecordBalance(fundsRecordReq.getFundsRecordBalance());
+        info.setFundsRecordDescribe(fundsRecordReq.getFundsRecordDescribe());
         info.setFundsRecordTime(fundsRecordReq.getFundsRecordTime());
+        info.setFundsRecordRemark(fundsRecordReq.getFundsRecordRemark());
+        info.setFundsRecordClassifyId(fundsRecordReq.getFundsRecordClassifyId());
+        info.setFundsAccountId(fundsRecordReq.getFundsAccountId());
+        info.setFundsUserId(fundsRecordReq.getFundsUserId());
 
         return info;
     }

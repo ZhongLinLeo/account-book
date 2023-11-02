@@ -54,6 +54,8 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
         // generate account id
         final long fundsRecordId = SnowIdUtil.nextId();
         entity.setFundsRecordId(fundsRecordId);
+        entity.setCreateTime(LocalDateTime.now());
+        entity.setModifyTime(LocalDateTime.now());
 
         fundsRecordRepository.save(entity);
     }
