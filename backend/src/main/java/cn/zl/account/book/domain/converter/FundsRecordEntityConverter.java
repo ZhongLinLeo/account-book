@@ -11,15 +11,17 @@ public final class FundsRecordEntityConverter {
     public static FundsRecordInfo entity2Info(FundsRecordEntity entity) {
         FundsRecordInfo info = new FundsRecordInfo();
         info.setFundsRecordId(entity.getFundsRecordId());
-        info.setFundsRecordClassifyId(entity.getFundsRecordClassifyId());
+        info.setFundsRecordBalance(entity.getFundsRecordBalance());
+        info.setFundsRecordTime(entity.getFundsRecordTime());
         info.setFundsRecordDescribe(entity.getFundsRecordDescribe());
         info.setFundsRecordRemark(entity.getFundsRecordRemark());
-        info.setFundsRecordBalance(entity.getFundsRecordBalance());
         info.setFundsAccountId(entity.getFundsAccountId());
+        info.setFundsRecordClassifyId(entity.getFundsRecordClassifyId());
+        info.setFundsUserId(entity.getFundsUserId());
         return info;
     }
 
-    public static FundsRecordEntity info2Entity(FundsRecordInfo info){
+    public static FundsRecordEntity info2Entity(FundsRecordInfo info) {
         FundsRecordEntity entity = new FundsRecordEntity();
         entity.setFundsRecordId(info.getFundsRecordId());
         entity.setFundsRecordClassifyId(info.getFundsRecordClassifyId());
