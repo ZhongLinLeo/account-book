@@ -39,5 +39,20 @@ public interface FundsRecordClassifyAppService {
      */
     List<FundsRecordClassifyInfo> listClassify();
 
+    /**
+     * pagination classify
+     *
+     * @param pageQuery conditions
+     * @return page of classify
+     */
     Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery);
+
+    /**
+     * list all
+     *
+     * @param classifyId classify id
+     * @return classify infos
+     */
+    FundsRecordClassifyInfo findClassify(Long classifyId);
+
 }

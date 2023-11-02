@@ -39,4 +39,12 @@ public interface AccountAppService {
      * @return true if success
      */
     void delAccount(Long accountId);
+
+    /**
+     * get account info
+     *
+     * @param accountId accountId
+     * @return account infos
+     */
+    AccountInfo findAccountInfo(Long accountId);
 }

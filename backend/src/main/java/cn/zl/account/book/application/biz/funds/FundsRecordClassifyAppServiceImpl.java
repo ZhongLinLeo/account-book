@@ -88,4 +88,14 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
 
         return new PageImpl<>(fundsClassifyInfos, pageRequest, fundsClassifies.getTotalElements());
     }
+
+    @Override
+    public FundsRecordClassifyInfo findClassify(Long classifyId) {
+        final Optional<FundsRecordClassifyEntity> originOptional = fundsRecordClassifyRepository.findById(classifyId);
+
+        final FundsRecordClassifyEntity classifyEntity =
+                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
+
+        return FundsRecordClassifyEntityConverter.entity2Info(classifyEntity);
+    }
 }

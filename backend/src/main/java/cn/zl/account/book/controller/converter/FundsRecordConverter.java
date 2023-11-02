@@ -12,10 +12,8 @@ public final class FundsRecordConverter {
     public static FundsRecordResponse info2Resp(FundsRecordInfo fundsRecordInfo){
 
         FundsRecordResponse resp = new FundsRecordResponse();
-        resp.setFundsAccountId(fundsRecordInfo.getFundsAccountId());
         resp.setFundsRecordRemark(fundsRecordInfo.getFundsRecordRemark());
         resp.setFundsRecordBalance(fundsRecordInfo.getFundsRecordBalance());
-        resp.setFundsRecordClassifyId(fundsRecordInfo.getFundsRecordClassifyId());
         resp.setFundsRecordTime(fundsRecordInfo.getFundsRecordTime());
         resp.setFundsRecordDescribe(fundsRecordInfo.getFundsRecordDescribe());
 

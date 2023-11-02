@@ -4,6 +4,7 @@ import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
+import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.infrastructure.architecture.BizException;
 import cn.zl.account.book.infrastructure.biz.account.AccountRepository;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
@@ -50,11 +51,21 @@ public class AccountAppServiceImpl implements AccountAppService {
         final AccountEntity accountEntity =
                 originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
 
-        accountDomainService.modifyAccount(accountInfo,accountEntity);
+        accountDomainService.modifyAccount(accountInfo, accountEntity);
     }
 
     @Override
     public void delAccount(Long accountId) {
         accountDomainService.delAccount(accountId);
+    }
+
+    @Override
+    public AccountInfo findAccountInfo(Long accountId) {
+        final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
+
+        final AccountEntity accountEntity =
+                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
+
+        return AccountEntityConverter.accountEntity2AccountInfo(accountEntity);
     }
 }

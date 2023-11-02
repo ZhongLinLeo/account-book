@@ -23,11 +23,9 @@ public class FundsRecordResponse {
 
     private String fundsRecordRemark;
 
-    @JsonSerialize(using= ToStringSerializer.class)
-    private Long fundsRecordClassifyId;
+    private FundsRecordClassifyResponse classifyInfo;
 
-    @JsonSerialize(using= ToStringSerializer.class)
-    private Long fundsAccountId;
+    private AccountInfoResponse accountInfo;
 
     @JsonSerialize(using= ToStringSerializer.class)
     private Long fundsUserId;

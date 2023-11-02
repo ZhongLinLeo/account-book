@@ -1,13 +1,17 @@
 package cn.zl.account.book.controller.biz.funds;
 
+import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.application.info.FundsRecordInfo;
+import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
+import cn.zl.account.book.controller.application.FundsRecordClassifyAppService;
+import cn.zl.account.book.controller.converter.AccountConverter;
+import cn.zl.account.book.controller.converter.FundsRecordClassifyConverter;
 import cn.zl.account.book.controller.converter.FundsRecordConverter;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
 import cn.zl.account.book.controller.request.FundsRecordRequest;
-import cn.zl.account.book.controller.response.FundsRecordResponse;
-import cn.zl.account.book.controller.response.NormalResponse;
-import cn.zl.account.book.controller.response.PageBaseResponse;
+import cn.zl.account.book.controller.response.*;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -29,15 +33,31 @@ public class FundsRecordController {
     @Resource
     private FundsRecordAppService fundsRecordAppService;
 
+    @Resource
+    private FundsRecordClassifyAppService fundsRecordClassifyAppService;
+
+    @Resource
+    private AccountAppService accountAppService;
 
     @GetMapping("pagination")
     public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(@Valid FundsRecordQueryRequest pagination) {
         Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pagination);
 
         List<FundsRecordResponse> content = fundsRecords.get()
-                .map(FundsRecordConverter::info2Resp)
-                .collect(Collectors.toList());
+                .map(recordInfo -> {
+                    FundsRecordResponse fundsRecordResponse = FundsRecordConverter.info2Resp(recordInfo);
+                    FundsRecordClassifyInfo classify = fundsRecordClassifyAppService
+                            .findClassify(recordInfo.getFundsRecordClassifyId());
+                    FundsRecordClassifyResponse classifyResponse = FundsRecordClassifyConverter.info2Resp(classify);
+                    fundsRecordResponse.setClassifyInfo(classifyResponse);
 
+                    AccountInfo accountInfo = accountAppService.findAccountInfo(recordInfo.getFundsAccountId());
+                    AccountInfoResponse accountInfoResponse = AccountConverter.info2Resp(accountInfo);
+                    fundsRecordResponse.setAccountInfo(accountInfoResponse);
+
+                    return fundsRecordResponse;
+                })
+                .collect(Collectors.toList());
         return PageBaseResponse.wrapSuccessPageResponse(fundsRecords.getTotalElements(), content);
     }
 
