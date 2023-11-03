@@ -2,6 +2,7 @@ package cn.zl.account.book.application.biz.account;
 
 import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
@@ -76,5 +77,12 @@ public class AccountAppServiceImpl implements AccountAppService {
         accountInfo.setAccountOwner(userEntity.getUserName());
 
         return accountInfo;
+    }
+
+    @Override
+    public void transfer(AccountTransferInfo transferInfo) {
+
+
+
     }
 }

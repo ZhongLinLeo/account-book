@@ -1,10 +1,12 @@
 package cn.zl.account.book.controller.biz.account;
 
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.converter.AccountConverter;
-import cn.zl.account.book.controller.response.AccountInfoResponse;
 import cn.zl.account.book.controller.request.AccountRequest;
+import cn.zl.account.book.controller.request.AccountTransferRequest;
+import cn.zl.account.book.controller.response.AccountInfoResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
 import org.springframework.web.bind.annotation.*;
 
@@ -76,4 +78,19 @@ public class AccountController {
         accountAppService.delAccount(accountId);
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
+
+    /**
+     * transfer
+     *
+     * @param transferRequest transfer req
+     */
+    @PostMapping("transfer")
+    public NormalResponse<Boolean> transfer(@RequestBody AccountTransferRequest transferRequest) {
+        AccountTransferInfo transferInfo = AccountConverter.req2Info(transferRequest);
+
+        accountAppService.transfer(transferInfo);
+
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
+    }
+
 }

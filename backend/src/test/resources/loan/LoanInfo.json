@@ -37,6 +37,11 @@
       "changeDate": "2023-09-13",
       "repayAmount": 10810.89,
       "reduceMonths": 36
+    },
+    {
+      "changeDate": "2023-11-03",
+      "repayAmount": 10916,
+      "reduceMonths": 24
     }
   ]
 }

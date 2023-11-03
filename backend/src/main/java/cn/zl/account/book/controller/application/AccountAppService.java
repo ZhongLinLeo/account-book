@@ -1,6 +1,7 @@
 package cn.zl.account.book.controller.application;
 
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.application.info.AccountTransferInfo;
 
 import java.util.List;
 
@@ -47,4 +48,11 @@ public interface AccountAppService {
      * @return account infos
      */
     AccountInfo findAccountInfo(Long accountId);
+
+    /**
+     * transfer
+     *
+     * @param transferInfo transfer info
+     */
+    void transfer(AccountTransferInfo transferInfo);
 }
