@@ -29,6 +29,7 @@ public final class FundsRecordEntityConverter {
         entity.setFundsRecordTime(info.getFundsRecordTime());
         entity.setFundsRecordBalance(info.getFundsRecordBalance());
         entity.setFundsAccountId(info.getFundsAccountId());
+        entity.setFundsUserId(info.getFundsUserId());
         return entity;
     }
 

@@ -7,7 +7,9 @@ import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.infrastructure.architecture.BizException;
 import cn.zl.account.book.infrastructure.biz.account.AccountRepository;
+import cn.zl.account.book.infrastructure.biz.user.UserRepository;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
+import cn.zl.account.book.infrastructure.entity.UserEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
@@ -27,10 +29,11 @@ public class AccountAppServiceImpl implements AccountAppService {
     @Resource
     private AccountDomainService accountDomainService;
 
-
     @Resource
     private AccountRepository accountRepository;
 
+    @Resource
+    private UserRepository userRepository;
 
     @Override
     public void createAccount(AccountInfo accountInfo) {
@@ -64,8 +67,14 @@ public class AccountAppServiceImpl implements AccountAppService {
         final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
 
         final AccountEntity accountEntity =
-                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
+                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.ACCOUNT_NONE_EXIST));
 
-        return AccountEntityConverter.accountEntity2AccountInfo(accountEntity);
+        Optional<UserEntity> userOpt = userRepository.findById(accountEntity.getAccountOwnershipId());
+        UserEntity userEntity = userOpt.orElseThrow(() -> new BizException(ResponseStatusEnum.USER_NONE_EXIST));
+
+        AccountInfo accountInfo = AccountEntityConverter.accountEntity2AccountInfo(accountEntity);
+        accountInfo.setAccountOwner(userEntity.getUserName());
+
+        return accountInfo;
     }
 }

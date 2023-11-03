@@ -9,7 +9,7 @@ import cn.zl.account.book.controller.response.FundsRecordResponse;
  */
 public final class FundsRecordConverter {
 
-    public static FundsRecordResponse info2Resp(FundsRecordInfo fundsRecordInfo){
+    public static FundsRecordResponse info2Resp(FundsRecordInfo fundsRecordInfo) {
 
         FundsRecordResponse resp = new FundsRecordResponse();
         resp.setFundsRecordId(fundsRecordInfo.getFundsRecordId());
@@ -17,18 +17,19 @@ public final class FundsRecordConverter {
         resp.setFundsRecordTime(fundsRecordInfo.getFundsRecordTime());
         resp.setFundsRecordDescribe(fundsRecordInfo.getFundsRecordDescribe());
         resp.setFundsRecordRemark(fundsRecordInfo.getFundsRecordRemark());
+        resp.setFundsUserId(fundsRecordInfo.getFundsUserId());
 
         return resp;
     }
 
-    public static FundsRecordInfo req2Info(FundsRecordRequest fundsRecordReq){
+    public static FundsRecordInfo req2Info(FundsRecordRequest fundsRecordReq) {
         FundsRecordInfo info = new FundsRecordInfo();
         info.setFundsRecordBalance(fundsRecordReq.getFundsRecordBalance());
         info.setFundsRecordDescribe(fundsRecordReq.getFundsRecordDescribe());
         info.setFundsRecordTime(fundsRecordReq.getFundsRecordTime());
         info.setFundsRecordRemark(fundsRecordReq.getFundsRecordRemark());
         info.setFundsRecordClassifyId(fundsRecordReq.getFundsRecordClassifyId());
-        info.setFundsAccountId(fundsRecordReq.getFundsAccountId());
+        info.setFundsAccountId(fundsRecordReq.getFundsRecordAccountId());
         info.setFundsUserId(fundsRecordReq.getFundsUserId());
 
         return info;

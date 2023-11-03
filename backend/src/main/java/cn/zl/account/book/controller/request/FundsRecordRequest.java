@@ -29,7 +29,7 @@ public class FundsRecordRequest {
     /**
      * account relation
      */
-    private Long fundsAccountId;
+    private Long fundsRecordAccountId;
 
     @NotBlank(message = "描述不能为空")
     private String fundsRecordDescribe;
