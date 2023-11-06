@@ -42,7 +42,6 @@ public final class AccountConverter {
                 .accountId(transferRequest.getAccountId())
                 .targetAccountId(transferRequest.getTargetAccountId())
                 .transferBalance(transferRequest.getTransferBalance())
-                .sourceAccountId(transferRequest.getSourceAccountId())
                 .build();
     }
 

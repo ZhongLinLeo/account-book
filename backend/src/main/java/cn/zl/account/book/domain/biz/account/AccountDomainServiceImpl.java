@@ -1,7 +1,9 @@
 package cn.zl.account.book.domain.biz.account;
 
 import cn.zl.account.book.application.domain.AccountDomainService;
+import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.domain.util.BeanCopyUtils;
 import cn.zl.account.book.domain.utils.SnowIdUtil;
@@ -36,6 +38,9 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
     @Resource
     private UserRepository userRepository;
+
+    @Resource
+    private FundsRecordDomainService fundsRecordDomainService;
 
     @Override
     public List<AccountInfo> listAccounts() {
@@ -74,8 +79,8 @@ public class AccountDomainServiceImpl implements AccountDomainService {
     }
 
     @Override
-    public void modifyAccount(AccountInfo accountInfo,AccountEntity accountEntity) {
-        BeanUtils.copyProperties(accountInfo,accountEntity, BeanCopyUtils.getNullPropertyNames(accountInfo));
+    public void modifyAccount(AccountInfo accountInfo, AccountEntity accountEntity) {
+        BeanUtils.copyProperties(accountInfo, accountEntity, BeanCopyUtils.getNullPropertyNames(accountInfo));
 
         final LocalDateTime now = LocalDateTime.now();
         accountEntity.setModifyTime(now);
@@ -93,5 +98,18 @@ public class AccountDomainServiceImpl implements AccountDomainService {
         entity.setInvalid(1);
         entity.setModifyTime(LocalDateTime.now());
         accountRepository.save(entity);
+    }
+
+    @Override
+    public void transfer(AccountTransferInfo transferInfo, AccountEntity sourceAccount, AccountEntity targetAccount) {
+        Long transferBalance = transferInfo.getTransferBalance();
+
+        // modify account balance
+        Long accountBalance = sourceAccount.getAccountBalance();
+        sourceAccount.setAccountBalance(accountBalance - transferBalance);
+        accountRepository.save(sourceAccount);
+
+        targetAccount.setAccountBalance(targetAccount.getAccountBalance() + transferBalance);
+        accountRepository.save(targetAccount);
     }
 }

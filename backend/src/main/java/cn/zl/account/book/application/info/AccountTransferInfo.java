@@ -21,11 +21,6 @@ public class AccountTransferInfo {
     private Long targetAccountId;
 
     /**
-     * 来源账户ID
-     */
-    private Long sourceAccountId;
-
-    /**
      * 转账金额
      */
     private Long transferBalance;

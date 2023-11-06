@@ -1,6 +1,7 @@
 package cn.zl.account.book.application.domain;
 
 import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
 
 import java.util.List;
@@ -41,4 +42,14 @@ public interface AccountDomainService {
      * @return true if success
      */
     void delAccount(Long accountId);
+
+    /**
+     * transfer
+     *
+     * @param transferInfo transfer info
+     * @param sourceAccount source account
+     * @param targetAccount target account
+     */
+    void transfer(AccountTransferInfo transferInfo, AccountEntity sourceAccount, AccountEntity targetAccount);
+
 }

@@ -18,18 +18,20 @@ public enum ResponseStatusEnum {
     /**
      * client error
      */
-    CLASSIFY_EXIST(953001, "该分类已存在"),
-    CLASSIFY_NONE_EXIST(953002, "该分类不存在"),
-    CLASSIFY_USING(953003, "分类已被使用，无法删除"),
-
-
     REQUEST_PARAM_ERROR(953004, "参数错误:{0}"),
 
-    FUNDS_RECORD_NONE_EXIST(953005, "该记录不存在"),
+    CLASSIFY_EXIST(953101, "该分类已存在"),
+    CLASSIFY_NONE_EXIST(953102, "该分类不存在"),
+    CLASSIFY_USING(953103, "分类已被使用，无法删除"),
 
-    ACCOUNT_NONE_EXIST(953006, "账户不存在"),
 
-    USER_NONE_EXIST(953007, "用户不存在"),
+
+    FUNDS_RECORD_NONE_EXIST(953205, "该记录不存在"),
+
+    ACCOUNT_NONE_EXIST(953306, "账户不存在"),
+    ACCOUNT_BALANCE_NOT_ENOUGH(953307, "账户余额不足"),
+
+    USER_NONE_EXIST(953407, "用户不存在"),
 
     /**
      * server error
