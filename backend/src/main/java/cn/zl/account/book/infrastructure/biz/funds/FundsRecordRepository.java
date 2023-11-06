@@ -11,6 +11,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 
 /**
  * @author lin.zl
@@ -47,4 +48,17 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
                     "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
             nativeQuery = true)
     Page<FundsRecordEntity> paginationRecord(@Param("paginationReq") FundsRecordQueryRequest paginationReq, Pageable pageable);
+
+    /**
+     * sum income or expenditure
+     *
+     * @param classifyType    classify type
+     * @param fundsRecordTime fundsRecordTime
+     * @return value
+     */
+    @Query(value = "select sum(funds_record_balance)  from funds_record " +
+            "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = :classifyType) " +
+            "  and (funds_record_time > :fundsRecordTime or :fundsRecordTime is null)", nativeQuery = true)
+    Long sumOverview(@Param("classifyType") Integer classifyType, @Param("fundsRecordTime") LocalDate fundsRecordTime);
+
 }
