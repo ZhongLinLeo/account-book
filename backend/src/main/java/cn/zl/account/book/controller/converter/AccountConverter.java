@@ -3,7 +3,7 @@ package cn.zl.account.book.controller.converter;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.controller.request.AccountRequest;
-import cn.zl.account.book.controller.request.AccountTransferRequest;
+import cn.zl.account.book.controller.request.AccountOperateRequest;
 import cn.zl.account.book.controller.response.AccountInfoResponse;
 
 /**
@@ -39,11 +39,12 @@ public final class AccountConverter {
                 .build();
     }
 
-    public static AccountTransferInfo req2Info(AccountTransferRequest transferRequest) {
+    public static AccountTransferInfo req2Info(AccountOperateRequest operateRequest) {
         return AccountTransferInfo.builder()
-                .accountId(transferRequest.getAccountId())
-                .targetAccountId(transferRequest.getTargetAccountId())
-                .transferBalance(transferRequest.getTransferBalance())
+                .accountId(operateRequest.getAccountId())
+                .targetAccountId(operateRequest.getTargetAccountId())
+                .transferBalance(operateRequest.getBalance())
+                .sourceAccountId(operateRequest.getSourceAccountId())
                 .build();
     }
 

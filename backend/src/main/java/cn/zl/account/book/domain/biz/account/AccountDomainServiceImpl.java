@@ -112,4 +112,17 @@ public class AccountDomainServiceImpl implements AccountDomainService {
         targetAccount.setAccountBalance(targetAccount.getAccountBalance() + transferBalance);
         accountRepository.save(targetAccount);
     }
+
+    @Override
+    public void repayment(AccountTransferInfo repaymentInfo, AccountEntity sourceAccount, AccountEntity targetAccount) {
+        Long transferBalance = repaymentInfo.getTransferBalance();
+
+        // modify account balance
+        Long accountBalance = sourceAccount.getAccountBalance();
+        sourceAccount.setAccountBalance(accountBalance - transferBalance);
+        accountRepository.save(sourceAccount);
+
+        targetAccount.setAccountBalance(targetAccount.getAccountBalance() + transferBalance);
+        accountRepository.save(targetAccount);
+    }
 }

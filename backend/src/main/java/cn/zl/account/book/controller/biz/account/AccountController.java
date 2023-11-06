@@ -5,7 +5,7 @@ import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.converter.AccountConverter;
 import cn.zl.account.book.controller.request.AccountRequest;
-import cn.zl.account.book.controller.request.AccountTransferRequest;
+import cn.zl.account.book.controller.request.AccountOperateRequest;
 import cn.zl.account.book.controller.response.AccountInfoResponse;
 import cn.zl.account.book.controller.response.NormalResponse;
 import org.springframework.web.bind.annotation.*;
@@ -82,10 +82,13 @@ public class AccountController {
     /**
      * transfer
      *
+     * @param accountId account id
      * @param transferRequest transfer req
      */
-    @PostMapping("transfer")
-    public NormalResponse<Boolean> transfer(@RequestBody AccountTransferRequest transferRequest) {
+    @PostMapping("{accountId}/transfer")
+    public NormalResponse<Boolean> transfer(@PathVariable Long accountId,
+                                            @RequestBody AccountOperateRequest transferRequest) {
+        transferRequest.setAccountId(accountId);
         AccountTransferInfo transferInfo = AccountConverter.req2Info(transferRequest);
 
         accountAppService.transfer(transferInfo);
@@ -93,4 +96,20 @@ public class AccountController {
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 
+    /**
+     * transfer
+     *
+     * @param accountId account id
+     * @param repaymentReq transfer req
+     */
+    @PostMapping("{accountId}/repayment")
+    public NormalResponse<Boolean> repayment(@PathVariable Long accountId,
+                                             @RequestBody AccountOperateRequest repaymentReq) {
+        repaymentReq.setAccountId(accountId);
+        AccountTransferInfo transferInfo = AccountConverter.req2Info(repaymentReq);
+
+        accountAppService.repayment(transferInfo);
+
+        return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
+    }
 }

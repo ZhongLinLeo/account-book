@@ -102,7 +102,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         BizAssert.isTrue(accountBalance > transferInfo.getTransferBalance(), ResponseStatusEnum.ACCOUNT_BALANCE_NOT_ENOUGH);
 
         // valid target account
-        Optional<AccountEntity> targetAccountOpt = accountRepository.findById(transferInfo.getAccountId());
+        Optional<AccountEntity> targetAccountOpt = accountRepository.findById(transferInfo.getTargetAccountId());
         final AccountEntity targetAccount =
                 targetAccountOpt.orElseThrow(() -> new BizException(ResponseStatusEnum.ACCOUNT_NONE_EXIST));
 
@@ -113,10 +113,55 @@ public class AccountAppServiceImpl implements AccountAppService {
 
     }
 
+    @Override
+    public void repayment(AccountTransferInfo repaymentInfo) {
+
+        Optional<AccountEntity> sourceAccountOpt = accountRepository.findById(repaymentInfo.getSourceAccountId());
+        final AccountEntity sourceAccount =
+                sourceAccountOpt.orElseThrow(() -> new BizException(ResponseStatusEnum.ACCOUNT_NONE_EXIST));
+        // valid account balance
+        long accountBalance = sourceAccount.getAccountBalance();
+        BizAssert.isTrue(accountBalance > repaymentInfo.getTransferBalance(), ResponseStatusEnum.ACCOUNT_BALANCE_NOT_ENOUGH);
+
+        // valid target account
+        Optional<AccountEntity> targetAccountOpt = accountRepository.findById(repaymentInfo.getAccountId());
+        final AccountEntity targetAccount =
+                targetAccountOpt.orElseThrow(() -> new BizException(ResponseStatusEnum.ACCOUNT_NONE_EXIST));
+
+        // record transfer
+        recordRepayment(repaymentInfo, sourceAccount, targetAccount);
+
+        accountDomainService.repayment(repaymentInfo,sourceAccount,targetAccount);
+    }
+
+    private void recordRepayment(AccountTransferInfo repaymentInfo, AccountEntity sourceAccount, AccountEntity targetAccount) {
+        FundsRecordInfo repaymentOut = new FundsRecordInfo();
+        repaymentOut.setFundsUserId(sourceAccount.getAccountOwnershipId());
+        repaymentOut.setFundsAccountId(sourceAccount.getAccountId());
+        repaymentOut.setFundsRecordTime(LocalDateTime.now());
+        repaymentOut.setFundsRecordDescribe(REPAYMENT_OUT.getClassifyName());
+        repaymentOut.setFundsRecordClassifyId(REPAYMENT_OUT.getClassifyId());
+        repaymentOut.setFundsRecordRemark(String.format("还款，从账户:{%s} 转出到 账户:{%s}", sourceAccount.getAccountName(),
+                targetAccount.getAccountName()));
+        repaymentOut.setFundsRecordBalance(repaymentInfo.getTransferBalance());
+        fundsRecordDomainService.recordFunds(repaymentOut);
+
+        FundsRecordInfo transferIn = new FundsRecordInfo();
+        transferIn.setFundsUserId(sourceAccount.getAccountOwnershipId());
+        transferIn.setFundsAccountId(targetAccount.getAccountId());
+        transferIn.setFundsRecordTime(LocalDateTime.now());
+        transferIn.setFundsRecordDescribe(REPAYMENT_IN.getClassifyName());
+        transferIn.setFundsRecordClassifyId(REPAYMENT_IN.getClassifyId());
+        transferIn.setFundsRecordRemark(String.format("还款，从账户:{%s} 转入到 账户:{%s}", targetAccount.getAccountName(),
+                sourceAccount.getAccountName()));
+        repaymentOut.setFundsRecordBalance(repaymentInfo.getTransferBalance());
+        fundsRecordDomainService.recordFunds(transferIn);
+    }
+
     private void recordTransfer(AccountTransferInfo transferInfo, AccountEntity sourceAccount, AccountEntity targetAccount) {
         FundsRecordInfo transferOut = new FundsRecordInfo();
         transferOut.setFundsUserId(sourceAccount.getAccountOwnershipId());
-        transferOut.setFundsAccountId(transferInfo.getAccountId());
+        transferOut.setFundsAccountId(sourceAccount.getAccountId());
         transferOut.setFundsRecordTime(LocalDateTime.now());
         transferOut.setFundsRecordDescribe(TRANSFER_OUT.getClassifyName());
         transferOut.setFundsRecordClassifyId(TRANSFER_OUT.getClassifyId());
@@ -128,7 +173,7 @@ public class AccountAppServiceImpl implements AccountAppService {
 
         FundsRecordInfo transferIn = new FundsRecordInfo();
         transferIn.setFundsUserId(sourceAccount.getAccountOwnershipId());
-        transferIn.setFundsAccountId(transferInfo.getTargetAccountId());
+        transferIn.setFundsAccountId(targetAccount.getAccountId());
         transferIn.setFundsRecordTime(LocalDateTime.now());
         transferIn.setFundsRecordDescribe(TRANSFER_IN.getClassifyName());
         transferIn.setFundsRecordClassifyId(TRANSFER_IN.getClassifyId());

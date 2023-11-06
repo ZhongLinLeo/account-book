@@ -55,4 +55,11 @@ public interface AccountAppService {
      * @param transferInfo transfer info
      */
     void transfer(AccountTransferInfo transferInfo);
+
+    /**
+     * repayment
+     *
+     * @param repaymentReq repayment req
+     */
+    void repayment(AccountTransferInfo repaymentReq);
 }

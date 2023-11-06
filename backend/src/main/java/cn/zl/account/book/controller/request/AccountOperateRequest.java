@@ -6,7 +6,7 @@ import lombok.Data;
  * @author lin.zl
  */
 @Data
-public class AccountTransferRequest {
+public class AccountOperateRequest {
 
     /**
      * 账户ID
@@ -24,7 +24,8 @@ public class AccountTransferRequest {
     private Long sourceAccountId;
 
     /**
-     * 转账金额
+     * 金额
+     * 还款金额、转账金额
      */
-    private Long transferBalance;
+    private Long balance;
 }

@@ -45,7 +45,7 @@ public class FundsRecordClassifyResponse {
     /**
      * 分类图标
      */
-    private Integer classifyIcon;
+    private String classifyIcon;
 
     /**
      * 默认分类

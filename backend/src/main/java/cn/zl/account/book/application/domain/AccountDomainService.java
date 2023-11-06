@@ -52,4 +52,13 @@ public interface AccountDomainService {
      */
     void transfer(AccountTransferInfo transferInfo, AccountEntity sourceAccount, AccountEntity targetAccount);
 
+    /**
+     * repayment
+     *
+     * @param repaymentInfo repayment info
+     * @param sourceAccount source account
+     * @param targetAccount target account
+     */
+    void repayment(AccountTransferInfo repaymentInfo, AccountEntity sourceAccount, AccountEntity targetAccount);
+
 }

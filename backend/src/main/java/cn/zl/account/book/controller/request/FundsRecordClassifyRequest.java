@@ -33,5 +33,5 @@ public class FundsRecordClassifyRequest {
     /**
      * 分类图标
      */
-    private Integer classifyIcon;
+    private String classifyIcon;
 }
