@@ -21,4 +21,6 @@ public class AccountRequest {
     private Long accountIncome;
 
     private Long accountExpenditure;
+
+    private Integer accountType;
 }

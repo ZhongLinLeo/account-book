@@ -30,4 +30,13 @@ public class FundsRecordClassifyEntity extends EntityBase{
 
     private String classifyDescribe;
 
+    /**
+     * 分类图标
+     */
+    private Integer classifyIcon;
+
+    /**
+     * 默认分类
+     */
+    private Integer defaultClassify;
 }

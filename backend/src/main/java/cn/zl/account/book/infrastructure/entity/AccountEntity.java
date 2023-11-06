@@ -30,4 +30,6 @@ public class AccountEntity extends EntityBase{
     private Long  accountIncome;
 
     private Long  accountExpenditure;
+
+    private Integer accountType;
 }

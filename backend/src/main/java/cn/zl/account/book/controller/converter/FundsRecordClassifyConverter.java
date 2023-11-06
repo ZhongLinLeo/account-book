@@ -15,6 +15,7 @@ public final class FundsRecordClassifyConverter {
                 .classifyName(fundsRecordClassifyReq.getClassifyName())
                 .classifyType(fundsRecordClassifyReq.getClassifyType())
                 .classifyDescribe(fundsRecordClassifyReq.getClassifyDescribe())
+                .classifyIcon(fundsRecordClassifyReq.getClassifyIcon())
                 .build();
     }
 
@@ -28,6 +29,8 @@ public final class FundsRecordClassifyConverter {
                 .classifyTypeName(ClassifyTypeEnum.findClassifyTypeName(classifyType))
                 .classifyDescribe(fundsRecordClassifyInfo.getClassifyDescribe())
                 .createTime(fundsRecordClassifyInfo.getCreateTime())
+                .classifyIcon(fundsRecordClassifyInfo.getClassifyIcon())
+                .defaultClassify(fundsRecordClassifyInfo.getDefaultClassify())
                 .build();
     }
 

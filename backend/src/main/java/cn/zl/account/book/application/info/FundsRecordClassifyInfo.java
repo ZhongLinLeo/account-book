@@ -32,4 +32,14 @@ public class FundsRecordClassifyInfo {
     private String classifyDescribe;
 
     private LocalDateTime createTime;
+
+    /**
+     * 分类图标
+     */
+    private Integer classifyIcon;
+
+    /**
+     * 默认分类
+     */
+    private Integer defaultClassify;
 }

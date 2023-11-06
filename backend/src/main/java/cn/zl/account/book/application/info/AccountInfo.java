@@ -25,4 +25,6 @@ public class AccountInfo {
     private Long accountIncome;
 
     private Long accountExpenditure;
+
+    private Integer accountType;
 }

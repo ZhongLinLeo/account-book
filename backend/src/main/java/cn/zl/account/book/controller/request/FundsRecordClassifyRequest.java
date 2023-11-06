@@ -29,4 +29,9 @@ public class FundsRecordClassifyRequest {
      * 分类描述
      */
     private String classifyDescribe;
+
+    /**
+     * 分类图标
+     */
+    private Integer classifyIcon;
 }

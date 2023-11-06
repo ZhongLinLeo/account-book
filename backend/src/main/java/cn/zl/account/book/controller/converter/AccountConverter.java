@@ -21,6 +21,7 @@ public final class AccountConverter {
                 .accountIncome(accountRequest.getAccountIncome())
                 .accountExpenditure(accountRequest.getAccountExpenditure())
                 .accountOwnershipId(accountRequest.getAccountOwnershipId())
+                .accountType(accountRequest.getAccountType())
                 .build();
     }
 
@@ -34,6 +35,7 @@ public final class AccountConverter {
                 .accountBalance(accountInfo.getAccountBalance())
                 .accountIncome(accountInfo.getAccountIncome())
                 .accountExpenditure(accountInfo.getAccountExpenditure())
+                .accountType(accountInfo.getAccountType())
                 .build();
     }
 

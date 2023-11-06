@@ -15,6 +15,8 @@ public final class FundsRecordClassifyEntityConverter {
                 .classifyType(entity.getClassifyType())
                 .classifyDescribe(entity.getClassifyDescribe())
                 .createTime(entity.getCreateTime())
+                .classifyIcon(entity.getClassifyIcon())
+                .defaultClassify(entity.getDefaultClassify())
                 .build();
     }
 
@@ -24,6 +26,7 @@ public final class FundsRecordClassifyEntityConverter {
         entity.setClassifyName(fundsRecordClassifyInfo.getClassifyName());
         entity.setClassifyType(fundsRecordClassifyInfo.getClassifyType());
         entity.setClassifyDescribe(fundsRecordClassifyInfo.getClassifyDescribe());
+        entity.setClassifyIcon(fundsRecordClassifyInfo.getClassifyIcon());
 
         return entity;
     }

@@ -31,4 +31,6 @@ public class AccountInfoResponse {
     private Long accountIncome;
 
     private Long accountExpenditure;
+
+    private Integer accountType;
 }

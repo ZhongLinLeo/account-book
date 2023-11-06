@@ -41,4 +41,14 @@ public class FundsRecordClassifyResponse {
      * 创建时间
      */
     private LocalDateTime createTime;
+
+    /**
+     * 分类图标
+     */
+    private Integer classifyIcon;
+
+    /**
+     * 默认分类
+     */
+    private Integer defaultClassify;
 }
