@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.response;
 
+import cn.zl.account.book.controller.utils.RmbUtils;
 import lombok.Builder;
 import lombok.Data;
 
@@ -35,20 +36,24 @@ public class FundsOverviewResponse {
     /**
      * 资产
      */
-    private Long assets;
+    private Double assets;
 
     /**
      * 负债
      */
-    private Long liabilities;
+    private Double liabilities;
 
     @Data
-    @Builder
     public static class Overview {
 
-        private Long income;
+        private Double income;
 
-        private Long expenditure;
+        private Double expenditure;
+
+        public Overview(Long income, Long expenditure) {
+            this.income = RmbUtils.convertFen2Yuan(income);
+            this.expenditure = RmbUtils.convertFen2Yuan(expenditure);
+        }
     }
 
 }

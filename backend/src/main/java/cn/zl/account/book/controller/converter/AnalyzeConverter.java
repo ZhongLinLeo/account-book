@@ -2,6 +2,7 @@ package cn.zl.account.book.controller.converter;
 
 import cn.zl.account.book.application.info.FundsOverviewInfo;
 import cn.zl.account.book.controller.response.FundsOverviewResponse;
+import cn.zl.account.book.controller.utils.RmbUtils;
 
 /**
  * @author lin.zl
@@ -11,31 +12,22 @@ public class AnalyzeConverter {
     public static FundsOverviewResponse converterInfo2Resp(FundsOverviewInfo fundsOverviewInfo) {
 
         return FundsOverviewResponse.builder()
-                .overview(FundsOverviewResponse.Overview
-                        .builder()
-                        .income(fundsOverviewInfo.getOverview().getIncome())
-                        .expenditure(fundsOverviewInfo.getOverview().getExpenditure())
-                        .build())
-                .yearOverview(FundsOverviewResponse.Overview
-                        .builder()
-                        .income(fundsOverviewInfo.getYearOverview().getIncome())
-                        .expenditure(fundsOverviewInfo.getYearOverview().getExpenditure())
-                        .build())
-                .monthOverview(FundsOverviewResponse.Overview
-                        .builder()
-                        .income(fundsOverviewInfo.getMonthOverview().getIncome())
-                        .expenditure(fundsOverviewInfo.getMonthOverview().getExpenditure())
-                        .build())
-                .weekOverview(FundsOverviewResponse.Overview
-                        .builder()
-                        .income(fundsOverviewInfo.getWeekOverview().getIncome())
-                        .expenditure(fundsOverviewInfo.getWeekOverview().getExpenditure())
-                        .build())
-                .assets(fundsOverviewInfo.getAssets())
-                .liabilities(fundsOverviewInfo.getLiabilities())
+                .overview(constructOverview(fundsOverviewInfo.getOverview().getIncome(),
+                        fundsOverviewInfo.getOverview().getExpenditure()))
+                .yearOverview(constructOverview(fundsOverviewInfo.getYearOverview().getIncome(),
+                        fundsOverviewInfo.getYearOverview().getExpenditure()))
+                .monthOverview(constructOverview(fundsOverviewInfo.getMonthOverview().getIncome(),
+                        fundsOverviewInfo.getMonthOverview().getExpenditure()))
+                .weekOverview(constructOverview(fundsOverviewInfo.getWeekOverview().getIncome(),
+                        fundsOverviewInfo.getWeekOverview().getExpenditure()))
+                .assets(RmbUtils.convertFen2Yuan(fundsOverviewInfo.getAssets()))
+                .liabilities(RmbUtils.convertFen2Yuan(fundsOverviewInfo.getLiabilities()))
                 .build();
     }
 
+    private static FundsOverviewResponse.Overview constructOverview(Long income, Long expenditure) {
+        return new FundsOverviewResponse.Overview(income, expenditure);
+    }
 
     private AnalyzeConverter() {
     }

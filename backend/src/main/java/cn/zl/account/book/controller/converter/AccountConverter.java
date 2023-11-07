@@ -5,6 +5,7 @@ import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.controller.request.AccountRequest;
 import cn.zl.account.book.controller.request.AccountOperateRequest;
 import cn.zl.account.book.controller.response.AccountInfoResponse;
+import cn.zl.account.book.controller.utils.RmbUtils;
 
 /**
  * 账户信息转换器
@@ -17,9 +18,9 @@ public final class AccountConverter {
         return AccountInfo.builder()
                 .accountName(accountRequest.getAccountName())
                 .accountDescribe(accountRequest.getAccountDescribe())
-                .accountBalance(accountRequest.getAccountBalance())
-                .accountIncome(accountRequest.getAccountIncome())
-                .accountExpenditure(accountRequest.getAccountExpenditure())
+                .accountBalance(RmbUtils.convertYuan2Fen(accountRequest.getAccountBalance()))
+                .accountIncome(RmbUtils.convertYuan2Fen(accountRequest.getAccountIncome()))
+                .accountExpenditure(RmbUtils.convertYuan2Fen(accountRequest.getAccountExpenditure()))
                 .accountOwnershipId(accountRequest.getAccountOwnershipId())
                 .accountType(accountRequest.getAccountType())
                 .build();
@@ -32,9 +33,9 @@ public final class AccountConverter {
                 .accountOwner(accountInfo.getAccountOwner())
                 .accountOwnershipId(accountInfo.getAccountOwnershipId())
                 .accountDescribe(accountInfo.getAccountDescribe())
-                .accountBalance(accountInfo.getAccountBalance())
-                .accountIncome(accountInfo.getAccountIncome())
-                .accountExpenditure(accountInfo.getAccountExpenditure())
+                .accountBalance(RmbUtils.convertFen2Yuan(accountInfo.getAccountBalance()))
+                .accountIncome(RmbUtils.convertFen2Yuan(accountInfo.getAccountIncome()))
+                .accountExpenditure(RmbUtils.convertFen2Yuan(accountInfo.getAccountExpenditure()))
                 .accountType(accountInfo.getAccountType())
                 .build();
     }

@@ -16,11 +16,11 @@ public class AccountRequest {
 
     private Long accountOwnershipId;
 
-    private Long accountBalance;
+    private Double accountBalance;
 
-    private Long accountIncome;
+    private Double accountIncome;
 
-    private Long accountExpenditure;
+    private Double accountExpenditure;
 
     private Integer accountType;
 }

@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 public class FundsRecordRequest {
 
     @NotNull(message = "金额不能为空")
-    private Long fundsRecordBalance;
+    private Double fundsRecordBalance;
 
     private String fundsRecordRemark;
 

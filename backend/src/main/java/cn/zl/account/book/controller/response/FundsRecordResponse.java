@@ -16,7 +16,7 @@ public class FundsRecordResponse {
     @JsonSerialize(using= ToStringSerializer.class)
     private Long fundsRecordId;
 
-    private Long fundsRecordBalance;
+    private Double fundsRecordBalance;
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime fundsRecordTime;
