@@ -19,7 +19,7 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long>, J
     /**
      * find all invalid
      *
-     * @return
+     * @return all account
      */
     default List<AccountEntity> findAccountEntities() {
         Specification<AccountEntity> specification = (root, query, criteriaBuilder) -> query
