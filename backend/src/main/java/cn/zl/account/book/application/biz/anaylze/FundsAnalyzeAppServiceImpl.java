@@ -2,6 +2,7 @@ package cn.zl.account.book.application.biz.anaylze;
 
 import cn.zl.account.book.application.enums.AccountTypeEnum;
 import cn.zl.account.book.application.info.FundsOverviewInfo;
+import cn.zl.account.book.application.info.FundsTrendInfo;
 import cn.zl.account.book.controller.application.FundsAnalyzeAppService;
 import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.infrastructure.biz.account.AccountRepository;
@@ -71,6 +72,11 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
                 .assets(asserts)
                 .liabilities(liabilities)
                 .build();
+    }
+
+    @Override
+    public List<FundsTrendInfo> fundsTrend(String trendType) {
+        return null;
     }
 
     private FundsOverviewInfo.Overview sumOverview(LocalDate firstDatOfYear) {

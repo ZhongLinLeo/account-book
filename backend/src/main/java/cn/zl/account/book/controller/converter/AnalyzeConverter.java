@@ -1,7 +1,9 @@
 package cn.zl.account.book.controller.converter;
 
 import cn.zl.account.book.application.info.FundsOverviewInfo;
+import cn.zl.account.book.application.info.FundsTrendInfo;
 import cn.zl.account.book.controller.response.FundsOverviewResponse;
+import cn.zl.account.book.controller.response.FundsTrendResponse;
 import cn.zl.account.book.controller.utils.RmbUtils;
 
 /**
@@ -22,6 +24,15 @@ public class AnalyzeConverter {
                         fundsOverviewInfo.getWeekOverview().getExpenditure()))
                 .assets(RmbUtils.convertFen2Yuan(fundsOverviewInfo.getAssets()))
                 .liabilities(RmbUtils.convertFen2Yuan(fundsOverviewInfo.getLiabilities()))
+                .build();
+    }
+
+    public static FundsTrendResponse converterInfo2Resp(FundsTrendInfo fundsTrendInfo) {
+
+        return FundsTrendResponse.builder()
+                .fundsRecordDate(fundsTrendInfo.getFundsRecordDate())
+                .income(fundsTrendInfo.getIncome())
+                .expenditure(fundsTrendInfo.getExpenditure())
                 .build();
     }
 
