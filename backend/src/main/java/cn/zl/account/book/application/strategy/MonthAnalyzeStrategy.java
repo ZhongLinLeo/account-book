@@ -2,9 +2,13 @@ package cn.zl.account.book.application.strategy;
 
 import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.application.factory.AnalyzeServiceFactory;
+import cn.zl.account.book.application.info.FundsComposeInfo;
+import cn.zl.account.book.application.info.FundsRecordTopInfo;
 import cn.zl.account.book.application.info.FundsTrendInfo;
 import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.controller.utils.RmbUtils;
+import cn.zl.account.book.infrastructure.bo.AnalyzeComposeBo;
+import cn.zl.account.book.infrastructure.bo.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.bo.AnalyzeTrendBo;
 import lombok.extern.slf4j.Slf4j;
 
@@ -63,6 +67,45 @@ public class MonthAnalyzeStrategy extends BaseAnalyzeStrategy {
                 })
                 .collect(Collectors.toList());
     }
+
+
+    @Override
+    public FundsComposeInfo composeAnalyze() {
+        LocalDate today = LocalDate.now();
+        LocalDate startTime = today.withDayOfMonth(1);
+        LocalDate endTime = today.with(TemporalAdjusters.lastDayOfMonth()).plusDays(1);
+
+        List<AnalyzeComposeBo> incomeCompose = fundsRecordRepository
+                .queryFundsCompose(ClassifyTypeEnum.INCOME.getClassifyType(), startTime, endTime);
+
+        List<AnalyzeComposeBo> expenditureCompose = fundsRecordRepository
+                .queryFundsCompose(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), startTime, endTime);
+
+        return FundsComposeInfo.builder()
+                .incomeCompose(constructCompose(incomeCompose))
+                .expenditureCompose(constructCompose(expenditureCompose))
+                .build();
+    }
+
+    @Override
+    public FundsRecordTopInfo fundsTops() {
+        LocalDate today = LocalDate.now();
+        LocalDate startTime = today.withDayOfMonth(1);
+        LocalDate endTime = today.with(TemporalAdjusters.lastDayOfMonth()).plusDays(1);
+
+        List<AnalyzeTopsBo> incomeTops = fundsRecordRepository
+                .queryFundsTops(ClassifyTypeEnum.INCOME.getClassifyType(), startTime, endTime);
+
+
+        List<AnalyzeTopsBo> expenditureTops = fundsRecordRepository
+                .queryFundsTops(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), startTime, endTime);
+
+        return FundsRecordTopInfo.builder()
+                .incomeTops(constructTops(incomeTops))
+                .expenditureTops(constructTops(expenditureTops))
+                .build();
+    }
+
 
     private List<LocalDate> statisticPeriod() {
         int lengthOfMonth = LocalDate.now().lengthOfMonth();

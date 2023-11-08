@@ -4,7 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * 资金概览
+ * 资金趋势
  *
  * @author lin.zl
  */

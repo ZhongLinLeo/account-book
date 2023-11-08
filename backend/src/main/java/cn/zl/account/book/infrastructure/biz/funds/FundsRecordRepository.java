@@ -1,6 +1,8 @@
 package cn.zl.account.book.infrastructure.biz.funds;
 
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
+import cn.zl.account.book.infrastructure.bo.AnalyzeComposeBo;
+import cn.zl.account.book.infrastructure.bo.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.bo.AnalyzeTrendBo;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
@@ -79,6 +81,45 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "where record.funds_record_time between :startTime and :endTime" +
             "group by classifyType, fundsRecordDate", nativeQuery = true)
     List<AnalyzeTrendBo> queryFundsTrend(@Param("typeFormat") String typeFormat, @Param("startTime") LocalDate startTime,
-                                        @Param("endTime") LocalDate endTime);
+                                         @Param("endTime") LocalDate endTime);
+
+    /**
+     * query funds tops
+     *
+     * @param classifyType trend type format
+     * @param startTime    start time
+     * @param endTime      end time
+     * @return value
+     */
+    @Query(value = "select record.funds_record_balance fundsRecordBalance, " +
+            "       classify.classify_name classifyName, " +
+            "       record.funds_record_time fundsRecordTime, " +
+            "       record.funds_record_describe fundsRecordDesc" +
+            "from funds_record record " +
+            "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
+            "where classify.classify_type = :classifyType " +
+            "  and record.funds_record_time between :startTime and :endTime " +
+            "order by record.funds_record_balance desc " +
+            "limit 10", nativeQuery = true)
+    List<AnalyzeTopsBo> queryFundsTops(@Param("classifyType") Integer classifyType, @Param("startTime") LocalDate startTime,
+                                       @Param("endTime") LocalDate endTime);
+
+    /**
+     * query funds compose
+     *
+     * @param classifyType trend type format
+     * @param startTime    start time
+     * @param endTime      end time
+     * @return value
+     */
+    @Query(value = "select classify.classify_name           classifyName, " +
+            "       sum(record.funds_record_balance) totalFundsBalance " +
+            "from funds_record record " +
+            "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
+            "where classify.classify_type = :classifyType " +
+            "  and record.funds_record_time between :startTime and :endTime " +
+            "group by classifyName", nativeQuery = true)
+    List<AnalyzeComposeBo> queryFundsCompose(@Param("classifyType") Integer classifyType, @Param("startTime") LocalDate startTime,
+                                             @Param("endTime") LocalDate endTime);
 
 }

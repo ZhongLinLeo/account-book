@@ -3,7 +3,9 @@ package cn.zl.account.book.application.biz.anaylze;
 import cn.zl.account.book.application.enums.AccountTypeEnum;
 import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.application.factory.AnalyzeServiceFactory;
+import cn.zl.account.book.application.info.FundsComposeInfo;
 import cn.zl.account.book.application.info.FundsOverviewInfo;
+import cn.zl.account.book.application.info.FundsRecordTopInfo;
 import cn.zl.account.book.application.info.FundsTrendInfo;
 import cn.zl.account.book.application.strategy.BaseAnalyzeStrategy;
 import cn.zl.account.book.controller.application.FundsAnalyzeAppService;
@@ -82,6 +84,20 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
         BaseAnalyzeStrategy analyzeService = AnalyzeServiceFactory.matchAnalyzeStrategy(trendType);
 
         return analyzeService.trendAnalyze();
+    }
+
+    @Override
+    public FundsComposeInfo fundsCompose(TrendAnalyzeEnum trendType) {
+        BaseAnalyzeStrategy analyzeService = AnalyzeServiceFactory.matchAnalyzeStrategy(trendType);
+
+        return analyzeService.composeAnalyze();
+    }
+
+    @Override
+    public FundsRecordTopInfo fundsTops(TrendAnalyzeEnum trendType) {
+        BaseAnalyzeStrategy analyzeService = AnalyzeServiceFactory.matchAnalyzeStrategy(trendType);
+
+        return analyzeService.fundsTops();
     }
 
     private FundsOverviewInfo.Overview sumOverview(LocalDate firstDatOfYear) {

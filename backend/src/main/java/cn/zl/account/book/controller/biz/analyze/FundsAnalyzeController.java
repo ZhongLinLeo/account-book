@@ -1,13 +1,13 @@
 package cn.zl.account.book.controller.biz.analyze;
 
 import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
+import cn.zl.account.book.application.info.FundsComposeInfo;
 import cn.zl.account.book.application.info.FundsOverviewInfo;
+import cn.zl.account.book.application.info.FundsRecordTopInfo;
 import cn.zl.account.book.application.info.FundsTrendInfo;
 import cn.zl.account.book.controller.application.FundsAnalyzeAppService;
 import cn.zl.account.book.controller.converter.AnalyzeConverter;
-import cn.zl.account.book.controller.response.FundsOverviewResponse;
-import cn.zl.account.book.controller.response.FundsTrendResponse;
-import cn.zl.account.book.controller.response.NormalResponse;
+import cn.zl.account.book.controller.response.*;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -66,5 +66,32 @@ public class FundsAnalyzeController {
         return NormalResponse.wrapSuccessResponse(fundsTrendResponses);
     }
 
+    /**
+     * 收支构成
+     *
+     * @return 构成信息
+     */
+    @GetMapping("compose")
+    public NormalResponse<FundsComposeResponse> fundsCompose(@Param("trendType") String trendType) {
+
+        TrendAnalyzeEnum trendAnalyzeEnum = TrendAnalyzeEnum.valueOf(trendType);
+        FundsComposeInfo fundsComposeInfo = fundsAnalyzeAppService.fundsCompose(trendAnalyzeEnum);
+
+        return NormalResponse.wrapSuccessResponse(AnalyzeConverter.converterInfo2Resp(fundsComposeInfo));
+    }
+
+    /**
+     * 收支Top
+     *
+     * @return Top信息
+     */
+    @GetMapping("top")
+    public NormalResponse<FundsRecordTopResponse> fundsTop(@Param("trendType") String trendType) {
+
+        TrendAnalyzeEnum trendAnalyzeEnum = TrendAnalyzeEnum.valueOf(trendType);
+        FundsRecordTopInfo fundsRecordTopInfo = fundsAnalyzeAppService.fundsTops(trendAnalyzeEnum);
+
+        return NormalResponse.wrapSuccessResponse(AnalyzeConverter.converterInfo2Resp(fundsRecordTopInfo));
+    }
 
 }
