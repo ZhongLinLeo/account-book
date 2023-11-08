@@ -48,7 +48,6 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
                     "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
                     "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
                     "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
-                    "AND (funds_record_classify_id = :#{#paginationReq.classifyId} or :#{#paginationReq.classifyId} is null) " +
                     "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
             nativeQuery = true)
     Page<FundsRecordEntity> paginationRecord(@Param("paginationReq") FundsRecordQueryRequest paginationReq, Pageable pageable);
@@ -78,7 +77,7 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "       classify.classify_type classifyType " +
             "from funds_record record " +
             "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
-            "where record.funds_record_time between :startTime and :endTime" +
+            "where record.funds_record_time between :startTime and :endTime " +
             "group by classifyType, fundsRecordDate", nativeQuery = true)
     List<AnalyzeTrendBo> queryFundsTrend(@Param("typeFormat") String typeFormat, @Param("startTime") LocalDate startTime,
                                          @Param("endTime") LocalDate endTime);

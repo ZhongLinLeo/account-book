@@ -11,6 +11,7 @@ import cn.zl.account.book.infrastructure.bo.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.bo.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.bo.AnalyzeTrendBo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -24,6 +25,7 @@ import java.util.stream.Collectors;
  * @author lin.zl
  */
 @Slf4j
+@Component
 public class YearAnalyzeStrategy extends BaseAnalyzeStrategy {
 
     private static final String TYPE_FORMAT = "%Y-%m";

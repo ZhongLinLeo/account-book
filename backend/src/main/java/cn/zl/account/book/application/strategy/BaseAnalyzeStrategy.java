@@ -9,7 +9,6 @@ import cn.zl.account.book.infrastructure.bo.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.bo.AnalyzeTopsBo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.Resource;
 import java.math.BigDecimal;
@@ -21,7 +20,6 @@ import java.util.stream.Collectors;
 /**
  * @author lin.zl
  */
-@Component
 public abstract class BaseAnalyzeStrategy implements InitializingBean {
 
     @Resource
