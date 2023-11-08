@@ -3,8 +3,6 @@ package cn.zl.account.book.application.info;
 import lombok.Builder;
 import lombok.Data;
 
-import java.time.LocalDate;
-
 /**
  * 资金概览
  *
@@ -17,7 +15,7 @@ public class FundsTrendInfo {
     /**
      * 资金记录时间
      */
-    private LocalDate fundsRecordDate;
+    private String fundsRecordDate;
 
     /**
      * 收入

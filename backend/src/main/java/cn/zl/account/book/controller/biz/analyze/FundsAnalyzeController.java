@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.biz.analyze;
 
+import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.application.info.FundsOverviewInfo;
 import cn.zl.account.book.application.info.FundsTrendInfo;
 import cn.zl.account.book.controller.application.FundsAnalyzeAppService;
@@ -54,7 +55,9 @@ public class FundsAnalyzeController {
      */
     @GetMapping("trend")
     public NormalResponse<List<FundsTrendResponse>> fundsTrend(@Param("trendType") String trendType) {
-        List<FundsTrendInfo> fundsTrendInfos = fundsAnalyzeAppService.fundsTrend(trendType);
+
+        TrendAnalyzeEnum trendAnalyzeEnum = TrendAnalyzeEnum.valueOf(trendType);
+        List<FundsTrendInfo> fundsTrendInfos = fundsAnalyzeAppService.fundsTrend(trendAnalyzeEnum);
 
         List<FundsTrendResponse> fundsTrendResponses = fundsTrendInfos.stream()
                 .map(AnalyzeConverter::converterInfo2Resp)

@@ -1,6 +1,7 @@
 package cn.zl.account.book.infrastructure.biz.funds;
 
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
+import cn.zl.account.book.infrastructure.bo.AnalyzeTrendBo;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.transaction.Transactional;
 import java.time.LocalDate;
+import java.util.List;
 
 /**
  * @author lin.zl
@@ -60,5 +62,23 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = :classifyType) " +
             "  and (funds_record_time > :fundsRecordTime or :fundsRecordTime is null)", nativeQuery = true)
     Long sumOverview(@Param("classifyType") Integer classifyType, @Param("fundsRecordTime") LocalDate fundsRecordTime);
+
+    /**
+     * query funds trend
+     *
+     * @param typeFormat trend type format
+     * @param startTime  start time
+     * @param endTime    end time
+     * @return value
+     */
+    @Query(value = "select date_format(record.funds_record_time, :typeFormat) as fundsRecordDate, " +
+            "       sum(record.funds_record_balance)                  totalFundsBalance, " +
+            "       classify.classify_type classifyType " +
+            "from funds_record record " +
+            "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
+            "where record.funds_record_time between :startTime and :endTime" +
+            "group by classifyType, fundsRecordDate", nativeQuery = true)
+    List<AnalyzeTrendBo> queryFundsTrend(@Param("typeFormat") String typeFormat, @Param("startTime") LocalDate startTime,
+                                        @Param("endTime") LocalDate endTime);
 
 }

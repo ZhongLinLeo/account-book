@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.application;
 
+import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.application.info.FundsOverviewInfo;
 import cn.zl.account.book.application.info.FundsTrendInfo;
 
@@ -24,6 +25,6 @@ public interface FundsAnalyzeAppService {
      * @param trendType trend type
      * @return funds trend
      */
-    List<FundsTrendInfo> fundsTrend(String trendType);
+    List<FundsTrendInfo> fundsTrend(TrendAnalyzeEnum trendType);
 
 }

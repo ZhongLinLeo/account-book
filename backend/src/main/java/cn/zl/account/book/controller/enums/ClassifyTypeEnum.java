@@ -12,7 +12,7 @@ public enum ClassifyTypeEnum {
     /**
      * 支出
      */
-    OUTCOME(0, "支出"),
+    EXPENDITURE(0, "支出"),
 
     /**
      * 收入
@@ -38,8 +38,8 @@ public enum ClassifyTypeEnum {
     }
 
     public static String findClassifyTypeName(Integer classifyType) {
-        if (Objects.equals(classifyType, OUTCOME.classifyType)) {
-            return OUTCOME.getClassifyTypeName();
+        if (Objects.equals(classifyType, EXPENDITURE.classifyType)) {
+            return EXPENDITURE.getClassifyTypeName();
         } else {
             return INCOME.getClassifyTypeName();
         }

@@ -1,8 +1,11 @@
 package cn.zl.account.book.application.biz.anaylze;
 
 import cn.zl.account.book.application.enums.AccountTypeEnum;
+import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
+import cn.zl.account.book.application.factory.AnalyzeServiceFactory;
 import cn.zl.account.book.application.info.FundsOverviewInfo;
 import cn.zl.account.book.application.info.FundsTrendInfo;
+import cn.zl.account.book.application.strategy.BaseAnalyzeStrategy;
 import cn.zl.account.book.controller.application.FundsAnalyzeAppService;
 import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.infrastructure.biz.account.AccountRepository;
@@ -75,13 +78,15 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
     }
 
     @Override
-    public List<FundsTrendInfo> fundsTrend(String trendType) {
-        return null;
+    public List<FundsTrendInfo> fundsTrend(TrendAnalyzeEnum trendType) {
+        BaseAnalyzeStrategy analyzeService = AnalyzeServiceFactory.matchAnalyzeStrategy(trendType);
+
+        return analyzeService.trendAnalyze();
     }
 
     private FundsOverviewInfo.Overview sumOverview(LocalDate firstDatOfYear) {
         Long income = fundsRecordRepository.sumOverview(ClassifyTypeEnum.INCOME.getClassifyType(), firstDatOfYear);
-        Long expenditure = fundsRecordRepository.sumOverview(ClassifyTypeEnum.OUTCOME.getClassifyType(), firstDatOfYear);
+        Long expenditure = fundsRecordRepository.sumOverview(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), firstDatOfYear);
         return FundsOverviewInfo.Overview.builder()
                 .income(income)
                 .expenditure(expenditure)

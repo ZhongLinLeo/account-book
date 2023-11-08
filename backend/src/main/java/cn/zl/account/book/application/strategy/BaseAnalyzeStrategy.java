@@ -16,14 +16,14 @@ import java.util.List;
 public abstract class BaseAnalyzeStrategy implements InitializingBean {
 
     @Resource
-    private FundsRecordRepository fundsRecordRepository;
+    protected FundsRecordRepository fundsRecordRepository;
 
     /**
      * trend analyze
      *
      * @return trend analyze
      */
-    abstract List<FundsTrendInfo> trendAnalyze();
+    public abstract List<FundsTrendInfo> trendAnalyze();
 
     /**
      * strategy mark
