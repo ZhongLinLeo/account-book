@@ -93,7 +93,7 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
     @Query(value = "select record.funds_record_balance fundsRecordBalance, " +
             "       classify.classify_name classifyName, " +
             "       record.funds_record_time fundsRecordTime, " +
-            "       record.funds_record_describe fundsRecordDesc" +
+            "       record.funds_record_describe fundsRecordDesc " +
             "from funds_record record " +
             "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
             "where classify.classify_type = :classifyType " +
