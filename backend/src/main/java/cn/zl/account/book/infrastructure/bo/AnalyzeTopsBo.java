@@ -1,21 +1,38 @@
 package cn.zl.account.book.infrastructure.bo;
 
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
 /**
  * @author lin.zl
  */
-@Data
-public class AnalyzeTopsBo {
+public interface AnalyzeTopsBo {
 
-    private String classifyName;
+    /**
+     * classify name
+     *
+     * @return ClassifyName
+     */
+    String getClassifyName();
 
-    private Long fundsRecordBalance;
+    /**
+     * balance
+     *
+     * @return FundsRecordBalance
+     */
+    Long getFundsRecordBalance();
 
-    private String fundsRecordDesc;
+    /**
+     * desc
+     *
+     * @return FundsRecordDesc
+     */
+    String getFundsRecordDesc();
 
-    private LocalDateTime fundsRecordTime;
+    /**
+     * RecordTime
+     *
+     * @return FundsRecordTime
+     */
+    LocalDateTime getFundsRecordTime();
 
 }

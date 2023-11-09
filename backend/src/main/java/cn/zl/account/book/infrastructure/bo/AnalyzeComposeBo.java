@@ -1,15 +1,22 @@
 package cn.zl.account.book.infrastructure.bo;
 
-import lombok.Data;
-
 /**
  * @author lin.zl
  */
-@Data
-public class AnalyzeComposeBo {
+public interface AnalyzeComposeBo {
 
-    private String classifyName;
+    /**
+     * ClassifyName
+     *
+     * @return ClassifyName
+     */
+    String getClassifyName();
 
-    private Long totalFundsBalance;
+    /**
+     * TotalFundsBalance
+     *
+     * @return TotalFundsBalance
+     */
+    Long getTotalFundsBalance();
 
 }
