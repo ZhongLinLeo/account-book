@@ -37,8 +37,8 @@ public class AnalyzeConverter {
     public static FundsTrendResponse converterInfo2Resp(FundsTrendInfo fundsTrendInfo) {
         return FundsTrendResponse.builder()
                 .fundsRecordDate(fundsTrendInfo.getFundsRecordDate())
-                .income(fundsTrendInfo.getIncome())
-                .expenditure(fundsTrendInfo.getExpenditure())
+                .balance(fundsTrendInfo.getBalance())
+                .fundsType(fundsTrendInfo.getFundsType())
                 .build();
     }
 

@@ -17,10 +17,7 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -38,38 +35,41 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
      */
     public List<FundsTrendInfo> trendAnalyze() {
 
-        List<AnalyzeTrendBo> analyzeTrendBos = fundsRecordRepository.queryFundsTrend(statisticSqlFormat(), startTime(), endTime());
+        List<AnalyzeTrendBo> analyzeTrendBos = fundsRecordRepository.queryFundsTrend(statisticSqlFormat(),
+                startTime(), endTime());
 
         Map<String, AnalyzeTrendBo> incomeMap = analyzeTrendBos.stream()
                 .filter(trend -> Objects.equals(ClassifyTypeEnum.INCOME.getClassifyType(), trend.getClassifyType()))
                 .collect(Collectors.toMap(AnalyzeTrendBo::getFundsRecordDate, e -> e, (o, n) -> n));
 
         Map<String, AnalyzeTrendBo> expenditureMap = analyzeTrendBos.stream()
-                .filter(trend -> Objects.equals(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), trend.getClassifyType()))
+                .filter(trend -> Objects.equals(ClassifyTypeEnum.EXPENDITURE.getClassifyType(),
+                        trend.getClassifyType()))
                 .collect(Collectors.toMap(AnalyzeTrendBo::getFundsRecordDate, e -> e, (o, n) -> n));
 
-        List<String> periods = statisticPeriod();
-        return periods.stream()
-                .map(recordDate -> {
+        final List<FundsTrendInfo> fundsTrendInfos = new ArrayList<>();
+        for (String period : statisticPeriod()) {
+            AnalyzeTrendBo incomeTrend = incomeMap.get(period);
+            final FundsTrendInfo incomeTrendInfo = constructAnalyzeTrend(period, incomeTrend, ClassifyTypeEnum.INCOME);
 
-                    double income = 0;
-                    AnalyzeTrendBo incomeTrend = incomeMap.get(recordDate);
-                    if (Objects.nonNull(incomeTrend)) {
-                        income = RmbUtils.convertFen2Yuan(incomeTrend.getTotalFundsBalance());
-                    }
+            AnalyzeTrendBo expenditureTrend = expenditureMap.get(period);
+            final FundsTrendInfo expenditureTrendInfo = constructAnalyzeTrend(period, expenditureTrend,
+                    ClassifyTypeEnum.EXPENDITURE);
 
-                    double expenditure = 0;
-                    AnalyzeTrendBo expenditureTrend = expenditureMap.get(recordDate);
-                    if (Objects.nonNull(expenditureTrend)) {
-                        expenditure = RmbUtils.convertFen2Yuan(expenditureTrend.getTotalFundsBalance());
-                    }
-                    return FundsTrendInfo.builder()
-                            .fundsRecordDate(recordDate)
-                            .income(income)
-                            .expenditure(expenditure)
-                            .build();
-                })
-                .collect(Collectors.toList());
+            fundsTrendInfos.add(incomeTrendInfo);
+            fundsTrendInfos.add(expenditureTrendInfo);
+        }
+        return fundsTrendInfos;
+    }
+
+    private FundsTrendInfo constructAnalyzeTrend(String period, AnalyzeTrendBo trendBo,
+                                                 ClassifyTypeEnum classifyTypeEnum) {
+        return FundsTrendInfo.builder()
+                .fundsRecordDate(period)
+                .fundsType(classifyTypeEnum.getClassifyTypeName())
+                .balance(Objects.isNull(trendBo) ? 0 : RmbUtils.convertFen2Yuan(trendBo.getTotalFundsBalance()))
+                .build();
+
     }
 
     /**
@@ -151,7 +151,7 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
         return tops.stream()
                 .map(bo -> FundsRecordTopInfo.TopInfo
                         .builder()
-                        .fundsRecordBalance(bo.getFundsRecordBalance())
+                        .fundsRecordBalance(RmbUtils.convertFen2Yuan(bo.getFundsRecordBalance()))
                         .fundsRecordTime(bo.getFundsRecordTime())
                         .classifyName(bo.getClassifyName())
                         .fundsRecordDescribe(bo.getFundsRecordDesc())
@@ -164,7 +164,8 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
             return Collections.emptyList();
         }
 
-        BigDecimal totalBalance = BigDecimal.valueOf(composes.stream().mapToLong(AnalyzeComposeBo::getTotalFundsBalance).sum());
+        BigDecimal totalBalance =
+                BigDecimal.valueOf(composes.stream().mapToLong(AnalyzeComposeBo::getTotalFundsBalance).sum());
         return composes.stream()
                 .map(compose -> {
                     double percent = BigDecimal.valueOf(compose.getTotalFundsBalance())

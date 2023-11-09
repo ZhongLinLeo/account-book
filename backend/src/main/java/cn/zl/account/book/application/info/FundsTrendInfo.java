@@ -18,12 +18,12 @@ public class FundsTrendInfo {
     private String fundsRecordDate;
 
     /**
-     * 收入
+     * 金额
      */
-    private Double income;
+    private Double balance;
 
     /**
-     * 支出
+     * 资金类型
      */
-    private Double expenditure;
+    private String fundsType;
 }

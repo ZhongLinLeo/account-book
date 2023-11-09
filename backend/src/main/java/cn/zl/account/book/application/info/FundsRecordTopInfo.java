@@ -23,7 +23,7 @@ public class FundsRecordTopInfo {
 
         private String classifyName;
 
-        private Long fundsRecordBalance;
+        private Double fundsRecordBalance;
 
         private LocalDateTime fundsRecordTime;
 

@@ -21,7 +21,7 @@ public class FundsRecordTopResponse {
     @Builder
     public static class TopInfo {
 
-        private Long fundsRecordBalance;
+        private Double fundsRecordBalance;
 
         private LocalDateTime fundsRecordTime;
 
