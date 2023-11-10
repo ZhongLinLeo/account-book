@@ -171,7 +171,7 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
                             .divide(totalBalance, 2, RoundingMode.HALF_UP).doubleValue();
 
                     return FundsComposeInfo.Compose.builder()
-                            .percent(percent)
+                            .percent(percent * 100)
                             .classifyName(compose.getClassifyName())
                             .build();
                 }).collect(Collectors.toList());

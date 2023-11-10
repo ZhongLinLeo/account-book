@@ -1,5 +1,6 @@
 package cn.zl.account.book.controller.response;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Builder;
 import lombok.Data;
 
@@ -23,6 +24,7 @@ public class FundsRecordTopResponse {
 
         private Double fundsRecordBalance;
 
+        @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
         private LocalDateTime fundsRecordTime;
 
         private String fundsRecordDescribe;
