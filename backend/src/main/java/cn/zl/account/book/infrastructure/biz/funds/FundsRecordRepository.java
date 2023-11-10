@@ -60,8 +60,10 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      * @return value
      */
     @Query(value = "select sum(funds_record_balance)  from funds_record " +
-            "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = :classifyType) " +
-            "  and (funds_record_time > :fundsRecordTime or :fundsRecordTime is null)", nativeQuery = true)
+            "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = :classifyType " +
+            "    and include_analyze = 1) " +
+            "  and (funds_record_time > :fundsRecordTime or :fundsRecordTime is null)" +
+            "  and  invalid = 0 ", nativeQuery = true)
     Long sumOverview(@Param("classifyType") Integer classifyType, @Param("fundsRecordTime") LocalDate fundsRecordTime);
 
     /**
@@ -78,6 +80,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "from funds_record record " +
             "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
             "where record.funds_record_time between :startTime and :endTime " +
+            "  and classify.include_analyze = 1 " +
+            "  and record.invalid = 0 " +
             "group by classifyType, fundsRecordDate", nativeQuery = true)
     List<AnalyzeTrendBo> queryFundsTrend(@Param("typeFormat") String typeFormat, @Param("startTime") LocalDate startTime,
                                          @Param("endTime") LocalDate endTime);
@@ -98,6 +102,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
             "where classify.classify_type = :classifyType " +
             "  and record.funds_record_time between :startTime and :endTime " +
+            "  and classify.include_analyze = 1 " +
+            "  and record.invalid = 0 " +
             "order by record.funds_record_balance desc " +
             "limit 10", nativeQuery = true)
     List<AnalyzeTopsBo> queryFundsTops(@Param("classifyType") Integer classifyType, @Param("startTime") LocalDate startTime,
@@ -116,6 +122,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "from funds_record record " +
             "         join funds_record_classify classify on record.funds_record_classify_id = classify.classify_id " +
             "where classify.classify_type = :classifyType " +
+            "  and classify.include_analyze = 1 " +
+            "  and record.invalid = 0 " +
             "  and record.funds_record_time between :startTime and :endTime " +
             "group by classifyName", nativeQuery = true)
     List<AnalyzeComposeBo> queryFundsCompose(@Param("classifyType") Integer classifyType, @Param("startTime") LocalDate startTime,

@@ -134,7 +134,6 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
         List<AnalyzeTopsBo> incomeTops = fundsRecordRepository
                 .queryFundsTops(ClassifyTypeEnum.INCOME.getClassifyType(), startTime(), endTime());
 
-
         List<AnalyzeTopsBo> expenditureTops = fundsRecordRepository
                 .queryFundsTops(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), startTime(), endTime());
 
