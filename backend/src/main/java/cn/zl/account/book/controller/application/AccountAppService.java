@@ -2,6 +2,7 @@ package cn.zl.account.book.controller.application;
 
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.application.info.AccountTransferInfo;
+import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 
 import java.util.List;
 
@@ -32,6 +33,8 @@ public interface AccountAppService {
      * @return true if success
      */
     void modifyAccount(AccountInfo accountInfo);
+
+    void fundsRecord(Long accountId, Long balance, ClassifyTypeEnum classifyType);
 
     /**
      * del account

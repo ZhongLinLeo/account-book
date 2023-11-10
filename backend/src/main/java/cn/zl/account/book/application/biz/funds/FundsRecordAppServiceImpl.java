@@ -2,6 +2,7 @@ package cn.zl.account.book.application.biz.funds;
 
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.FundsRecordInfo;
+import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -32,8 +34,15 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     @Resource
     private FundsRecordDomainService fundsRecordDomainService;
 
+    @Resource
+    private AccountAppService accountAppService;
+
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void recordFunds(FundsRecordInfo fundsRecordInfo) {
+        // 从账户中增减，todo
+
+
         fundsRecordDomainService.recordFunds(fundsRecordInfo);
     }
 

@@ -34,4 +34,9 @@ public class FundsRecordClassifyRequest {
      * 分类图标
      */
     private String classifyIcon;
+
+    /**
+     * 是否计入收支分析
+     */
+    private Integer includeAnalyze;
 }

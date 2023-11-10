@@ -2,10 +2,12 @@ package cn.zl.account.book.application.biz.account;
 
 import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
+import cn.zl.account.book.application.enums.AccountTypeEnum;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.application.info.AccountTransferInfo;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.AccountAppService;
+import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.infrastructure.architecture.BizAssert;
@@ -21,6 +23,7 @@ import javax.annotation.Resource;
 import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static cn.zl.account.book.application.enums.DefaultClassifyEnum.*;
@@ -69,6 +72,39 @@ public class AccountAppServiceImpl implements AccountAppService {
     }
 
     @Override
+    public void fundsRecord(Long accountId, Long balance, ClassifyTypeEnum classifyType) {
+        final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
+
+        final AccountEntity accountEntity =
+                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
+
+        long accountBalance = accountEntity.getAccountBalance();
+        AccountInfo.AccountInfoBuilder builder = AccountInfo.builder()
+                .accountBalance(accountBalance);
+
+        if (Objects.equals(classifyType, ClassifyTypeEnum.EXPENDITURE)) {
+            BizAssert.isTrue(isEnoughBalance(balance, accountEntity, accountBalance),
+                    ResponseStatusEnum.ACCOUNT_BALANCE_NOT_ENOUGH);
+            accountBalance -= balance;
+            builder.accountExpenditure(accountEntity.getAccountExpenditure() + balance);
+        }
+
+        if (Objects.equals(classifyType, ClassifyTypeEnum.INCOME)) {
+            accountBalance += balance;
+            builder.accountIncome(accountEntity.getAccountIncome() + balance);
+        }
+
+        AccountInfo accountInfo = builder.accountBalance(accountBalance)
+                .build();
+        accountDomainService.modifyAccount(accountInfo, accountEntity);
+    }
+
+    private boolean isEnoughBalance(Long balance, AccountEntity accountEntity, long accountBalance) {
+        return Objects.equals(accountEntity.getAccountType(),
+                AccountTypeEnum.DEBIT_ACCOUNT.getAccountType()) && balance > accountBalance;
+    }
+
+    @Override
     public void delAccount(Long accountId) {
         accountDomainService.delAccount(accountId);
     }
@@ -109,7 +145,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         // record transfer
         recordTransfer(transferInfo, sourceAccount, targetAccount);
 
-        accountDomainService.transfer(transferInfo,sourceAccount,targetAccount);
+        accountDomainService.transfer(transferInfo, sourceAccount, targetAccount);
 
     }
 
@@ -131,7 +167,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         // record transfer
         recordRepayment(repaymentInfo, sourceAccount, targetAccount);
 
-        accountDomainService.repayment(repaymentInfo,sourceAccount,targetAccount);
+        accountDomainService.repayment(repaymentInfo, sourceAccount, targetAccount);
     }
 
     private void recordRepayment(AccountTransferInfo repaymentInfo, AccountEntity sourceAccount, AccountEntity targetAccount) {
