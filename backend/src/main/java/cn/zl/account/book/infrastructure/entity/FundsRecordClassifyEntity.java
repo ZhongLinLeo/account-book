@@ -37,6 +37,15 @@ public class FundsRecordClassifyEntity extends EntityBase{
 
     /**
      * 默认分类
+     * 0: 否
+     * 1：是
      */
     private Integer defaultClassify;
+
+    /**
+     * 是否计入收支分析
+     * 0: 否
+     * 1：是
+     */
+    private Integer includeAnalyze;
 }

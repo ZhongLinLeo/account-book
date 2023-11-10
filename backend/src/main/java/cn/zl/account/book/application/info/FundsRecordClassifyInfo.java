@@ -42,4 +42,9 @@ public class FundsRecordClassifyInfo {
      * 默认分类
      */
     private Integer defaultClassify;
+
+    /**
+     * 是否计入收支分析
+     */
+    private Integer includeAnalyze;
 }
