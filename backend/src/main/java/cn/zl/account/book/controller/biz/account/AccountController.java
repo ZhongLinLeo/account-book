@@ -85,7 +85,7 @@ public class AccountController {
      * @param accountId account id
      * @param transferRequest transfer req
      */
-    @PostMapping("{accountId}/transfer")
+    @PutMapping("{accountId}/transfer")
     public NormalResponse<Boolean> transfer(@PathVariable Long accountId,
                                             @RequestBody AccountOperateRequest transferRequest) {
         transferRequest.setAccountId(accountId);
@@ -102,7 +102,7 @@ public class AccountController {
      * @param accountId account id
      * @param repaymentReq transfer req
      */
-    @PostMapping("{accountId}/repayment")
+    @PutMapping("{accountId}/repayment")
     public NormalResponse<Boolean> repayment(@PathVariable Long accountId,
                                              @RequestBody AccountOperateRequest repaymentReq) {
         repaymentReq.setAccountId(accountId);
