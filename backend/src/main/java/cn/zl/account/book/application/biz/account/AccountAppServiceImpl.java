@@ -135,7 +135,7 @@ public class AccountAppServiceImpl implements AccountAppService {
 
         // valid account balance
         long accountBalance = sourceAccount.getAccountBalance();
-        BizAssert.isTrue(accountBalance > transferInfo.getTransferBalance(), ResponseStatusEnum.ACCOUNT_BALANCE_NOT_ENOUGH);
+        BizAssert.isFalse(accountBalance > transferInfo.getTransferBalance(), ResponseStatusEnum.ACCOUNT_BALANCE_NOT_ENOUGH);
 
         // valid target account
         Optional<AccountEntity> targetAccountOpt = accountRepository.findById(transferInfo.getTargetAccountId());
@@ -215,7 +215,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         transferIn.setFundsRecordClassifyId(TRANSFER_IN.getClassifyId());
         transferIn.setFundsRecordRemark(String.format("从账户:{%s} 转入到 账户:{%s}", targetAccount.getAccountName(),
                 sourceAccount.getAccountName()));
-        transferOut.setFundsRecordBalance(transferInfo.getTransferBalance());
+        transferIn.setFundsRecordBalance(transferInfo.getTransferBalance());
         fundsRecordDomainService.recordFunds(transferIn);
     }
 }

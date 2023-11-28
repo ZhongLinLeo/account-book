@@ -27,5 +27,5 @@ public class AccountOperateRequest {
      * 金额
      * 还款金额、转账金额
      */
-    private Long balance;
+    private Double balance;
 }

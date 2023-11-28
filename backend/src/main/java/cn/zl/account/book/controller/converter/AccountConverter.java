@@ -44,7 +44,7 @@ public final class AccountConverter {
         return AccountTransferInfo.builder()
                 .accountId(operateRequest.getAccountId())
                 .targetAccountId(operateRequest.getTargetAccountId())
-                .transferBalance(operateRequest.getBalance())
+                .transferBalance(RmbUtils.convertYuan2Fen(operateRequest.getBalance()))
                 .sourceAccountId(operateRequest.getSourceAccountId())
                 .build();
     }
