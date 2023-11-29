@@ -179,19 +179,19 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
                     .divide(totalBalance, 2, RoundingMode.HALF_UP).doubleValue() * 100;
 
             FundsComposeInfo.Compose composeInfo = FundsComposeInfo.Compose.builder()
-                    .percent(percent)
+                    .percent(RmbUtils.convertFen2Yuan(compose.getTotalFundsBalance()))
                     .classifyName(compose.getClassifyName())
                     .build();
             composeList.add(composeInfo);
-            remains -= percent;
-            if (0 < remains && remains < 5) {
-                FundsComposeInfo.Compose remainsCompose = FundsComposeInfo.Compose.builder()
-                        .percent(remains)
-                        .classifyName("其他")
-                        .build();
-                composeList.add(remainsCompose);
-                break;
-            }
+//            remains -= percent;
+//            if (0 < remains && remains < 5) {
+//                FundsComposeInfo.Compose remainsCompose = FundsComposeInfo.Compose.builder()
+//                        .percent(remains)
+//                        .classifyName("其他")
+//                        .build();
+//                composeList.add(remainsCompose);
+//                break;
+//            }
         }
 
         return composeList;
