@@ -4,9 +4,11 @@ import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.application.info.AccountTransferInfo;
+import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.domain.util.BeanCopyUtils;
 import cn.zl.account.book.domain.utils.SnowIdUtil;
+import cn.zl.account.book.infrastructure.architecture.BizException;
 import cn.zl.account.book.infrastructure.biz.account.AccountRepository;
 import cn.zl.account.book.infrastructure.biz.user.UserRepository;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
@@ -124,5 +126,18 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
         targetAccount.setAccountBalance(targetAccount.getAccountBalance() + transferBalance);
         accountRepository.save(targetAccount);
+    }
+
+    @Override
+    public void transaction(Long accountId, Long transactionBalance) {
+        final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
+        final AccountEntity accountEntity =
+                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.ACCOUNT_NONE_EXIST));
+
+        // modify account balance
+        accountEntity.setAccountBalance(accountEntity.getAccountBalance() - transactionBalance);
+        accountEntity.setAccountExpenditure(accountEntity.getAccountExpenditure() + transactionBalance);
+
+        accountRepository.save(accountEntity);
     }
 }

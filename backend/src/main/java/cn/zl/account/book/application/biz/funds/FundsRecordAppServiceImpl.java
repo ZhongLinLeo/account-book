@@ -1,8 +1,8 @@
 package cn.zl.account.book.application.biz.funds;
 
+import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.FundsRecordInfo;
-import cn.zl.account.book.controller.application.AccountAppService;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
@@ -13,6 +13,7 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,35 +36,49 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     private FundsRecordDomainService fundsRecordDomainService;
 
     @Resource
-    private AccountAppService accountAppService;
+    private AccountDomainService accountDomainService;
 
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void recordFunds(FundsRecordInfo fundsRecordInfo) {
-        // 从账户中增减，todo
+        // 从账户中增减
+        accountDomainService.transaction(fundsRecordInfo.getFundsAccountId(), fundsRecordInfo.getFundsRecordBalance());
 
-
+        // 记录
         fundsRecordDomainService.recordFunds(fundsRecordInfo);
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void modifyFundsRecord(FundsRecordInfo fundsRecordInfo) {
         Optional<FundsRecordEntity> optional = fundsRecordRepository.findById(fundsRecordInfo.getFundsRecordId());
         FundsRecordEntity classifyEntity = optional
                 .orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
 
-        fundsRecordDomainService.modifyFundRecord(classifyEntity,fundsRecordInfo);
+        // 修改流水信息时，先在原始记录的账户中，修改相应的金额，再对当前账户进行修改
+        accountDomainService.transaction(classifyEntity.getFundsAccountId(), -classifyEntity.getFundsRecordBalance());
+
+        accountDomainService.transaction(fundsRecordInfo.getFundsAccountId(), fundsRecordInfo.getFundsRecordBalance());
+
+        fundsRecordDomainService.modifyFundRecord(classifyEntity, fundsRecordInfo);
     }
 
     @Override
+    @Transactional(rollbackOn = Exception.class)
     public void delFundsRecord(Long recordId) {
+        Optional<FundsRecordEntity> optional = fundsRecordRepository.findById(recordId);
+        FundsRecordEntity classifyEntity = optional
+                .orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
+
+        accountDomainService.transaction(classifyEntity.getFundsAccountId(), -classifyEntity.getFundsRecordBalance());
+
         fundsRecordDomainService.delFundRecord(recordId);
     }
 
     @Override
     public Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
-        PageRequest pageRequest = PageRequest.of(paginationReq.getCurrent(), paginationReq.getPageSize());
-
+        PageRequest pageRequest = PageRequest.of(paginationReq.getCurrent(), paginationReq.getPageSize(),
+                Sort.by(Sort.Direction.fromString(paginationReq.getOrder()), paginationReq.getSortFiled()));
         Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.paginationRecord(paginationReq, pageRequest);
 
         List<FundsRecordInfo> content = fundsRecords.get()
