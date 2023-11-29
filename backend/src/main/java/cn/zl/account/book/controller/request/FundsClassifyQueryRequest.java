@@ -14,11 +14,11 @@ public class FundsClassifyQueryRequest extends BasePaginationRequest {
     /**
      * 名称模糊搜索
      */
-    private String fundsClassifyNameKeyword;
+    private String classifyName;
 
     private Integer fundsClassifyType;
 
-    public String getFundsClassifyNameKeyword() {
-        return StringUtils.isBlank(fundsClassifyNameKeyword) ? null : "%" + fundsClassifyNameKeyword + "%";
+    public String getClassifyName() {
+        return StringUtils.isBlank(classifyName) ? null : "%" + classifyName + "%";
     }
 }

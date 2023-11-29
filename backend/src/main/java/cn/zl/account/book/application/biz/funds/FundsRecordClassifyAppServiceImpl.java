@@ -12,10 +12,7 @@ import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -77,10 +74,11 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
 
     @Override
     public Page<FundsRecordClassifyInfo> paginationClassify(FundsClassifyQueryRequest pageQuery) {
-        PageRequest pageRequest = PageRequest.of(pageQuery.getCurrent(), pageQuery.getPageSize());
+        PageRequest pageRequest = PageRequest.of(pageQuery.getCurrent(), pageQuery.getPageSize(),
+                Sort.by(Sort.Direction.fromString(pageQuery.getOrder()), pageQuery.getSortFiled()));
 
         Page<FundsRecordClassifyEntity> fundsClassifies = fundsRecordClassifyRepository
-                .paginationClassify(pageQuery.getFundsClassifyNameKeyword(), pageRequest);
+                .paginationClassify(pageQuery.getClassifyName(), pageRequest);
 
         List<FundsRecordClassifyInfo> fundsClassifyInfos = fundsClassifies.get()
                 .map(FundsRecordClassifyEntityConverter::entity2Info)
