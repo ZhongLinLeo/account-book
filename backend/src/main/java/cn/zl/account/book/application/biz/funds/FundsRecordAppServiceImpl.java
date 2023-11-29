@@ -13,6 +13,7 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,7 +53,7 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
         FundsRecordEntity classifyEntity = optional
                 .orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
 
-        fundsRecordDomainService.modifyFundRecord(classifyEntity,fundsRecordInfo);
+        fundsRecordDomainService.modifyFundRecord(classifyEntity, fundsRecordInfo);
     }
 
     @Override
@@ -62,8 +63,8 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
 
     @Override
     public Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
-        PageRequest pageRequest = PageRequest.of(paginationReq.getCurrent(), paginationReq.getPageSize());
-
+        PageRequest pageRequest = PageRequest.of(paginationReq.getCurrent(), paginationReq.getPageSize(),
+                Sort.by(Sort.Direction.fromString(paginationReq.getOrder()), paginationReq.getSortFiled()));
         Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.paginationRecord(paginationReq, pageRequest);
 
         List<FundsRecordInfo> content = fundsRecords.get()

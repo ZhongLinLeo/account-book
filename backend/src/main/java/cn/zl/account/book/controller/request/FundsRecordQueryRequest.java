@@ -21,6 +21,12 @@ public class FundsRecordQueryRequest extends BasePaginationRequest {
 
     private Long accountId;
 
+    @Override
+    public String getSortFiled() {
+        return StringUtils.isBlank(sortFiled) ? "funds_record_time" : sortFiled;
+    }
+
+
     public String getRecordKeyword() {
         return StringUtils.isBlank(recordKeyword) ? null : "%" + recordKeyword + "%";
     }
