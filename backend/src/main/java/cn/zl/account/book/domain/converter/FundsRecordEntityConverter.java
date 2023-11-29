@@ -30,6 +30,7 @@ public final class FundsRecordEntityConverter {
         entity.setFundsRecordBalance(info.getFundsRecordBalance());
         entity.setFundsAccountId(info.getFundsAccountId());
         entity.setFundsUserId(info.getFundsUserId());
+        entity.setFundsRecordDescribe(info.getFundsRecordDescribe());
         return entity;
     }
 

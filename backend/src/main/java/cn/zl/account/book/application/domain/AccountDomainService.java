@@ -61,4 +61,11 @@ public interface AccountDomainService {
      */
     void repayment(AccountTransferInfo repaymentInfo, AccountEntity sourceAccount, AccountEntity targetAccount);
 
+    /**
+     * transaction
+     *
+     * @param accountId accountId
+     * @param transactionBalance  balance
+     */
+    void transaction(Long accountId, Long transactionBalance);
 }
