@@ -168,30 +168,30 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
 
         List<FundsComposeInfo.Compose> composeList = new ArrayList<>();
 
-        double remains = 100;
-
         composes = composes.stream()
                 .sorted(Comparator.comparingLong(AnalyzeComposeBo::getTotalFundsBalance).reversed())
                 .collect(Collectors.toList());
 
+        long remains = totalBalance.longValue();
         for (AnalyzeComposeBo compose : composes) {
-            double percent = BigDecimal.valueOf(compose.getTotalFundsBalance())
-                    .divide(totalBalance, 2, RoundingMode.HALF_UP).doubleValue() * 100;
 
             FundsComposeInfo.Compose composeInfo = FundsComposeInfo.Compose.builder()
                     .percent(RmbUtils.convertFen2Yuan(compose.getTotalFundsBalance()))
                     .classifyName(compose.getClassifyName())
                     .build();
             composeList.add(composeInfo);
-//            remains -= percent;
-//            if (0 < remains && remains < 5) {
-//                FundsComposeInfo.Compose remainsCompose = FundsComposeInfo.Compose.builder()
-//                        .percent(remains)
-//                        .classifyName("其他")
-//                        .build();
-//                composeList.add(remainsCompose);
-//                break;
-//            }
+
+            remains -= compose.getTotalFundsBalance();
+            double remainsPercent = BigDecimal.valueOf(remains)
+                    .divide(totalBalance, 2, RoundingMode.HALF_UP).doubleValue() * 100;
+            if (0 < remainsPercent && remainsPercent < 5) {
+                FundsComposeInfo.Compose remainsCompose = FundsComposeInfo.Compose.builder()
+                        .percent(RmbUtils.convertFen2Yuan(remains))
+                        .classifyName("其他")
+                        .build();
+                composeList.add(remainsCompose);
+                break;
+            }
         }
 
         return composeList;
