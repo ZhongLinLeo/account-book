@@ -215,7 +215,7 @@ public class LoanDomainTest {
 
 
     public String readFile() throws IOException {
-        File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "loan/LoanInfo.json");
+        File file = ResourceUtils.getFile(ResourceUtils.CLASSPATH_URL_PREFIX + "src/test/resources/loan/LoanInfo.json");
         return FileUtils.readFileToString(file, Charset.defaultCharset());
     }
 }
