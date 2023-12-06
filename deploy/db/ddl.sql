@@ -66,3 +66,26 @@ create table funds_record_classify
     invalid           tinyint    not null default 0 comment '删除标识位，0：未删除，1：删除'
 ) engine = INNODB,
   DEFAULT CHARSET = utf8,comment ='资金分类表';
+
+
+drop table if exists loan;
+create table loan
+(
+    loan_id                  bigint primary key comment '贷款id',
+    loan_type                tinyint       null comment '贷款类型，1：房贷，2：消费贷',
+    loan_desc                varchar(32)   not null comment '贷款描述',
+    loan_amount              bigint        not null comment '贷款金额',
+    loan_period              int           not null comment '贷款周期',
+    repay_amount             bigint        not null comment '还款金额',
+    repay_date               date          not null comment '还款时间',
+    loan_remark              varchar(128)  null comment '贷款备注',
+    loan_rate                double        null comment '贷款利率',
+    loan_rate_extra          varchar(1024) null comment '贷款利率额外信息，房贷的利率会有变更，json 格式',
+    prepay_info              varchar(1024) null comment '提前还款信息，json格式',
+    repay_amount_change_info varchar(1024) null comment '还款金额变更，json 格式',
+    create_time              timestamp     not null                             default current_timestamp comment '创建时间',
+    modify_time              timestamp     not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid                  tinyint       not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+) engine = INNODB,
+  DEFAULT CHARSET = utf8,comment ='贷款信息表';
+
