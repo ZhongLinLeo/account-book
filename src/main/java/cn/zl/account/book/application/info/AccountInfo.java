@@ -3,6 +3,8 @@ package cn.zl.account.book.application.info;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 /**
  * @author lin.zl
  */
@@ -27,4 +29,9 @@ public class AccountInfo {
     private Long accountExpenditure;
 
     private Integer accountType;
+
+    /**
+     * 还款时间
+     */
+    private LocalDate repayDate;
 }

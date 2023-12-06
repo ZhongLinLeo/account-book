@@ -37,6 +37,7 @@ public final class AccountConverter {
                 .accountIncome(RmbUtils.convertFen2Yuan(accountInfo.getAccountIncome()))
                 .accountExpenditure(RmbUtils.convertFen2Yuan(accountInfo.getAccountExpenditure()))
                 .accountType(accountInfo.getAccountType())
+                .repayDate(accountInfo.getRepayDate())
                 .build();
     }
 

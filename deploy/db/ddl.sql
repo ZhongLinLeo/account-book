@@ -14,6 +14,7 @@ create table account
     account_income       bigint               default 0 comment '账户收入',
     account_expenditure  bigint               default 0 comment '账户支出',
     account_type         tinyint              default 0 comment '账户类型，0:储蓄账户，1:信用账户',
+    repay_date           date null comment '还款时间，只有信用卡有',
     create_time          timestamp   not null default current_timestamp comment '创建时间',
     modify_time          timestamp   not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
     invalid              tinyint     not null default 0 comment '删除标识位，0：未删除，1：删除'

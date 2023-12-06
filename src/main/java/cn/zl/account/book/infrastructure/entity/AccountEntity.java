@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.time.LocalDate;
 
 /**
  * @author lin.zl
@@ -32,4 +33,9 @@ public class AccountEntity extends EntityBase{
     private Long  accountExpenditure;
 
     private Integer accountType;
+
+    /**
+     * 还款时间
+     */
+    private LocalDate repayDate;
 }

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDate;
+
 /**
  * account view info
  *
@@ -33,4 +35,9 @@ public class AccountInfoResponse {
     private Double accountExpenditure;
 
     private Integer accountType;
+
+    /**
+     * 还款时间
+     */
+    private LocalDate repayDate;
 }
