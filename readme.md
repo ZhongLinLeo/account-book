@@ -4,7 +4,7 @@
 
 用于家庭记账的项目，前后端分离。
 
-[后端地址](https://github.com/ZhongLinLeo/account-book.git)
+[前端地址](https://github.com/ZhongLinLeo/account-book-client.git)
 
 ---
 
