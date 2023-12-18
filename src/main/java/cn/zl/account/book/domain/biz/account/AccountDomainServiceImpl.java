@@ -4,6 +4,7 @@ import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.application.info.AccountTransferInfo;
+import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.domain.converter.AccountEntityConverter;
 import cn.zl.account.book.domain.util.BeanCopyUtils;
@@ -20,10 +21,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -129,6 +127,24 @@ public class AccountDomainServiceImpl implements AccountDomainService {
     }
 
     @Override
+    public void transaction(Long accountId, Long transactionBalance, ClassifyTypeEnum classifyTypeEnum) {
+        final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
+        final AccountEntity accountEntity =
+                originOptional.orElseThrow(() -> new BizException(ResponseStatusEnum.ACCOUNT_NONE_EXIST));
+
+        // modify account balance
+        if (Objects.equals(classifyTypeEnum,ClassifyTypeEnum.INCOME)){
+            accountEntity.setAccountBalance(accountEntity.getAccountBalance() + transactionBalance);
+            accountEntity.setAccountIncome(transactionBalance);
+        }else {
+            accountEntity.setAccountBalance(accountEntity.getAccountBalance() - transactionBalance);
+            accountEntity.setAccountExpenditure(accountEntity.getAccountExpenditure() + transactionBalance);
+        }
+
+        accountRepository.save(accountEntity);
+    }
+
+    @Override
     public void transaction(Long accountId, Long transactionBalance) {
         final Optional<AccountEntity> originOptional = accountRepository.findById(accountId);
         final AccountEntity accountEntity =
@@ -140,4 +156,7 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
         accountRepository.save(accountEntity);
     }
+
+
+
 }

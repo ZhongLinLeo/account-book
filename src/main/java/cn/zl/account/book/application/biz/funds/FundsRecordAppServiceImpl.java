@@ -4,11 +4,14 @@ import cn.zl.account.book.application.domain.AccountDomainService;
 import cn.zl.account.book.application.domain.FundsRecordDomainService;
 import cn.zl.account.book.application.info.FundsRecordInfo;
 import cn.zl.account.book.controller.application.FundsRecordAppService;
+import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.controller.enums.ResponseStatusEnum;
 import cn.zl.account.book.controller.request.FundsRecordQueryRequest;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.infrastructure.architecture.BizException;
+import cn.zl.account.book.infrastructure.biz.funds.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
+import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -33,6 +36,9 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     private FundsRecordRepository fundsRecordRepository;
 
     @Resource
+    private FundsRecordClassifyRepository fundsRecordClassifyRepository;
+
+    @Resource
     private FundsRecordDomainService fundsRecordDomainService;
 
     @Resource
@@ -41,8 +47,14 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     @Override
     @Transactional(rollbackOn = Exception.class)
     public void recordFunds(FundsRecordInfo fundsRecordInfo) {
+        final Long fundsRecordClassifyId = fundsRecordInfo.getFundsRecordClassifyId();
+        final FundsRecordClassifyEntity classifyEntity = fundsRecordClassifyRepository
+                .findById(fundsRecordClassifyId)
+                .orElseThrow(() -> new BizException(ResponseStatusEnum.CLASSIFY_NONE_EXIST));
+
         // 从账户中增减
-        accountDomainService.transaction(fundsRecordInfo.getFundsAccountId(), fundsRecordInfo.getFundsRecordBalance());
+        accountDomainService.transaction(fundsRecordInfo.getFundsAccountId(), fundsRecordInfo.getFundsRecordBalance()
+                , ClassifyTypeEnum.findClassifyTypeEnum(classifyEntity.getClassifyType()));
 
         // 记录
         fundsRecordDomainService.recordFunds(fundsRecordInfo);

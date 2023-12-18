@@ -2,6 +2,7 @@ package cn.zl.account.book.application.domain;
 
 import cn.zl.account.book.application.info.AccountInfo;
 import cn.zl.account.book.application.info.AccountTransferInfo;
+import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
 
 import java.util.List;
@@ -60,6 +61,15 @@ public interface AccountDomainService {
      * @param targetAccount target account
      */
     void repayment(AccountTransferInfo repaymentInfo, AccountEntity sourceAccount, AccountEntity targetAccount);
+
+    /**
+     * transaction
+     *
+     * @param accountId accountId
+     * @param transactionBalance  balance
+     * @param classifyTypeEnum  classify type
+     */
+    void transaction(Long accountId, Long transactionBalance, ClassifyTypeEnum classifyTypeEnum);
 
     /**
      * transaction
