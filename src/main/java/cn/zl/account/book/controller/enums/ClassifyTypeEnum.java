@@ -44,4 +44,11 @@ public enum ClassifyTypeEnum {
             return INCOME.getClassifyTypeName();
         }
     }
+    public static ClassifyTypeEnum findClassifyTypeEnum(Integer classifyType) {
+        if (Objects.equals(classifyType, EXPENDITURE.classifyType)) {
+            return EXPENDITURE;
+        } else {
+            return INCOME;
+        }
+    }
 }
