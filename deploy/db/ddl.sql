@@ -71,21 +71,65 @@ create table funds_record_classify
 drop table if exists loan;
 create table loan
 (
-    loan_id                  bigint primary key comment '贷款id',
-    loan_type                tinyint       null comment '贷款类型，1：房贷，2：消费贷',
-    loan_desc                varchar(32)   not null comment '贷款描述',
-    loan_amount              bigint        not null comment '贷款金额',
-    loan_period              int           not null comment '贷款周期',
-    repay_amount             bigint        not null comment '还款金额',
-    repay_date               date          not null comment '还款时间',
-    loan_remark              varchar(128)  null comment '贷款备注',
-    loan_rate                double        null comment '贷款利率',
-    loan_rate_extra          varchar(1024) null comment '贷款利率额外信息，房贷的利率会有变更，json 格式',
-    prepay_info              varchar(1024) null comment '提前还款信息，json格式',
-    repay_amount_change_info varchar(1024) null comment '还款金额变更，json 格式',
-    create_time              timestamp     not null                             default current_timestamp comment '创建时间',
-    modify_time              timestamp     not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
-    invalid                  tinyint       not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+    loan_id      bigint primary key comment '贷款id',
+    loan_type    tinyint      null comment '贷款类型，1：房贷，2：消费贷',
+    loan_desc    varchar(32)  not null comment '贷款描述',
+    loan_amount  bigint       not null comment '贷款金额',
+    loan_period  int          not null comment '贷款周期',
+    repay_amount bigint       not null comment '还款金额',
+    repay_date   date         not null comment '还款时间',
+    loan_remark  varchar(128) null comment '贷款备注',
+    create_time  timestamp    not null                             default current_timestamp comment '创建时间',
+    modify_time  timestamp    not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid      tinyint      not null                             default 0 comment '删除标识位，0：未删除，1：删除'
 ) engine = INNODB,
   DEFAULT CHARSET = utf8,comment ='贷款信息表';
+
+
+drop table if exists loan_rate;
+create table loan_rate
+(
+    id          bigint primary key comment 'id',
+    loan_id     bigint       not null comment '贷款id',
+    rate        bigint       not null comment '利率',
+    rate_desc   varchar(32)  not null comment '利率描述',
+    rate_remark varchar(128) null comment '利率备注',
+    create_time timestamp    not null                             default current_timestamp comment '创建时间',
+    modify_time timestamp    not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid     tinyint      not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+) engine = INNODB,
+  DEFAULT CHARSET = utf8,comment ='贷款利率表';
+
+drop table if exists loan_prepay;
+create table loan_prepay
+(
+    id            bigint primary key comment 'id',
+    loan_id       bigint       not null comment '贷款id',
+    prepay_amount bigint       not null comment '提前还款金额',
+    prepay_desc   varchar(32)  not null comment '提前还款描述',
+    prepay_remark varchar(128) null comment '提前还款备注',
+    prepay_time   timestamp    not null comment '提前还款时间',
+    create_time   timestamp    not null                             default current_timestamp comment '创建时间',
+    modify_time   timestamp    not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid       tinyint      not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+) engine = INNODB,
+  DEFAULT CHARSET = utf8,comment ='贷款提前还款信息表';
+
+drop table if exists loan_repay_change;
+create table loan_repay_change
+(
+    id                  bigint primary key comment 'id',
+    loan_id             bigint       not null comment '贷款id',
+    repay_change_time   timestamp    not null comment '还款变更时间',
+    repay_amount        bigint       not null comment '变更后金额',
+    reduce_time         int          not null comment '变更后缩短时间',
+    repay_change_desc   varchar(32)  not null comment '提前还款描述',
+    repay_change_remark varchar(128) null comment '提前还款备注',
+    create_time         timestamp    not null                             default current_timestamp comment '创建时间',
+    modify_time         timestamp    not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid             tinyint      not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+) engine = INNODB,
+  DEFAULT CHARSET = utf8,comment ='贷款提前还款信息表';
+
+
 
