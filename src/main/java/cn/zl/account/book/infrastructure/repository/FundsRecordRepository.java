@@ -1,7 +1,6 @@
 package cn.zl.account.book.infrastructure.repository;
 
 import cn.zl.account.book.info.FundsRecordSearchInfo;
-import cn.zl.account.book.view.request.FundsRecordQueryRequest;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
@@ -36,47 +35,35 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
     /**
      * pagination
      *
-     * @param paginationReq conditions
-     * @param pageable      page condition
+     * @param recordSearchInfo conditions
+     * @param pageable         page condition
      * @return page list
      */
-    @Query(value = "SELECT * FROM funds_record WHERE invalid = 0 " +
-            "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
-            "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
-            "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
-            "AND (funds_record_classify_id = :#{#paginationReq.classifyId} or :#{#paginationReq.classifyId} is null) " +
-            "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
+    @Query(value = "SELECT *  FROM funds_record WHERE invalid = 0 " +
+            "AND (funds_record_describe like :#{#recordSearchInfo.recordKeyWord} " +
+            "   OR :#{#recordSearchInfo.recordKeyWord} IS NULL) " +
+            "AND (funds_record_time > :#{#recordSearchInfo.startTime} " +
+            "   OR :#{#recordSearchInfo.startTime} IS NULL) " +
+            "AND (funds_record_time < :#{#recordSearchInfo.endTime} " +
+            "   OR :#{#recordSearchInfo.endTime} IS NULL)" +
+            "AND (COALESCE(:#{#recordSearchInfo.classifyIds}) IS NULL  " +
+            "   OR funds_record_classify_id in :#{#recordSearchInfo.classifyIds}) " +
+            "AND (COALESCE(:#{#recordSearchInfo.accountIds}) IS NULL  " +
+            "   OR funds_account_id in :#{#recordSearchInfo.accountIds}) ",
             countQuery = "SELECT COUNT(*) FROM funds_record WHERE invalid = 0 " +
-                    "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
-                    "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
-                    "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
-                    "AND (funds_record_classify_id = :#{#paginationReq.classifyId} or :#{#paginationReq.classifyId} is null) " +
-                    "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
+                    "AND (funds_record_describe like :#{#recordSearchInfo.recordKeyWord} " +
+                    "   OR :#{#recordSearchInfo.recordKeyWord} IS NULL) " +
+                    "AND (funds_record_time > :#{#recordSearchInfo.startTime} " +
+                    "   OR :#{#recordSearchInfo.startTime} IS NULL) " +
+                    "AND (funds_record_time < :#{#recordSearchInfo.endTime} " +
+                    "   OR :#{#recordSearchInfo.endTime} IS NULL)" +
+                    "AND (COALESCE(:#{#recordSearchInfo.classifyIds}) IS NULL  " +
+                    "   OR funds_record_classify_id in :#{#recordSearchInfo.classifyIds}) " +
+                    "AND (COALESCE(:#{#recordSearchInfo.accountIds}) IS NULL  " +
+                    "   OR funds_account_id in :#{#recordSearchInfo.accountIds}) ",
             nativeQuery = true)
-    Page<FundsRecordEntity> paginationRecord(@Param("paginationReq") FundsRecordQueryRequest paginationReq, Pageable pageable);
-
-
-    /**
-     * pagination
-     *
-     * @param paginationReq conditions
-     * @param pageable      page condition
-     * @return page list
-     */
-    @Query(value = "SELECT * FROM funds_record WHERE invalid = 0 " +
-            "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
-            "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
-            "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
-            "AND (funds_record_classify_id = :#{#paginationReq.classifyId} or :#{#paginationReq.classifyId} is null) " +
-            "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
-            countQuery = "SELECT COUNT(*) FROM funds_record WHERE invalid = 0 " +
-                    "AND (funds_record_describe like :#{#recordSearchInfo.recordKeyword} or :#{#recordSearchInfo.recordKeyword} is null) " +
-                    "AND (funds_record_time > :#{#recordSearchInfo.startTime} or :#{#recordSearchInfo.startTime} is null) " +
-                    "AND (funds_record_time < :#{#recordSearchInfo.endTime} or :#{#recordSearchInfo.endTime} is null) " +
-                    "AND (funds_record_classify_id = :#{#recordSearchInfo.classifyId} or :#{#recordSearchInfo.classifyId} is null) " +
-                    "AND (funds_account_id = :#{#recordSearchInfo.accountId} or :#{#recordSearchInfo.accountId} is null)",
-            nativeQuery = true)
-    Page<FundsRecordEntity> paginationRecord(@Param("recordSearchInfo") FundsRecordSearchInfo recordSearchInfo, Pageable pageable);
+    Page<FundsRecordEntity> paginationRecord(@Param("recordSearchInfo") FundsRecordSearchInfo recordSearchInfo,
+                                             Pageable pageable);
 
 
     /**
@@ -87,7 +74,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      * @return value
      */
     @Query(value = "select sum(funds_record_balance)  from funds_record " +
-            "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = :classifyType " +
+            "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = " +
+            ":classifyType " +
             "    and include_analyze = 1) " +
             "  and (funds_record_time > :fundsRecordTime or :fundsRecordTime is null)" +
             "  and  invalid = 0 ", nativeQuery = true)
@@ -110,7 +98,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "  and classify.include_analyze = 1 " +
             "  and record.invalid = 0 " +
             "group by classifyType, fundsRecordDate", nativeQuery = true)
-    List<AnalyzeTrendBo> queryFundsTrend(@Param("typeFormat") String typeFormat, @Param("startTime") LocalDate startTime,
+    List<AnalyzeTrendBo> queryFundsTrend(@Param("typeFormat") String typeFormat,
+                                         @Param("startTime") LocalDate startTime,
                                          @Param("endTime") LocalDate endTime);
 
     /**
@@ -133,7 +122,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "  and record.invalid = 0 " +
             "order by record.funds_record_balance desc " +
             "limit 10", nativeQuery = true)
-    List<AnalyzeTopsBo> queryFundsTops(@Param("classifyType") Integer classifyType, @Param("startTime") LocalDate startTime,
+    List<AnalyzeTopsBo> queryFundsTops(@Param("classifyType") Integer classifyType,
+                                       @Param("startTime") LocalDate startTime,
                                        @Param("endTime") LocalDate endTime);
 
     /**
@@ -153,7 +143,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
             "  and record.invalid = 0 " +
             "  and record.funds_record_time between :startTime and :endTime " +
             "group by classifyName", nativeQuery = true)
-    List<AnalyzeComposeBo> queryFundsCompose(@Param("classifyType") Integer classifyType, @Param("startTime") LocalDate startTime,
+    List<AnalyzeComposeBo> queryFundsCompose(@Param("classifyType") Integer classifyType,
+                                             @Param("startTime") LocalDate startTime,
                                              @Param("endTime") LocalDate endTime);
 
 }

@@ -1,21 +1,13 @@
 package cn.zl.account.book.controller;
 
-import cn.zl.account.book.application.AccountAppService;
-import cn.zl.account.book.application.FundsRecordAppService;
-import cn.zl.account.book.application.FundsRecordClassifyAppService;
-import cn.zl.account.book.converter.AccountConverter;
-import cn.zl.account.book.converter.AnalyzeConverter;
-import cn.zl.account.book.converter.FundsRecordClassifyConverter;
-import cn.zl.account.book.converter.FundsRecordConverter;
-import cn.zl.account.book.enums.TrendAnalyzeEnum;
-import cn.zl.account.book.info.*;
 import cn.zl.account.book.application.FundsAnalyzeAppService;
-import cn.zl.account.book.view.request.FundsRecordQueryRequest;
-import cn.zl.account.book.view.request.PageFundsComposeRequest;
+import cn.zl.account.book.converter.AnalyzeConverter;
+import cn.zl.account.book.enums.TrendAnalyzeEnum;
+import cn.zl.account.book.info.FundsComposeInfo;
+import cn.zl.account.book.info.FundsOverviewInfo;
+import cn.zl.account.book.info.FundsRecordTopInfo;
+import cn.zl.account.book.info.FundsTrendInfo;
 import cn.zl.account.book.view.response.*;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,7 +15,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
-import javax.validation.Valid;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,15 +30,6 @@ public class FundsAnalyzeController {
 
     @Resource
     private FundsAnalyzeAppService fundsAnalyzeAppService;
-
-    @Resource
-    private FundsRecordAppService fundsRecordAppService;
-
-    @Resource
-    private AccountAppService accountAppService;
-
-    @Resource
-    private FundsRecordClassifyAppService fundsRecordClassifyAppService;
 
     /**
      * 资金概览
@@ -110,34 +92,4 @@ public class FundsAnalyzeController {
 
         return NormalResponse.wrapSuccessResponse(AnalyzeConverter.converterInfo2Resp(fundsRecordTopInfo));
     }
-
-
-    @GetMapping("pagination/compose")
-    public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(@Valid PageFundsComposeRequest request) {
-
-        PageRequest pageRequest = PageRequest.of(request.getCurrent(), request.getPageSize(),
-                Sort.by(Sort.Direction.fromString(request.getOrder()), request.getSortFiled()));
-
-        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pageRequest,FundsRecordConverter.req2Info(request));
-
-        List<FundsRecordResponse> content = fundsRecords.get()
-                .map(recordInfo -> {
-                    FundsRecordResponse fundsRecordResponse = FundsRecordConverter.info2Resp(recordInfo);
-                    FundsRecordClassifyInfo classify = fundsRecordClassifyAppService
-                            .findClassify(recordInfo.getFundsRecordClassifyId());
-                    FundsRecordClassifyResponse classifyResponse = FundsRecordClassifyConverter.info2Resp(classify);
-                    fundsRecordResponse.setClassifyInfo(classifyResponse);
-
-                    AccountInfo accountInfo = accountAppService.findAccountInfo(recordInfo.getFundsAccountId());
-                    AccountInfoResponse accountInfoResponse = AccountConverter.info2Resp(accountInfo);
-                    fundsRecordResponse.setAccountInfo(accountInfoResponse);
-
-                    return fundsRecordResponse;
-                })
-                .collect(Collectors.toList());
-        return PageBaseResponse.wrapSuccessPageResponse(fundsRecords.getTotalElements(), content);
-
-    }
-
-
 }

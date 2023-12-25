@@ -1,18 +1,20 @@
 package cn.zl.account.book.controller;
 
-import cn.zl.account.book.info.AccountInfo;
-import cn.zl.account.book.info.FundsRecordClassifyInfo;
-import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.application.AccountAppService;
 import cn.zl.account.book.application.FundsRecordAppService;
 import cn.zl.account.book.application.FundsRecordClassifyAppService;
 import cn.zl.account.book.converter.AccountConverter;
 import cn.zl.account.book.converter.FundsRecordClassifyConverter;
 import cn.zl.account.book.converter.FundsRecordConverter;
+import cn.zl.account.book.info.AccountInfo;
+import cn.zl.account.book.info.FundsRecordClassifyInfo;
+import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.view.request.FundsRecordQueryRequest;
 import cn.zl.account.book.view.request.FundsRecordRequest;
 import cn.zl.account.book.view.response.*;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -41,7 +43,11 @@ public class FundsRecordController {
 
     @GetMapping("pagination")
     public PageBaseResponse<FundsRecordResponse> paginationFundsRecord(@Valid FundsRecordQueryRequest pagination) {
-        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pagination);
+
+        PageRequest pageRequest = PageRequest.of(pagination.getCurrent(), pagination.getPageSize(),
+                Sort.by(Sort.Direction.fromString(pagination.getOrder()), pagination.getSortFiled()));
+
+        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pageRequest,FundsRecordConverter.req2Info(pagination));
 
         List<FundsRecordResponse> content = fundsRecords.get()
                 .map(recordInfo -> {

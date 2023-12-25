@@ -2,7 +2,6 @@ package cn.zl.account.book.application;
 
 import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
-import cn.zl.account.book.view.request.FundsRecordQueryRequest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.web.multipart.MultipartFile;
@@ -32,14 +31,6 @@ public interface FundsRecordAppService {
      * @param recordId funds record id
      */
     void delFundsRecord(Long recordId);
-
-    /**
-     * query record
-     *
-     * @param paginationReq query funds record conditions
-     * @return page info
-     */
-    Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq);
 
     /**
      * import funds records

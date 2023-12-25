@@ -6,6 +6,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 /**
  * @author lin.zl
@@ -22,9 +23,16 @@ public class FundsRecordQueryRequest extends BasePaginationRequest {
     @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime endTime;
 
-    private Long accountId;
+    /**
+     * 分类id列表
+     */
+    private List<Long> classifyIds;
 
-    private Long classifyId;
+    /**
+     * 账户列表
+     */
+    private List<Long> accountIds;
+
 
     @Override
     public String getSortFiled() {

@@ -2,11 +2,10 @@ package cn.zl.account.book.converter;
 
 import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
-import cn.zl.account.book.view.request.FundsRecordRequest;
-import cn.zl.account.book.view.request.PageFundsComposeRequest;
-import cn.zl.account.book.view.response.FundsRecordResponse;
 import cn.zl.account.book.util.RmbUtils;
-import org.apache.poi.ss.formula.functions.T;
+import cn.zl.account.book.view.request.FundsRecordQueryRequest;
+import cn.zl.account.book.view.request.FundsRecordRequest;
+import cn.zl.account.book.view.response.FundsRecordResponse;
 
 /**
  * @author lin.zl
@@ -39,11 +38,11 @@ public final class FundsRecordConverter {
         return info;
     }
 
-    public static FundsRecordSearchInfo req2Info(PageFundsComposeRequest composeRequest){
+    public static FundsRecordSearchInfo req2Info(FundsRecordQueryRequest recordQueryRequest){
         return FundsRecordSearchInfo.builder()
-                .startTime(composeRequest.getStartTime())
-                .endTime(composeRequest.getEndTime())
-                .classifyIds(composeRequest.getClassifyIds())
+                .startTime(recordQueryRequest.getStartTime())
+                .endTime(recordQueryRequest.getEndTime())
+                .classifyIds(recordQueryRequest.getClassifyIds())
                 .build();
     }
 

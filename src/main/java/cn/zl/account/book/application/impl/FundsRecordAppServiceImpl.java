@@ -1,23 +1,21 @@
 package cn.zl.account.book.application.impl;
 
+import cn.zl.account.book.application.FundsRecordAppService;
+import cn.zl.account.book.architecture.BizException;
 import cn.zl.account.book.domain.AccountDomainService;
 import cn.zl.account.book.domain.FundsRecordDomainService;
-import cn.zl.account.book.info.FundsRecordInfo;
-import cn.zl.account.book.application.FundsRecordAppService;
+import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.enums.ClassifyTypeEnum;
 import cn.zl.account.book.enums.ResponseStatusEnum;
+import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
-import cn.zl.account.book.view.request.FundsRecordQueryRequest;
-import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
-import cn.zl.account.book.architecture.BizException;
-import cn.zl.account.book.infrastructure.repository.FundsRecordClassifyRepository;
-import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
+import cn.zl.account.book.infrastructure.repository.FundsRecordClassifyRepository;
+import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -86,19 +84,6 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
         accountDomainService.transaction(classifyEntity.getFundsAccountId(), -classifyEntity.getFundsRecordBalance());
 
         fundsRecordDomainService.delFundRecord(recordId);
-    }
-
-    @Override
-    public Page<FundsRecordInfo> paginationFundsRecord(FundsRecordQueryRequest paginationReq) {
-        PageRequest pageRequest = PageRequest.of(paginationReq.getCurrent(), paginationReq.getPageSize(),
-                Sort.by(Sort.Direction.fromString(paginationReq.getOrder()), paginationReq.getSortFiled()));
-        Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.paginationRecord(paginationReq, pageRequest);
-
-        List<FundsRecordInfo> content = fundsRecords.get()
-                .map(FundsRecordEntityConverter::entity2Info)
-                .collect(Collectors.toList());
-
-        return new PageImpl<>(content, pageRequest, fundsRecords.getTotalElements());
     }
 
     @Override
