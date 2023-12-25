@@ -1,15 +1,15 @@
 package cn.zl.account.book.application.strategy;
 
-import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
-import cn.zl.account.book.application.info.FundsComposeInfo;
-import cn.zl.account.book.application.info.FundsRecordTopInfo;
-import cn.zl.account.book.application.info.FundsTrendInfo;
-import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
-import cn.zl.account.book.controller.utils.RmbUtils;
-import cn.zl.account.book.infrastructure.biz.funds.FundsRecordRepository;
-import cn.zl.account.book.infrastructure.bo.AnalyzeComposeBo;
-import cn.zl.account.book.infrastructure.bo.AnalyzeTopsBo;
-import cn.zl.account.book.infrastructure.bo.AnalyzeTrendBo;
+import cn.zl.account.book.enums.TrendAnalyzeEnum;
+import cn.zl.account.book.info.FundsComposeInfo;
+import cn.zl.account.book.info.FundsRecordTopInfo;
+import cn.zl.account.book.info.FundsTrendInfo;
+import cn.zl.account.book.enums.ClassifyTypeEnum;
+import cn.zl.account.book.util.RmbUtils;
+import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
+import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
+import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
+import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 

@@ -1,6 +1,6 @@
 package cn.zl.account.book.domain.converter;
 
-import cn.zl.account.book.application.info.FundsRecordClassifyInfo;
+import cn.zl.account.book.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 
 /**

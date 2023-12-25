@@ -1,10 +1,7 @@
 package cn.zl.account.book.application.strategy;
 
-import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.application.factory.AnalyzeServiceFactory;
-import cn.zl.account.book.application.info.FundsRecordTopInfo;
-import cn.zl.account.book.controller.enums.ClassifyTypeEnum;
-import cn.zl.account.book.infrastructure.bo.AnalyzeTopsBo;
+import cn.zl.account.book.enums.TrendAnalyzeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
 

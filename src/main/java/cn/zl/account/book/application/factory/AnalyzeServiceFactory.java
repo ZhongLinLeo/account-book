@@ -1,7 +1,7 @@
 package cn.zl.account.book.application.factory;
 
-import cn.zl.account.book.application.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.application.strategy.BaseAnalyzeStrategy;
+import cn.zl.account.book.enums.TrendAnalyzeEnum;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

@@ -1,6 +1,6 @@
 package cn.zl.account.book.domain.converter;
 
-import cn.zl.account.book.application.info.AccountInfo;
+import cn.zl.account.book.info.AccountInfo;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
 
 /**
