@@ -6,6 +6,7 @@ import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.application.FundsRecordAppService;
 import cn.zl.account.book.enums.ClassifyTypeEnum;
 import cn.zl.account.book.enums.ResponseStatusEnum;
+import cn.zl.account.book.info.FundsRecordSearchInfo;
 import cn.zl.account.book.view.request.FundsRecordQueryRequest;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.architecture.BizException;
@@ -103,5 +104,16 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     @Override
     public void importFundsRecord(MultipartFile excelFile) {
         fundsRecordDomainService.importFundsRecord(excelFile);
+    }
+
+    @Override
+    public Page<FundsRecordInfo> paginationFundsRecord(PageRequest pageRequest, FundsRecordSearchInfo recordSearchInfo) {
+        Page<FundsRecordEntity> fundsRecords = fundsRecordRepository.paginationRecord(recordSearchInfo, pageRequest);
+
+        List<FundsRecordInfo> content = fundsRecords.get()
+                .map(FundsRecordEntityConverter::entity2Info)
+                .collect(Collectors.toList());
+
+        return new PageImpl<>(content, pageRequest, fundsRecords.getTotalElements());
     }
 }

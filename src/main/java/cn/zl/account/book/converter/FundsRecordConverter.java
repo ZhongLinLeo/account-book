@@ -1,9 +1,12 @@
 package cn.zl.account.book.converter;
 
 import cn.zl.account.book.info.FundsRecordInfo;
+import cn.zl.account.book.info.FundsRecordSearchInfo;
 import cn.zl.account.book.view.request.FundsRecordRequest;
+import cn.zl.account.book.view.request.PageFundsComposeRequest;
 import cn.zl.account.book.view.response.FundsRecordResponse;
 import cn.zl.account.book.util.RmbUtils;
+import org.apache.poi.ss.formula.functions.T;
 
 /**
  * @author lin.zl
@@ -34,6 +37,14 @@ public final class FundsRecordConverter {
         info.setFundsUserId(fundsRecordReq.getFundsUserId());
 
         return info;
+    }
+
+    public static FundsRecordSearchInfo req2Info(PageFundsComposeRequest composeRequest){
+        return FundsRecordSearchInfo.builder()
+                .startTime(composeRequest.getStartTime())
+                .endTime(composeRequest.getEndTime())
+                .classifyIds(composeRequest.getClassifyIds())
+                .build();
     }
 
     private FundsRecordConverter() {

@@ -19,5 +19,10 @@ public enum TrendAnalyzeEnum {
      * 周趋势
      */
     WEEK(),
+
+    /**
+     * 自定义
+     */
+    CUSTOM(),
     ;
 }

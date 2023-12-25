@@ -1,5 +1,6 @@
 package cn.zl.account.book.infrastructure.repository;
 
+import cn.zl.account.book.info.FundsRecordSearchInfo;
 import cn.zl.account.book.view.request.FundsRecordQueryRequest;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
@@ -53,6 +54,30 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
                     "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
             nativeQuery = true)
     Page<FundsRecordEntity> paginationRecord(@Param("paginationReq") FundsRecordQueryRequest paginationReq, Pageable pageable);
+
+
+    /**
+     * pagination
+     *
+     * @param paginationReq conditions
+     * @param pageable      page condition
+     * @return page list
+     */
+    @Query(value = "SELECT * FROM funds_record WHERE invalid = 0 " +
+            "AND (funds_record_describe like :#{#paginationReq.recordKeyword} or :#{#paginationReq.recordKeyword} is null) " +
+            "AND (funds_record_time > :#{#paginationReq.startTime} or :#{#paginationReq.startTime} is null) " +
+            "AND (funds_record_time < :#{#paginationReq.endTime} or :#{#paginationReq.endTime} is null) " +
+            "AND (funds_record_classify_id = :#{#paginationReq.classifyId} or :#{#paginationReq.classifyId} is null) " +
+            "AND (funds_account_id = :#{#paginationReq.accountId} or :#{#paginationReq.accountId} is null)",
+            countQuery = "SELECT COUNT(*) FROM funds_record WHERE invalid = 0 " +
+                    "AND (funds_record_describe like :#{#recordSearchInfo.recordKeyword} or :#{#recordSearchInfo.recordKeyword} is null) " +
+                    "AND (funds_record_time > :#{#recordSearchInfo.startTime} or :#{#recordSearchInfo.startTime} is null) " +
+                    "AND (funds_record_time < :#{#recordSearchInfo.endTime} or :#{#recordSearchInfo.endTime} is null) " +
+                    "AND (funds_record_classify_id = :#{#recordSearchInfo.classifyId} or :#{#recordSearchInfo.classifyId} is null) " +
+                    "AND (funds_account_id = :#{#recordSearchInfo.accountId} or :#{#recordSearchInfo.accountId} is null)",
+            nativeQuery = true)
+    Page<FundsRecordEntity> paginationRecord(@Param("recordSearchInfo") FundsRecordSearchInfo recordSearchInfo, Pageable pageable);
+
 
     /**
      * sum income or expenditure
