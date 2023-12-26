@@ -10,14 +10,16 @@ create table account
     account_name         varchar(32) not null comment '账户名称',
     account_describe     varchar(128) comment '账户描述',
     account_ownership_id bigint      not null comment '账户归属人ID',
-    account_balance      bigint               default 0 comment '账户余额',
-    account_income       bigint               default 0 comment '账户收入',
-    account_expenditure  bigint               default 0 comment '账户支出',
-    account_type         tinyint              default 0 comment '账户类型，0:储蓄账户，1:信用账户',
-    repay_date           date null comment '还款时间，只有信用卡有',
-    create_time          timestamp   not null default current_timestamp comment '创建时间',
+    account_balance      bigint                                           default 0 comment '账户余额',
+    account_income       bigint                                           default 0 comment '账户收入',
+    account_expenditure  bigint                                           default 0 comment '账户支出',
+    account_type         tinyint                                          default 0 comment '账户类型，0:储蓄账户，1:信用账户',
+    repay_date           varchar(32)        null comment '还款时间，只有信用卡有',
+    account_sort         tinyint     not null comment '卡排序',
+    account_available    tinyint                                          default 1 comment '卡是否可用标识，1：可用，0：不可用',
+    create_time          timestamp   not null                             default current_timestamp comment '创建时间',
     modify_time          timestamp   not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
-    invalid              tinyint     not null default 0 comment '删除标识位，0：未删除，1：删除'
+    invalid              tinyint     not null                             default 0 comment '删除标识位，0：未删除，1：删除'
 ) engine = INNODB,
   DEFAULT CHARSET = utf8,comment ='账户信息表';
 
