@@ -18,6 +18,7 @@ public final class AccountEntityConverter {
                 .accountExpenditure(accountEntity.getAccountExpenditure())
                 .accountType(accountEntity.getAccountType())
                 .repayDate(accountEntity.getRepayDate())
+                .accountAvailable(accountEntity.getAccountAvailable())
                 .build();
     }
 

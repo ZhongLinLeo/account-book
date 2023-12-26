@@ -39,5 +39,10 @@ public class AccountInfoResponse {
     /**
      * 还款时间
      */
-    private LocalDate repayDate;
+    private String repayDate;
+
+    /**
+     * 卡是否可用
+     */
+    private Integer accountAvailable;
 }

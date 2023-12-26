@@ -1,7 +1,6 @@
 package cn.zl.account.book.domain.impl;
 
 import cn.zl.account.book.domain.AccountDomainService;
-import cn.zl.account.book.domain.FundsRecordDomainService;
 import cn.zl.account.book.info.AccountInfo;
 import cn.zl.account.book.info.AccountTransferInfo;
 import cn.zl.account.book.enums.ClassifyTypeEnum;
@@ -38,9 +37,6 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
     @Resource
     private UserRepository userRepository;
-
-    @Resource
-    private FundsRecordDomainService fundsRecordDomainService;
 
     @Override
     public List<AccountInfo> listAccounts() {
@@ -156,7 +152,4 @@ public class AccountDomainServiceImpl implements AccountDomainService {
 
         accountRepository.save(accountEntity);
     }
-
-
-
 }

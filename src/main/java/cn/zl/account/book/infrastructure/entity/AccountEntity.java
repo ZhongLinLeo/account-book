@@ -20,22 +20,53 @@ public class AccountEntity extends EntityBase{
     @Id
     private Long accountId;
 
+    /**
+     * 账户名称
+     */
     private String  accountName;
 
+    /**
+     * 账户描述
+     */
     private String  accountDescribe;
 
+    /**
+     * 账户所属
+     */
     private Long  accountOwnershipId;
 
+    /**
+     * 账户余额
+     */
     private Long  accountBalance;
 
+    /**
+     * 账户收入
+     */
     private Long  accountIncome;
 
+    /**
+     * 账户支出
+     */
     private Long  accountExpenditure;
 
+    /**
+     * 卡类型
+     */
     private Integer accountType;
+
+    /**
+     * 卡排序
+     */
+    private Integer accountSort;
+
+    /**
+     * 卡是否可用
+     */
+    private Integer accountAvailable;
 
     /**
      * 还款时间
      */
-    private LocalDate repayDate;
+    private String repayDate;
 }
