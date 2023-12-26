@@ -174,7 +174,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         FundsRecordInfo repaymentOut = new FundsRecordInfo();
         repaymentOut.setFundsUserId(sourceAccount.getAccountOwnershipId());
         repaymentOut.setFundsAccountId(sourceAccount.getAccountId());
-        repaymentOut.setFundsRecordTime(LocalDateTime.now());
+        repaymentOut.setFundsRecordTime(repaymentInfo.getOperateTime());
         repaymentOut.setFundsRecordDescribe(REPAYMENT_OUT.getClassifyName());
         repaymentOut.setFundsRecordClassifyId(REPAYMENT_OUT.getClassifyId());
         repaymentOut.setFundsRecordRemark(String.format("还款，从账户:{%s} 转出到 账户:{%s}", sourceAccount.getAccountName(),
@@ -185,7 +185,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         FundsRecordInfo transferIn = new FundsRecordInfo();
         transferIn.setFundsUserId(sourceAccount.getAccountOwnershipId());
         transferIn.setFundsAccountId(targetAccount.getAccountId());
-        transferIn.setFundsRecordTime(LocalDateTime.now());
+        transferIn.setFundsRecordTime(repaymentInfo.getOperateTime());
         transferIn.setFundsRecordDescribe(REPAYMENT_IN.getClassifyName());
         transferIn.setFundsRecordClassifyId(REPAYMENT_IN.getClassifyId());
         transferIn.setFundsRecordRemark(String.format("还款，从账户:{%s} 转入到 账户:{%s}", targetAccount.getAccountName(),
@@ -198,7 +198,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         FundsRecordInfo transferOut = new FundsRecordInfo();
         transferOut.setFundsUserId(sourceAccount.getAccountOwnershipId());
         transferOut.setFundsAccountId(sourceAccount.getAccountId());
-        transferOut.setFundsRecordTime(LocalDateTime.now());
+        transferOut.setFundsRecordTime(transferInfo.getOperateTime());
         transferOut.setFundsRecordDescribe(TRANSFER_OUT.getClassifyName());
         transferOut.setFundsRecordClassifyId(TRANSFER_OUT.getClassifyId());
         transferOut.setFundsRecordRemark(String.format("从账户:{%s} 转出到 账户:{%s}", sourceAccount.getAccountName(),
@@ -210,7 +210,7 @@ public class AccountAppServiceImpl implements AccountAppService {
         FundsRecordInfo transferIn = new FundsRecordInfo();
         transferIn.setFundsUserId(sourceAccount.getAccountOwnershipId());
         transferIn.setFundsAccountId(targetAccount.getAccountId());
-        transferIn.setFundsRecordTime(LocalDateTime.now());
+        transferIn.setFundsRecordTime(transferInfo.getOperateTime());
         transferIn.setFundsRecordDescribe(TRANSFER_IN.getClassifyName());
         transferIn.setFundsRecordClassifyId(TRANSFER_IN.getClassifyId());
         transferIn.setFundsRecordRemark(String.format("从账户:{%s} 转入到 账户:{%s}", targetAccount.getAccountName(),

@@ -2,6 +2,8 @@ package cn.zl.account.book.view.request;
 
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
@@ -28,4 +30,6 @@ public class AccountOperateRequest {
      * 还款金额、转账金额
      */
     private Double balance;
+
+    private LocalDateTime operateTime;
 }

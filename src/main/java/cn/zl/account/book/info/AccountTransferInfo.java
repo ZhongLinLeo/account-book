@@ -3,6 +3,8 @@ package cn.zl.account.book.info;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
@@ -29,4 +31,6 @@ public class AccountTransferInfo {
      * 转账金额
      */
     private Long transferBalance;
+
+    private LocalDateTime operateTime;
 }
