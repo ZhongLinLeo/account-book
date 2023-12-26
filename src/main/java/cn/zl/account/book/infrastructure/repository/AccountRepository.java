@@ -1,6 +1,7 @@
 package cn.zl.account.book.infrastructure.repository;
 
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
@@ -23,7 +24,8 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long>, J
      */
     default List<AccountEntity> findAccountEntities() {
         Specification<AccountEntity> specification = (root, query, criteriaBuilder) -> query
-                .where(criteriaBuilder.equal(root.get("invalid"), 0)).getRestriction();
-        return findAll(specification);
+                .where(criteriaBuilder.equal(root.get("invalid"), 0))
+                .getRestriction();
+        return findAll(specification, Sort.by(Sort.Direction.DESC, "account_sort"));
     }
 }
