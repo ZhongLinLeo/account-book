@@ -30,6 +30,6 @@ public class PageFundsComposeRequest extends BasePaginationRequest {
      */
     @Override
     public String getSortFiled() {
-        return StringUtils.isBlank(sortFiled) ? "funds_record_balance" : sortFiled;
+        return StringUtils.isBlank(sortFiled) ? "fundsRecordBalance" : sortFiled;
     }
 }

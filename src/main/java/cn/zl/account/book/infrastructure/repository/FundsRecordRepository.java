@@ -46,32 +46,6 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      * @param pageable         page condition
      * @return page list
      */
-//    @Query(value = "SELECT *  FROM funds_record WHERE invalid = 0 " +
-//            "AND (funds_record_describe like :#{#recordSearchInfo.recordKeyWord} " +
-//            "   OR :#{#recordSearchInfo.recordKeyWord} IS NULL) " +
-//            "AND (funds_record_time > :#{#recordSearchInfo.startTime} " +
-//            "   OR :#{#recordSearchInfo.startTime} IS NULL) " +
-//            "AND (funds_record_time < :#{#recordSearchInfo.endTime} " +
-//            "   OR :#{#recordSearchInfo.endTime} IS NULL)" +
-//            "AND (COALESCE(:#{#recordSearchInfo.classifyIds}) IS NULL  " +
-//            "   OR funds_record_classify_id in :#{#recordSearchInfo.classifyIds}) " +
-//            "AND (COALESCE(:#{#recordSearchInfo.accountIds}) IS NULL  " +
-//            "   OR funds_account_id in :#{#recordSearchInfo.accountIds}) ",
-//            countQuery = "SELECT COUNT(*) FROM funds_record WHERE invalid = 0 " +
-//                    "AND (funds_record_describe like :#{#recordSearchInfo.recordKeyWord} " +
-//                    "   OR :#{#recordSearchInfo.recordKeyWord} IS NULL) " +
-//                    "AND (funds_record_time > :#{#recordSearchInfo.startTime} " +
-//                    "   OR :#{#recordSearchInfo.startTime} IS NULL) " +
-//                    "AND (funds_record_time < :#{#recordSearchInfo.endTime} " +
-//                    "   OR :#{#recordSearchInfo.endTime} IS NULL)" +
-//                    "AND (COALESCE(:#{#recordSearchInfo.classifyIds}) IS NULL  " +
-//                    "   OR funds_record_classify_id in :#{#recordSearchInfo.classifyIds}) " +
-//                    "AND (COALESCE(:#{#recordSearchInfo.accountIds}) IS NULL  " +
-//                    "   OR funds_account_id in :#{#recordSearchInfo.accountIds}) ",
-//            nativeQuery = true)
-//    Page<FundsRecordEntity> paginationRecord(@Param("recordSearchInfo") FundsRecordSearchInfo recordSearchInfo,
-//                                             Pageable pageable);
-
     default Page<FundsRecordEntity> paginationRecord(FundsRecordSearchInfo recordSearchInfo,
                                                       Pageable pageable) {
 

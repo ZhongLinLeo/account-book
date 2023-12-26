@@ -26,6 +26,6 @@ public interface AccountRepository extends JpaRepository<AccountEntity, Long>, J
         Specification<AccountEntity> specification = (root, query, criteriaBuilder) -> query
                 .where(criteriaBuilder.equal(root.get("invalid"), 0))
                 .getRestriction();
-        return findAll(specification, Sort.by(Sort.Direction.DESC, "account_sort"));
+        return findAll(specification, Sort.by(Sort.Direction.DESC, "accountSort"));
     }
 }

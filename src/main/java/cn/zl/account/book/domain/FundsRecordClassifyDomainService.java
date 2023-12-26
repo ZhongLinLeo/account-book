@@ -25,8 +25,8 @@ public interface FundsRecordClassifyDomainService {
     /**
      * del
      *
-     * @param classifyId classify id
+     * @param classifyEntity classify
      */
-    void delClassify(Long classifyId);
+    void delClassify(FundsRecordClassifyEntity classifyEntity);
 
 }

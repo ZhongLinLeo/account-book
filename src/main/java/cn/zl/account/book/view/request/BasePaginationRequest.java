@@ -22,7 +22,7 @@ public abstract class BasePaginationRequest {
     protected String order;
 
     public String getSortFiled() {
-        return StringUtils.isBlank(sortFiled) ? "create_time" : sortFiled;
+        return StringUtils.isBlank(sortFiled) ? "createTime" : sortFiled;
     }
 
     public String getOrder() {

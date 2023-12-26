@@ -1,17 +1,16 @@
 package cn.zl.account.book.application.impl;
 
-import cn.zl.account.book.domain.FundsRecordClassifyDomainService;
-import cn.zl.account.book.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.application.FundsRecordClassifyAppService;
-import cn.zl.account.book.enums.ResponseStatusEnum;
-import cn.zl.account.book.view.request.FundsClassifyQueryRequest;
-import cn.zl.account.book.domain.converter.FundsRecordClassifyEntityConverter;
 import cn.zl.account.book.architecture.BizAssert;
 import cn.zl.account.book.architecture.BizException;
+import cn.zl.account.book.domain.FundsRecordClassifyDomainService;
+import cn.zl.account.book.domain.converter.FundsRecordClassifyEntityConverter;
+import cn.zl.account.book.enums.ResponseStatusEnum;
+import cn.zl.account.book.info.FundsRecordClassifyInfo;
+import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.repository.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
-import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
-import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
+import cn.zl.account.book.view.request.FundsClassifyQueryRequest;
 import org.springframework.data.domain.*;
 import org.springframework.stereotype.Service;
 
@@ -56,13 +55,11 @@ public class FundsRecordClassifyAppServiceImpl implements FundsRecordClassifyApp
 
     @Override
     public void delClassify(Long classifyId) {
-        final FundsRecordEntity conditions = new FundsRecordEntity();
-        conditions.setFundsRecordClassifyId(classifyId);
-        boolean exists = fundsRecordRepository.exists(Example.of(conditions));
+        Optional<FundsRecordClassifyEntity> optional = fundsRecordClassifyRepository.findById(classifyId);
+        FundsRecordClassifyEntity classifyEntity = optional
+                .orElseThrow(() -> new BizException(ResponseStatusEnum.CLASSIFY_NONE_EXIST));
 
-        BizAssert.isTrue(exists, ResponseStatusEnum.CLASSIFY_USING);
-
-        fundsRecordClassifyDomainService.delClassify(classifyId);
+        fundsRecordClassifyDomainService.delClassify(classifyEntity);
     }
 
     @Override
