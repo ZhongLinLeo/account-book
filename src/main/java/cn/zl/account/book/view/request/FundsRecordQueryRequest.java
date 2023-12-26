@@ -5,7 +5,7 @@ import lombok.EqualsAndHashCode;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.List;
 
 /**
@@ -17,11 +17,11 @@ public class FundsRecordQueryRequest extends BasePaginationRequest {
 
     private String recordKeyword;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime startTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startTime;
 
-    @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
-    private LocalDateTime endTime;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endTime;
 
     /**
      * 分类id列表

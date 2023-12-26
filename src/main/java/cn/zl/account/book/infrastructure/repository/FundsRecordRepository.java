@@ -28,7 +28,8 @@ import java.util.Objects;
  * @author lin.zl
  */
 @Repository
-public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, Long>, JpaSpecificationExecutor<FundsRecordEntity> {
+public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, Long>,
+        JpaSpecificationExecutor<FundsRecordEntity> {
     /**
      * delete by logical
      *
@@ -47,7 +48,7 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      * @return page list
      */
     default Page<FundsRecordEntity> paginationRecord(FundsRecordSearchInfo recordSearchInfo,
-                                                      Pageable pageable) {
+                                                     Pageable pageable) {
 
         Specification<FundsRecordEntity> sp = (root, query, cb) -> {
             ArrayList<Predicate> predicates = new ArrayList<>();
@@ -55,26 +56,26 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
 
             List<Long> classifyIds = recordSearchInfo.getClassifyIds();
             if (CollectionUtils.isNotEmpty(classifyIds)) {
-                predicates.add(cb.in(root.get("fundsRecordClassifyId").in(classifyIds)));
+                predicates.add(cb.and(root.get("fundsRecordClassifyId").in(classifyIds)));
             }
             List<Long> accountIds = recordSearchInfo.getAccountIds();
             if (CollectionUtils.isNotEmpty(accountIds)) {
-                predicates.add(cb.in(root.get("fundsAccountId").in(accountIds)));
+                predicates.add(cb.and(root.get("fundsAccountId").in(accountIds)));
             }
 
             LocalDateTime startTime = recordSearchInfo.getStartTime();
-            if(Objects.nonNull(startTime)){
-                predicates.add(cb.greaterThan(root.get("fundsRecordTime"),startTime));
+            if (Objects.nonNull(startTime)) {
+                predicates.add(cb.greaterThan(root.get("fundsRecordTime"), startTime));
             }
 
             LocalDateTime endTime = recordSearchInfo.getEndTime();
-            if(Objects.nonNull(endTime)){
+            if (Objects.nonNull(endTime)) {
                 predicates.add(cb.lessThan(root.get("fundsRecordTime"), endTime));
             }
 
             String recordKeyword = recordSearchInfo.getRecordKeyword();
-            if (Objects.nonNull(recordKeyword)){
-                predicates.add(cb.like(root.get("fundsRecordDescribe"),recordKeyword));
+            if (Objects.nonNull(recordKeyword)) {
+                predicates.add(cb.like(root.get("fundsRecordDescribe"), recordKeyword));
             }
 
             Predicate[] p = new Predicate[predicates.size()];
