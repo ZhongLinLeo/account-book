@@ -38,8 +38,4 @@ public class FundsRecordQueryRequest extends BasePaginationRequest {
     public String getSortFiled() {
         return StringUtils.isBlank(sortFiled) ? "fundsRecordTime" : sortFiled;
     }
-
-    public String getRecordKeyword() {
-        return StringUtils.isBlank(recordKeyword) ? null : "%" + recordKeyword + "%";
-    }
 }

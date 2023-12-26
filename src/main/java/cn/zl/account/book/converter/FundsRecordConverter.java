@@ -52,6 +52,7 @@ public final class FundsRecordConverter {
                 .endTime(Objects.isNull(endTime) ? null : LocalDateTime.of(endTime, LocalTime.MAX))
                 .classifyIds(recordQueryRequest.getClassifyIds())
                 .accountIds(recordQueryRequest.getAccountIds())
+                .recordKeyword(recordQueryRequest.getRecordKeyword())
                 .build();
     }
 
