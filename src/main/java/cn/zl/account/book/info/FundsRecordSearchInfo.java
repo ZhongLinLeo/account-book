@@ -41,7 +41,7 @@ public class FundsRecordSearchInfo {
      */
     private String recordKeyword;
 
-    public String getRecordKeyWord() {
+    public String getRecordKeyword() {
         return StringUtils.isBlank(recordKeyword) ? null : "%" + recordKeyword + "%";
     }
 
