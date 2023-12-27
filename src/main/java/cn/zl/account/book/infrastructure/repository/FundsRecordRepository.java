@@ -1,33 +1,25 @@
 package cn.zl.account.book.infrastructure.repository;
 
-import cn.zl.account.book.architecture.JpaConfig;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
-import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.apache.commons.collections4.CollectionUtils;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.criterion.SimpleExpression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.annotation.Resource;
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.*;
-import javax.transaction.Transactional;
-import javax.validation.constraints.NotNull;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -99,7 +91,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      * @param entityManager entity manager
      * @return value
      */
-    default Long sumOverview(List<Long> classifyIds, LocalDateTime startTime, LocalDateTime endTime, EntityManager entityManager) {
+    default Long sumOverview(List<Long> classifyIds, LocalDateTime startTime, LocalDateTime endTime,
+                             EntityManager entityManager) {
         CriteriaBuilder cb = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Long> query = cb.createQuery(Long.class);
