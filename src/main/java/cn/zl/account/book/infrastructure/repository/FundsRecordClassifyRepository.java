@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.Predicate;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author lin.zl
@@ -42,4 +43,19 @@ public interface FundsRecordClassifyRepository extends JpaRepository<FundsRecord
         return findAll(sp, pageable);
     }
 
+
+    /**
+     * list classify info
+     *
+     * @return classify id and classify type
+     */
+    default List<FundsRecordClassifyEntity> listAnalyzeClassify() {
+        Specification<FundsRecordClassifyEntity> sp = (root, query, criteriaBuilder) -> query
+                .multiselect(root.get("classifyId"), root.get("classifyType"))
+                .where(criteriaBuilder.equal(root.get("invalid"), 0))
+                .where(criteriaBuilder.equal(root.get("includeAnalyze"), 1))
+                .getRestriction();
+        return findAll(sp);
+
+    }
 }

@@ -26,9 +26,9 @@ public interface FundsRecordDomainService {
     /**
      * del record
      *
-     * @param recordId funds record id
+     * @param recordEntity funds record info
      */
-    void delFundRecord(Long recordId);
+    void delFundRecord(FundsRecordEntity recordEntity);
 
     /**
      * import funds records

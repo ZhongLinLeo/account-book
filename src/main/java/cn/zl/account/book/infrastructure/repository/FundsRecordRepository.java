@@ -1,11 +1,15 @@
 package cn.zl.account.book.infrastructure.repository;
 
+import cn.zl.account.book.architecture.JpaConfig;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
+import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import org.apache.commons.collections4.CollectionUtils;
+import org.hibernate.criterion.Restrictions;
+import org.hibernate.criterion.SimpleExpression;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.domain.Specification;
@@ -16,8 +20,14 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.Predicate;
+import javax.annotation.Resource;
+import javax.persistence.EntityManager;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.Persistence;
+import javax.persistence.PersistenceContext;
+import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -30,15 +40,6 @@ import java.util.Objects;
 @Repository
 public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, Long>,
         JpaSpecificationExecutor<FundsRecordEntity> {
-    /**
-     * delete by logical
-     *
-     * @param fundsRecordId classify id
-     */
-    @Modifying
-    @Transactional(rollbackOn = Exception.class)
-    @Query("update FundsRecordEntity set invalid = 1 where fundsRecordId = :fundsRecordId")
-    void deleteLogical(@Param("fundsRecordId") Long fundsRecordId);
 
     /**
      * pagination
@@ -49,6 +50,7 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
      */
     default Page<FundsRecordEntity> paginationRecord(FundsRecordSearchInfo recordSearchInfo,
                                                      Pageable pageable) {
+
 
         Specification<FundsRecordEntity> sp = (root, query, cb) -> {
             ArrayList<Predicate> predicates = new ArrayList<>();
@@ -80,6 +82,8 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
 
             Predicate[] p = new Predicate[predicates.size()];
             p = predicates.toArray(p);
+
+
             return query.where(p).getRestriction();
         };
 
@@ -89,17 +93,36 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
     /**
      * sum income or expenditure
      *
-     * @param classifyType    classify type
-     * @param fundsRecordTime fundsRecordTime
+     * @param classifyIds   classify ids
+     * @param startTime     startTime
+     * @param endTime       endTime
+     * @param entityManager entity manager
      * @return value
      */
-    @Query(value = "select sum(funds_record_balance)  from funds_record " +
-            "where funds_record_classify_id in (select classify_id from funds_record_classify where classify_type = " +
-            ":classifyType " +
-            "    and include_analyze = 1) " +
-            "  and (funds_record_time > :fundsRecordTime or :fundsRecordTime is null)" +
-            "  and  invalid = 0 ", nativeQuery = true)
-    Long sumOverview(@Param("classifyType") Integer classifyType, @Param("fundsRecordTime") LocalDate fundsRecordTime);
+    default Long sumOverview(List<Long> classifyIds, LocalDateTime startTime, LocalDateTime endTime, EntityManager entityManager) {
+        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+
+        CriteriaQuery<Long> query = cb.createQuery(Long.class);
+        Root<FundsRecordEntity> root = query.from(FundsRecordEntity.class);
+        ArrayList<Predicate> predicates = new ArrayList<>();
+        predicates.add(cb.equal(root.get("invalid"), 0));
+        predicates.add(cb.and(root.get("fundsRecordClassifyId").in(classifyIds)));
+
+        if (Objects.nonNull(startTime)) {
+            predicates.add(cb.greaterThanOrEqualTo(root.get("fundsRecordTime"), startTime));
+        }
+
+        if (Objects.nonNull(endTime)) {
+            predicates.add(cb.lessThanOrEqualTo(root.get("fundsRecordTime"), endTime));
+        }
+
+        Predicate[] p = new Predicate[predicates.size()];
+        p = predicates.toArray(p);
+        query.multiselect(cb.coalesce(cb.sum(root.get("fundsRecordBalance")), 0));
+        query.where(p);
+
+        return entityManager.createQuery(query).getSingleResult();
+    }
 
     /**
      * query funds trend

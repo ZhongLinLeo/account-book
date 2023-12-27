@@ -78,12 +78,12 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     @Transactional(rollbackOn = Exception.class)
     public void delFundsRecord(Long recordId) {
         Optional<FundsRecordEntity> optional = fundsRecordRepository.findById(recordId);
-        FundsRecordEntity classifyEntity = optional
+        FundsRecordEntity recordEntity = optional
                 .orElseThrow(() -> new BizException(ResponseStatusEnum.FUNDS_RECORD_NONE_EXIST));
 
-        accountDomainService.transaction(classifyEntity.getFundsAccountId(), -classifyEntity.getFundsRecordBalance());
+        accountDomainService.transaction(recordEntity.getFundsAccountId(), -recordEntity.getFundsRecordBalance());
 
-        fundsRecordDomainService.delFundRecord(recordId);
+        fundsRecordDomainService.delFundRecord(recordEntity);
     }
 
     @Override

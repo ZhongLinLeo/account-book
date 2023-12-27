@@ -5,6 +5,7 @@ import lombok.EqualsAndHashCode;
 
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 import java.time.LocalDateTime;
 
@@ -28,6 +29,7 @@ public class FundsRecordEntity extends EntityBase{
 
     private String fundsRecordRemark;
 
+    @JoinColumn()
     private Long fundsRecordClassifyId;
 
     private Long fundsAccountId;

@@ -10,18 +10,22 @@ import cn.zl.account.book.info.FundsComposeInfo;
 import cn.zl.account.book.info.FundsOverviewInfo;
 import cn.zl.account.book.info.FundsRecordTopInfo;
 import cn.zl.account.book.info.FundsTrendInfo;
+import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.repository.AccountRepository;
+import cn.zl.account.book.infrastructure.repository.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.time.DayOfWeek;
-import java.time.LocalDate;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.time.*;
 import java.time.temporal.TemporalAdjusters;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 import java.util.stream.LongStream;
 
 /**
@@ -35,24 +39,43 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
     private FundsRecordRepository fundsRecordRepository;
 
     @Resource
+    private FundsRecordClassifyRepository fundsRecordClassifyRepository;
+
+    @Resource
     private AccountRepository accountRepository;
+
+    @PersistenceContext
+    private EntityManager entityManager;
 
     @Override
     public FundsOverviewInfo fundsOverview() {
-        FundsOverviewInfo.Overview overview = sumOverview(null);
+        List<FundsRecordClassifyEntity> classifyEntities = fundsRecordClassifyRepository.listAnalyzeClassify();
+
+        List<Long> incomeClassify = classifyEntities.stream()
+                .filter(e -> Objects.equals(e.getClassifyType(), ClassifyTypeEnum.INCOME.getClassifyType()))
+                .map(FundsRecordClassifyEntity::getClassifyId)
+                .collect(Collectors.toList());
+
+        List<Long> expenditureClassify = classifyEntities.stream()
+                .filter(e -> Objects.equals(e.getClassifyType(), ClassifyTypeEnum.EXPENDITURE.getClassifyType()))
+                .map(FundsRecordClassifyEntity::getClassifyId)
+                .collect(Collectors.toList());
+
+
+        FundsOverviewInfo.Overview overview = sumOverview(null, null, incomeClassify, expenditureClassify);
 
         // year
         LocalDate today = LocalDate.now();
-        LocalDate firstDatOfYear = today.withDayOfYear(1);
-        FundsOverviewInfo.Overview yearOverview = sumOverview(firstDatOfYear);
+        LocalDateTime startYear = LocalDateTime.of(LocalDate.of(today.getYear(), 1, 1), LocalTime.MIN);
+        FundsOverviewInfo.Overview yearOverview = sumOverview(startYear, null, incomeClassify, expenditureClassify);
 
         // month
-        LocalDate firstDatOfMonth = today.withDayOfMonth(1);
-        FundsOverviewInfo.Overview monthOverview = sumOverview(firstDatOfMonth);
+        LocalDateTime startMonth = LocalDateTime.of(today.withDayOfMonth(1), LocalTime.MIN);
+        FundsOverviewInfo.Overview monthOverview = sumOverview(startMonth, null, incomeClassify, expenditureClassify);
 
         // week
-        LocalDate monday = today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY));
-        FundsOverviewInfo.Overview weekOverview = sumOverview(monday);
+        LocalDateTime monday = LocalDateTime.of(today.with(TemporalAdjusters.previousOrSame(DayOfWeek.MONDAY)), LocalTime.MIN);
+        FundsOverviewInfo.Overview weekOverview = sumOverview(monday, null, incomeClassify, expenditureClassify);
 
         // asserts, list all debit card
         List<AccountEntity> accountEntities = accountRepository.findAccountEntities();
@@ -100,9 +123,10 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
         return analyzeService.fundsTops();
     }
 
-    private FundsOverviewInfo.Overview sumOverview(LocalDate firstDatOfYear) {
-        Long income = fundsRecordRepository.sumOverview(ClassifyTypeEnum.INCOME.getClassifyType(), firstDatOfYear);
-        Long expenditure = fundsRecordRepository.sumOverview(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), firstDatOfYear);
+    private FundsOverviewInfo.Overview sumOverview(LocalDateTime startTime, LocalDateTime endTime,
+                                                   List<Long> incomeClassify, List<Long> expenditureClassify) {
+        Long expenditure = fundsRecordRepository.sumOverview(expenditureClassify, startTime, endTime, entityManager);
+        Long income = fundsRecordRepository.sumOverview(incomeClassify, startTime, endTime, entityManager);
         return FundsOverviewInfo.Overview.builder()
                 .income(income)
                 .expenditure(expenditure)

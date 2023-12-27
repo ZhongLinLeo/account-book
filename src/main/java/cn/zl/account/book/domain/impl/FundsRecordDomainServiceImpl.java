@@ -62,15 +62,16 @@ public class FundsRecordDomainServiceImpl implements FundsRecordDomainService {
 
     @Override
     public void modifyFundRecord(FundsRecordEntity classifyEntity, FundsRecordInfo fundsRecordInfo) {
-        BeanUtils.copyProperties(fundsRecordInfo,classifyEntity, BeanCopyUtils.getNullPropertyNames(fundsRecordInfo));
+        BeanUtils.copyProperties(fundsRecordInfo, classifyEntity, BeanCopyUtils.getNullPropertyNames(fundsRecordInfo));
         classifyEntity.setModifyTime(LocalDateTime.now());
 
         fundsRecordRepository.save(classifyEntity);
     }
 
     @Override
-    public void delFundRecord(Long recordId) {
-        fundsRecordRepository.deleteLogical(recordId);
+    public void delFundRecord(FundsRecordEntity recordEntity) {
+        recordEntity.setInvalid(1);
+        fundsRecordRepository.save(recordEntity);
     }
 
     @Override
