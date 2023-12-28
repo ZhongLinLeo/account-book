@@ -3,9 +3,7 @@ package cn.zl.account.book.infrastructure.repository;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
-import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.*;
