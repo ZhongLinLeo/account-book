@@ -5,6 +5,7 @@ import cn.zl.account.book.info.FundsComposeInfo;
 import cn.zl.account.book.info.FundsRecordTopInfo;
 import cn.zl.account.book.info.FundsTrendInfo;
 import cn.zl.account.book.enums.ClassifyTypeEnum;
+import cn.zl.account.book.infrastructure.repository.ComplexAnalyzeRepository;
 import cn.zl.account.book.util.RmbUtils;
 import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
@@ -17,6 +18,8 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -28,15 +31,17 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
     @Resource
     protected FundsRecordRepository fundsRecordRepository;
 
+    @Resource
+    private ComplexAnalyzeRepository complexAnalyzeRepository;
+
     /**
      * trend analyze
      *
      * @return trend analyze
      */
     public List<FundsTrendInfo> trendAnalyze() {
-
-        List<AnalyzeTrendBo> analyzeTrendBos = fundsRecordRepository.queryFundsTrend(statisticSqlFormat(),
-                startTime(), endTime());
+        String format = statisticFormat();
+        List<AnalyzeTrendBo> analyzeTrendBos = complexAnalyzeRepository.queryFundsTrend(format,startTime(), endTime());
 
         Map<String, AnalyzeTrendBo> incomeMap = analyzeTrendBos.stream()
                 .filter(trend -> Objects.equals(ClassifyTypeEnum.INCOME.getClassifyType(), trend.getClassifyType()))
@@ -105,7 +110,13 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
      *
      * @return statistic format
      */
-    protected abstract String statisticSqlFormat();
+    protected abstract String statisticFormat();
+
+    private String format(LocalDateTime dateTime) {
+        String format = statisticFormat();
+        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
+        return dateTimeFormatter.format(dateTime);
+    }
 
     /**
      * funds compose
@@ -113,10 +124,10 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
      * @return funds compose
      */
     public FundsComposeInfo composeAnalyze() {
-        List<AnalyzeComposeBo> incomeCompose = fundsRecordRepository
+        List<AnalyzeComposeBo> incomeCompose = complexAnalyzeRepository
                 .queryFundsCompose(ClassifyTypeEnum.INCOME.getClassifyType(), startTime(), endTime());
 
-        List<AnalyzeComposeBo> expenditureCompose = fundsRecordRepository
+        List<AnalyzeComposeBo> expenditureCompose = complexAnalyzeRepository
                 .queryFundsCompose(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), startTime(), endTime());
 
         return FundsComposeInfo.builder()
@@ -131,10 +142,10 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
      * @return funds tops
      */
     public FundsRecordTopInfo fundsTops() {
-        List<AnalyzeTopsBo> incomeTops = fundsRecordRepository
+        List<AnalyzeTopsBo> incomeTops = complexAnalyzeRepository
                 .queryFundsTops(ClassifyTypeEnum.INCOME.getClassifyType(), startTime(), endTime());
 
-        List<AnalyzeTopsBo> expenditureTops = fundsRecordRepository
+        List<AnalyzeTopsBo> expenditureTops = complexAnalyzeRepository
                 .queryFundsTops(ClassifyTypeEnum.EXPENDITURE.getClassifyType(), startTime(), endTime());
 
         return FundsRecordTopInfo.builder()
@@ -178,6 +189,7 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
             FundsComposeInfo.Compose composeInfo = FundsComposeInfo.Compose.builder()
                     .percent(RmbUtils.convertFen2Yuan(compose.getTotalFundsBalance()))
                     .classifyName(compose.getClassifyName())
+                    .classifyId(compose.getClassifyId())
                     .build();
             composeList.add(composeInfo);
 

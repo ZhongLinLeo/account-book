@@ -83,41 +83,6 @@ public interface FundsRecordRepository extends JpaRepository<FundsRecordEntity, 
     }
 
     /**
-     * sum income or expenditure
-     *
-     * @param classifyIds   classify ids
-     * @param startTime     startTime
-     * @param endTime       endTime
-     * @param entityManager entity manager
-     * @return value
-     */
-    default Long sumOverview(List<Long> classifyIds, LocalDateTime startTime, LocalDateTime endTime,
-                             EntityManager entityManager) {
-        CriteriaBuilder cb = entityManager.getCriteriaBuilder();
-
-        CriteriaQuery<Long> query = cb.createQuery(Long.class);
-        Root<FundsRecordEntity> root = query.from(FundsRecordEntity.class);
-        ArrayList<Predicate> predicates = new ArrayList<>();
-        predicates.add(cb.equal(root.get("invalid"), 0));
-        predicates.add(cb.and(root.get("fundsRecordClassifyId").in(classifyIds)));
-
-        if (Objects.nonNull(startTime)) {
-            predicates.add(cb.greaterThanOrEqualTo(root.get("fundsRecordTime"), startTime));
-        }
-
-        if (Objects.nonNull(endTime)) {
-            predicates.add(cb.lessThanOrEqualTo(root.get("fundsRecordTime"), endTime));
-        }
-
-        Predicate[] p = new Predicate[predicates.size()];
-        p = predicates.toArray(p);
-        query.multiselect(cb.coalesce(cb.sum(root.get("fundsRecordBalance")), 0));
-        query.where(p);
-
-        return entityManager.createQuery(query).getSingleResult();
-    }
-
-    /**
      * query funds trend
      *
      * @param typeFormat trend type format

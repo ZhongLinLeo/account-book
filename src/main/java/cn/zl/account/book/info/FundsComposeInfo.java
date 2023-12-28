@@ -30,6 +30,8 @@ public class FundsComposeInfo {
 
         private String classifyName;
 
+        private Long classifyId;
+
         private Double percent;
 
     }

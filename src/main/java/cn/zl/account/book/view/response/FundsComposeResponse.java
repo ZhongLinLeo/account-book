@@ -1,5 +1,7 @@
 package cn.zl.account.book.view.response;
 
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
 import lombok.Data;
 
@@ -29,6 +31,9 @@ public class FundsComposeResponse {
     public static class Compose{
 
         private String classifyName;
+
+        @JsonSerialize(using= ToStringSerializer.class)
+        private Long classifyId;
 
         private Double percent;
 

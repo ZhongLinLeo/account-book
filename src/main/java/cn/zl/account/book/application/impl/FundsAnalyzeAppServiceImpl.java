@@ -12,6 +12,7 @@ import cn.zl.account.book.info.FundsRecordTopInfo;
 import cn.zl.account.book.info.FundsTrendInfo;
 import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.repository.AccountRepository;
+import cn.zl.account.book.infrastructure.repository.ComplexAnalyzeRepository;
 import cn.zl.account.book.infrastructure.repository.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.entity.AccountEntity;
@@ -44,8 +45,8 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
     @Resource
     private AccountRepository accountRepository;
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    @Resource
+    private ComplexAnalyzeRepository complexAnalyzeRepository;
 
     @Override
     public FundsOverviewInfo fundsOverview() {
@@ -125,8 +126,8 @@ public class FundsAnalyzeAppServiceImpl implements FundsAnalyzeAppService {
 
     private FundsOverviewInfo.Overview sumOverview(LocalDateTime startTime, LocalDateTime endTime,
                                                    List<Long> incomeClassify, List<Long> expenditureClassify) {
-        Long expenditure = fundsRecordRepository.sumOverview(expenditureClassify, startTime, endTime, entityManager);
-        Long income = fundsRecordRepository.sumOverview(incomeClassify, startTime, endTime, entityManager);
+        Long expenditure = complexAnalyzeRepository.sumOverview(expenditureClassify, startTime, endTime);
+        Long income = complexAnalyzeRepository.sumOverview(incomeClassify, startTime, endTime);
         return FundsOverviewInfo.Overview.builder()
                 .income(income)
                 .expenditure(expenditure)

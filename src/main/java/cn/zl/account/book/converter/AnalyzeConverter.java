@@ -73,6 +73,7 @@ public class AnalyzeConverter {
                 .map(compose -> FundsComposeResponse.Compose
                         .builder()
                         .classifyName(compose.getClassifyName())
+                        .classifyId(compose.getClassifyId())
                         .percent(compose.getPercent())
                         .build())
                 .collect(Collectors.toList());
