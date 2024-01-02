@@ -2,7 +2,6 @@ package cn.zl.account.book.domain;
 
 import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
-import org.springframework.web.multipart.MultipartFile;
 
 /**
  * @author lin.zl
@@ -29,11 +28,4 @@ public interface FundsRecordDomainService {
      * @param recordEntity funds record info
      */
     void delFundRecord(FundsRecordEntity recordEntity);
-
-    /**
-     * import funds records
-     *
-     * @param excelFile excel file
-     */
-    void importFundsRecord(MultipartFile excelFile);
 }
