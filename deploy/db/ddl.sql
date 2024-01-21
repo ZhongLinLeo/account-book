@@ -28,7 +28,7 @@ create table funds_record
 (
     funds_record_id          bigint primary key comment '资金记录ID',
     funds_record_balance     bigint       not null comment '资金记录金额',
-    funds_record_time        timestamp    not null comment '资金记录时间',
+    funds_record_time        datetime    not null comment '资金记录时间',
     funds_record_describe    varchar(128) not null comment '资金记录描述',
     funds_record_remark      varchar(128) null comment '资金记录备注',
     funds_record_classify_id bigint       not null comment '资金记录分类ID',
@@ -133,5 +133,30 @@ create table loan_repay_change
 ) engine = INNODB,
   DEFAULT CHARSET = utf8,comment ='贷款提前还款信息表';
 
+drop table if exists budget;
+create table budget
+(
+    budget_id     bigint primary key comment 'id',
+    budget_name   varchar(64) not null comment '预算名称',
+    budget_amount bigint      not null comment '预算金额，单位：分',
+    budget_desc   varchar(128) comment '预算描述',
+    budget_start  datetime    not null comment '预算开始时间',
+    budget_end    datetime    not null comment '预算开始时间',
+    budget_type   tinyint     not null                             default 0 comment '预算类型，1: 周期性，2：一次性',
+    create_time   timestamp   not null                             default current_timestamp comment '创建时间',
+    modify_time   timestamp   not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid       tinyint     not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+) engine = INNODB,
+  DEFAULT CHARSET = utf8,comment ='预算基础信息表';
 
+drop table if exists rel_budget_classify;
+create table rel_budget_classify
+(
+    id          bigint primary key comment 'id',
+    budget_id   bigint    not null comment '预算id',
+    classify_id bigint    not null comment '分类id',
+    create_time timestamp not null                             default current_timestamp comment '创建时间',
+    modify_time timestamp not null ON UPDATE CURRENT_TIMESTAMP default current_timestamp comment '修改时间',
+    invalid     tinyint   not null                             default 0 comment '删除标识位，0：未删除，1：删除'
+)
 
