@@ -43,7 +43,7 @@ public class MonthAnalyzeStrategy extends BaseAnalyzeStrategy {
     }
 
     @Override
-    protected String statisticSqlFormat() {
+    protected String statisticFormat() {
         return TYPE_FORMAT;
     }
 
