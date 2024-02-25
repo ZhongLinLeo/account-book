@@ -43,7 +43,8 @@ public class FundsRecordClassifyDomainServiceImpl implements FundsRecordClassify
     }
 
     @Override
-    public void delClassify(Long classifyId) {
-        fundsRecordClassifyRepository.deleteLogical(classifyId);
+    public void delClassify(FundsRecordClassifyEntity classifyEntity) {
+        classifyEntity.setInvalid(1);
+        fundsRecordClassifyRepository.save(classifyEntity);
     }
 }

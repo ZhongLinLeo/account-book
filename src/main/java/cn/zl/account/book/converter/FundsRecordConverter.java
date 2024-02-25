@@ -7,6 +7,11 @@ import cn.zl.account.book.view.request.FundsRecordQueryRequest;
 import cn.zl.account.book.view.request.FundsRecordRequest;
 import cn.zl.account.book.view.response.FundsRecordResponse;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.Objects;
+
 /**
  * @author lin.zl
  */
@@ -38,11 +43,16 @@ public final class FundsRecordConverter {
         return info;
     }
 
-    public static FundsRecordSearchInfo req2Info(FundsRecordQueryRequest recordQueryRequest){
+    public static FundsRecordSearchInfo req2Info(FundsRecordQueryRequest recordQueryRequest) {
+        final LocalDate startTime = recordQueryRequest.getStartTime();
+        final LocalDate endTime = recordQueryRequest.getEndTime();
+
         return FundsRecordSearchInfo.builder()
-                .startTime(recordQueryRequest.getStartTime())
-                .endTime(recordQueryRequest.getEndTime())
+                .startTime(Objects.isNull(startTime) ? null : LocalDateTime.of(startTime, LocalTime.MIN))
+                .endTime(Objects.isNull(endTime) ? null : LocalDateTime.of(endTime, LocalTime.MAX))
                 .classifyIds(recordQueryRequest.getClassifyIds())
+                .accountIds(recordQueryRequest.getAccountIds())
+                .recordKeyword(recordQueryRequest.getRecordKeyword())
                 .build();
     }
 
