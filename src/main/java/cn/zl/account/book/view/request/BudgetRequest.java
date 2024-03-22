@@ -4,6 +4,8 @@ import cn.zl.account.book.enums.BudgetTypeEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author lin.zl
@@ -37,7 +39,7 @@ public class BudgetRequest {
     private LocalDateTime budgetStart;
 
     /**
-     *  预算结束时间
+     * 预算结束时间
      */
     private LocalDateTime budgetEnd;
 
@@ -46,4 +48,8 @@ public class BudgetRequest {
      */
     private BudgetTypeEnum budgetType;
 
+    /**
+     * 分类ID
+     */
+    private Set<Long> classifyIds;
 }

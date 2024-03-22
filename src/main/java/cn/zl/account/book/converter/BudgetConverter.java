@@ -20,6 +20,7 @@ public class BudgetConverter {
         budgetInfo.setBudgetStart(budgetRequest.getBudgetStart());
         budgetInfo.setBudgetType(budgetRequest.getBudgetType());
         budgetInfo.setBudgetAmount(budgetRequest.getBudgetAmount());
+        budgetInfo.setClassifyIds(budgetInfo.getClassifyIds());
 
         return budgetInfo;
     }

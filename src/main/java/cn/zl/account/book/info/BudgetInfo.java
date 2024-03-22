@@ -4,6 +4,8 @@ import cn.zl.account.book.enums.BudgetTypeEnum;
 import lombok.Data;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author lin.zl
@@ -45,4 +47,10 @@ public class BudgetInfo {
      * 预算类型
      */
     private BudgetTypeEnum budgetType;
+
+
+    /**
+     * 分类ID
+     */
+    private Set<Long> classifyIds;
 }
