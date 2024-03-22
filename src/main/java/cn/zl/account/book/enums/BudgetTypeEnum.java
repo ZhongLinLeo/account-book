@@ -6,17 +6,20 @@ package cn.zl.account.book.enums;
 public enum BudgetTypeEnum {
 
     // 预算类型
-    REPEAT("周期性"),
-    LONELY("一次性"),
+    REPEAT(1, "周期性"),
+
+    LONELY(2, "一次性"),
     ;
 
-    private String name;
+    private Integer type;
+    private String typeName;
 
-    BudgetTypeEnum(String name) {
-        this.name = name;
+    BudgetTypeEnum(Integer type, String typeName) {
+        this.type = type;
+        this.typeName = typeName;
     }
 
     public String getName() {
-        return name;
+        return typeName;
     }
 }

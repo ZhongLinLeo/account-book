@@ -2,6 +2,7 @@ package cn.zl.account.book.controller;
 
 import cn.zl.account.book.application.BudgetApplicationService;
 import cn.zl.account.book.converter.BudgetConverter;
+import cn.zl.account.book.info.BudgetDetailInfo;
 import cn.zl.account.book.info.BudgetInfo;
 import cn.zl.account.book.view.request.BudgetRequest;
 import cn.zl.account.book.view.response.BudgetDetailResponse;
@@ -61,7 +62,7 @@ public class BudgetController {
 
     @GetMapping({"{budgetId}"})
     public NormalResponse<BudgetDetailResponse> findBudget(@PathVariable Long budgetId) {
-        BudgetInfo budgetInfo = budgetApplicationService.findBudget(budgetId);
+        BudgetDetailInfo budgetInfo = budgetApplicationService.findBudget(budgetId);
 
         BudgetDetailResponse budgetDetailResponse = BudgetConverter.convertInfo2Response(budgetInfo);
 

@@ -1,4 +1,4 @@
-package cn.zl.account.book.view.request;
+package cn.zl.account.book.info;
 
 import cn.zl.account.book.enums.BudgetTypeEnum;
 import lombok.Data;
@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
  * @author lin.zl
  */
 @Data
-public class BudgetRequest {
+public class BudgetDetailInfo {
 
     /**
      * 预算ID
@@ -46,4 +46,18 @@ public class BudgetRequest {
      */
     private BudgetTypeEnum budgetType;
 
+    /**
+     * 创建时间
+     */
+    private LocalDateTime createTime;
+
+    /**
+     * 修改时间
+     */
+    private LocalDateTime modifyTime;
+
+    /**
+     * 剩余金额
+     */
+    private Long remainAmount;
 }

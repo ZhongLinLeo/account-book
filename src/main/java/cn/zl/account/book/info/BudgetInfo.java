@@ -45,10 +45,4 @@ public class BudgetInfo {
      * 预算类型
      */
     private BudgetTypeEnum budgetType;
-
-    /**
-     * 预算备注
-     */
-    private String budgetRemark;
-
 }

@@ -1,5 +1,6 @@
 package cn.zl.account.book.application;
 
+import cn.zl.account.book.info.BudgetDetailInfo;
 import cn.zl.account.book.info.BudgetInfo;
 
 /**
@@ -34,6 +35,6 @@ public interface BudgetApplicationService {
      * @param budgetId budgetId
      * @return budgetInfo
      */
-    BudgetInfo findBudget(Long budgetId);
+    BudgetDetailInfo findBudget(Long budgetId);
 
 }

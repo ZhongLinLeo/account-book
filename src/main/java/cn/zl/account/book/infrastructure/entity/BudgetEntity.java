@@ -1,20 +1,26 @@
-package cn.zl.account.book.view.request;
+package cn.zl.account.book.infrastructure.entity;
 
 import cn.zl.account.book.enums.BudgetTypeEnum;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.time.LocalDateTime;
 
 /**
  * @author lin.zl
  */
+@EqualsAndHashCode(callSuper = true)
 @Data
-public class BudgetRequest {
+@Entity
+@Table(name = "budget")
+public class BudgetEntity extends EntityBase{
 
-    /**
-     * 预算ID
-     */
+    @Id
     private Long budgetId;
+
 
     /**
      * 预算名称
@@ -45,5 +51,6 @@ public class BudgetRequest {
      * 预算类型
      */
     private BudgetTypeEnum budgetType;
+
 
 }

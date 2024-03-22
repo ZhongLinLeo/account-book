@@ -1,5 +1,6 @@
 package cn.zl.account.book.converter;
 
+import cn.zl.account.book.info.BudgetDetailInfo;
 import cn.zl.account.book.info.BudgetInfo;
 import cn.zl.account.book.view.request.BudgetRequest;
 import cn.zl.account.book.view.response.BudgetDetailResponse;
@@ -16,7 +17,6 @@ public class BudgetConverter {
         budgetInfo.setBudgetDesc(budgetRequest.getBudgetDesc());
         budgetInfo.setBudgetEnd(budgetRequest.getBudgetEnd());
         budgetInfo.setBudgetName(budgetRequest.getBudgetName());
-        budgetInfo.setBudgetRemark(budgetRequest.getBudgetRemark());
         budgetInfo.setBudgetStart(budgetRequest.getBudgetStart());
         budgetInfo.setBudgetType(budgetRequest.getBudgetType());
         budgetInfo.setBudgetAmount(budgetRequest.getBudgetAmount());
@@ -28,16 +28,20 @@ public class BudgetConverter {
         //  none
     }
 
-    public static BudgetDetailResponse convertInfo2Response(BudgetInfo budgetInfo) {
+    public static BudgetDetailResponse convertInfo2Response(BudgetDetailInfo budgetDetailInfo) {
 
         BudgetDetailResponse budgetDetailResponse = new BudgetDetailResponse();
 
-        budgetDetailResponse.setBudgetId(budgetInfo.getBudgetId());
-        budgetDetailResponse.setBudgetDesc(budgetInfo.getBudgetDesc());
-        budgetDetailResponse.setBudgetEnd(budgetInfo.getBudgetEnd());
-        budgetDetailResponse.setBudgetName(budgetInfo.getBudgetName());
-        budgetDetailResponse.setBudgetRemark(budgetInfo.getBudgetRemark());
-        budgetDetailResponse.setBudgetStart(budgetInfo.getBudgetStart());
+        budgetDetailResponse.setBudgetId(budgetDetailInfo.getBudgetId());
+        budgetDetailResponse.setBudgetAmount(budgetDetailInfo.getBudgetAmount());
+        budgetDetailResponse.setBudgetDesc(budgetDetailInfo.getBudgetDesc());
+        budgetDetailResponse.setBudgetEnd(budgetDetailInfo.getBudgetEnd());
+        budgetDetailResponse.setBudgetName(budgetDetailInfo.getBudgetName());
+        budgetDetailResponse.setBudgetStart(budgetDetailInfo.getBudgetStart());
+        budgetDetailResponse.setBudgetType(budgetDetailInfo.getBudgetType());
+        budgetDetailResponse.setCreateTime(budgetDetailInfo.getCreateTime());
+        budgetDetailResponse.setModifyTime(budgetDetailInfo.getModifyTime());
+        budgetDetailResponse.setRemainAmount(budgetDetailInfo.getRemainAmount());
 
         return budgetDetailResponse;
     }
