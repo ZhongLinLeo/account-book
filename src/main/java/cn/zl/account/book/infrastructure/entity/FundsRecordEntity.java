@@ -18,6 +18,9 @@ import java.time.LocalDateTime;
 @Table(name = "funds_record")
 public class FundsRecordEntity extends EntityBase{
 
+    public static final String FUNDS_RECORD_TIME = "fundsRecordTime";
+    public static final String CLASSIFY_TYPE = "classifyType";
+
     @Id
     private Long fundsRecordId;
 

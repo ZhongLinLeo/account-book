@@ -57,7 +57,7 @@ public class BudgetDetailInfo {
     private LocalDateTime modifyTime;
 
     /**
-     * 剩余金额
+     * 已使用金额
      */
-    private Long remainAmount;
+    private Long usedAmount;
 }

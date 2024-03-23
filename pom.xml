@@ -56,7 +56,7 @@
                     <imageName>account_book</imageName>
                     <!-- image 的tag, 可以是多个 -->
                     <imageTags>
-                        <imageTag>${project.version}</imageTag>
+                        <imageTag>latest</imageTag>
                     </imageTags>
                     <!-- Dockerfile所在的目录 -->
                     <dockerDirectory>${project.basedir}</dockerDirectory>

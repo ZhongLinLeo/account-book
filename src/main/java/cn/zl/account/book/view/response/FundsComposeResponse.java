@@ -1,11 +1,10 @@
 package cn.zl.account.book.view.response;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 资金构成
@@ -32,8 +31,7 @@ public class FundsComposeResponse {
 
         private String classifyName;
 
-        @JsonSerialize(using= ToStringSerializer.class)
-        private Long classifyId;
+        private Set<String> classifyIds;
 
         private Double percent;
 

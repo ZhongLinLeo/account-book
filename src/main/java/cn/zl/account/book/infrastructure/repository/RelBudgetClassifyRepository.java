@@ -18,5 +18,5 @@ public interface RelBudgetClassifyRepository extends JpaRepository<RelBudgetClas
      *
      * @param budgetId budgetId
      */
-    void removeRelBudgetClassifyEntitiesByBudgetId(Long budgetId);
+    void deleteAllByBudgetId(Long budgetId);
 }

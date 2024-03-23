@@ -1,16 +1,16 @@
 package cn.zl.account.book.application.strategy;
 
+import cn.zl.account.book.enums.ClassifyTypeEnum;
 import cn.zl.account.book.enums.TrendAnalyzeEnum;
 import cn.zl.account.book.info.FundsComposeInfo;
 import cn.zl.account.book.info.FundsRecordTopInfo;
 import cn.zl.account.book.info.FundsTrendInfo;
-import cn.zl.account.book.enums.ClassifyTypeEnum;
-import cn.zl.account.book.infrastructure.repository.ComplexAnalyzeRepository;
-import cn.zl.account.book.util.RmbUtils;
-import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
+import cn.zl.account.book.infrastructure.repository.ComplexAnalyzeRepository;
+import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
+import cn.zl.account.book.util.RmbUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
 
@@ -18,8 +18,6 @@ import javax.annotation.Resource;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,7 +39,7 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
      */
     public List<FundsTrendInfo> trendAnalyze() {
         String format = statisticFormat();
-        List<AnalyzeTrendBo> analyzeTrendBos = complexAnalyzeRepository.queryFundsTrend(format,startTime(), endTime());
+        List<AnalyzeTrendBo> analyzeTrendBos = complexAnalyzeRepository.queryFundsTrend(format, startTime(), endTime());
 
         Map<String, AnalyzeTrendBo> incomeMap = analyzeTrendBos.stream()
                 .filter(trend -> Objects.equals(ClassifyTypeEnum.INCOME.getClassifyType(), trend.getClassifyType()))
@@ -112,12 +110,6 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
      */
     protected abstract String statisticFormat();
 
-    private String format(LocalDateTime dateTime) {
-        String format = statisticFormat();
-        DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern(format);
-        return dateTimeFormatter.format(dateTime);
-    }
-
     /**
      * funds compose
      *
@@ -183,15 +175,20 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
                 .sorted(Comparator.comparingLong(AnalyzeComposeBo::getTotalFundsBalance).reversed())
                 .collect(Collectors.toList());
 
+        final Set<String> classifyIds =
+                composes.stream().map(AnalyzeComposeBo::getClassifyId)
+                        .map(String::valueOf).collect(Collectors.toSet());
+
         long remains = totalBalance.longValue();
         for (AnalyzeComposeBo compose : composes) {
-
+            final String classifyId = String.valueOf(compose.getClassifyId());
             FundsComposeInfo.Compose composeInfo = FundsComposeInfo.Compose.builder()
                     .percent(RmbUtils.convertFen2Yuan(compose.getTotalFundsBalance()))
                     .classifyName(compose.getClassifyName())
-                    .classifyId(compose.getClassifyId())
+                    .classifyIds(Collections.singleton(classifyId))
                     .build();
             composeList.add(composeInfo);
+            classifyIds.remove(classifyId);
 
             remains -= compose.getTotalFundsBalance();
             double remainsPercent = BigDecimal.valueOf(remains)
@@ -200,6 +197,7 @@ public abstract class BaseAnalyzeStrategy implements InitializingBean {
                 FundsComposeInfo.Compose remainsCompose = FundsComposeInfo.Compose.builder()
                         .percent(RmbUtils.convertFen2Yuan(remains))
                         .classifyName("其他")
+                        .classifyIds(classifyIds)
                         .build();
                 composeList.add(remainsCompose);
                 break;

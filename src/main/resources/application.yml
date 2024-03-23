@@ -2,4 +2,4 @@ server:
   port: 10086
 spring:
   profiles:
-    active: beta
+    active: prd

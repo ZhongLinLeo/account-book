@@ -4,9 +4,11 @@ import cn.zl.account.book.domain.RelBudgetClassifyDomainService;
 import cn.zl.account.book.infrastructure.entity.RelBudgetClassifyEntity;
 import cn.zl.account.book.infrastructure.repository.RelBudgetClassifyRepository;
 import cn.zl.account.book.util.SnowIdUtils;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
@@ -36,6 +38,27 @@ public class RelBudgetClassifyDomainServiceImpl implements RelBudgetClassifyDoma
 
     @Override
     public void removeRelation(Long budgetId) {
-        relBudgetClassifyRepository.removeRelBudgetClassifyEntitiesByBudgetId(budgetId);
+        relBudgetClassifyRepository.deleteAllByBudgetId(budgetId);
+    }
+
+    @Override
+    public void modifyRelBudgetClassify(Long budgetId, Set<Long> classifyIds) {
+        // remove
+        removeRelation(budgetId);
+
+        // create
+        createRelBudgetClassify(budgetId, classifyIds);
+    }
+
+    @Override
+    public List<Long> listRelBudgetClassify(Long budgetId) {
+        final RelBudgetClassifyEntity entity = new RelBudgetClassifyEntity();
+        entity.setBudgetId(budgetId);
+        entity.setInvalid(0);
+        final List<RelBudgetClassifyEntity> entities = relBudgetClassifyRepository.findAll(Example.of(entity));
+
+        return entities.stream()
+                .map(RelBudgetClassifyEntity::getClassifyId)
+                .collect(Collectors.toList());
     }
 }

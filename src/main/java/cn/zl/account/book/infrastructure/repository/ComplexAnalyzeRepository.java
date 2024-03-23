@@ -49,11 +49,11 @@ public class ComplexAnalyzeRepository {
         predicates.add(cb.and(root.get("fundsRecordClassifyId").in(classifyIds)));
 
         if (Objects.nonNull(startTime)) {
-            predicates.add(cb.greaterThanOrEqualTo(root.get("fundsRecordTime"), startTime));
+            predicates.add(cb.greaterThanOrEqualTo(root.get(FundsRecordEntity.FUNDS_RECORD_TIME), startTime));
         }
 
         if (Objects.nonNull(endTime)) {
-            predicates.add(cb.lessThanOrEqualTo(root.get("fundsRecordTime"), endTime));
+            predicates.add(cb.lessThanOrEqualTo(root.get(FundsRecordEntity.FUNDS_RECORD_TIME), endTime));
         }
 
         Predicate[] p = new Predicate[predicates.size()];
@@ -86,7 +86,7 @@ public class ComplexAnalyzeRepository {
             AnalyzeTrendBo trendBo = new AnalyzeTrendBo();
             trendBo.setFundsRecordDate(tuple.get("fundsRecordDate", String.class));
             trendBo.setTotalFundsBalance(tuple.get("totalFundsBalance", Long.class));
-            trendBo.setClassifyType(tuple.get("classifyType", Integer.class));
+            trendBo.setClassifyType(tuple.get(FundsRecordEntity.CLASSIFY_TYPE, Integer.class));
             return trendBo;
         }).collect(Collectors.toList());
     }
@@ -107,7 +107,7 @@ public class ComplexAnalyzeRepository {
         TypedQuery<Tuple> query = entityManager.createQuery(topSql, Tuple.class);
 
         List<Tuple> resultList = query
-                .setParameter("classifyType", classifyType)
+                .setParameter(FundsRecordEntity.CLASSIFY_TYPE, classifyType)
                 .setParameter(START_TIME_FIELD, LocalDateTime.of(startTime, LocalTime.MIN))
                 .setParameter(END_TIME_FIELD, LocalDateTime.of(endTime, LocalTime.MAX))
                 .setMaxResults(10)
@@ -117,7 +117,7 @@ public class ComplexAnalyzeRepository {
             AnalyzeTopsBo topsBo = new AnalyzeTopsBo();
             topsBo.setFundsRecordBalance(tuple.get("fundsRecordBalance", Long.class));
             topsBo.setFundsRecordDesc(tuple.get("fundsRecordDesc", String.class));
-            topsBo.setFundsRecordTime(tuple.get("fundsRecordTime", LocalDateTime.class));
+            topsBo.setFundsRecordTime(tuple.get(FundsRecordEntity.FUNDS_RECORD_TIME, LocalDateTime.class));
             topsBo.setClassifyName(tuple.get("classifyName", String.class));
 
             return topsBo;
@@ -139,7 +139,7 @@ public class ComplexAnalyzeRepository {
         TypedQuery<Tuple> query = entityManager.createQuery(topSql, Tuple.class);
 
         List<Tuple> resultList = query
-                .setParameter("classifyType", classifyType)
+                .setParameter(FundsRecordEntity.CLASSIFY_TYPE, classifyType)
                 .setParameter(START_TIME_FIELD, LocalDateTime.of(startTime, LocalTime.MIN))
                 .setParameter(END_TIME_FIELD, LocalDateTime.of(endTime, LocalTime.MAX))
                 .getResultList();

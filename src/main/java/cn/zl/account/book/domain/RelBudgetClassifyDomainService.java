@@ -1,5 +1,6 @@
 package cn.zl.account.book.domain;
 
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -20,4 +21,18 @@ public interface RelBudgetClassifyDomainService {
      * @param budgetId budgetId
      */
     void removeRelation(Long budgetId);
+
+    /**
+     * 修改预算分类
+     * @param budgetId budgetId
+     * @param classifyIds classifyIds
+     */
+    void modifyRelBudgetClassify(Long budgetId, Set<Long> classifyIds);
+
+    /**
+     * 查询预算分类
+     * @param budgetId budgetId
+     * @return List<Long> classify ids
+     */
+    List<Long> listRelBudgetClassify(Long budgetId);
 }

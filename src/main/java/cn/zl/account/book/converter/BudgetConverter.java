@@ -42,7 +42,7 @@ public class BudgetConverter {
         budgetDetailResponse.setBudgetType(budgetDetailInfo.getBudgetType());
         budgetDetailResponse.setCreateTime(budgetDetailInfo.getCreateTime());
         budgetDetailResponse.setModifyTime(budgetDetailInfo.getModifyTime());
-        budgetDetailResponse.setRemainAmount(budgetDetailInfo.getRemainAmount());
+        budgetDetailResponse.setUsedAmount(budgetDetailInfo.getUsedAmount());
 
         return budgetDetailResponse;
     }
