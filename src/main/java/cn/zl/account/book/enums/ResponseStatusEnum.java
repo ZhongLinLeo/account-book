@@ -33,6 +33,9 @@ public enum ResponseStatusEnum {
 
     USER_NONE_EXIST(953407, "用户不存在"),
 
+
+    BUDGET_NONE_EXIST(953501, "预算不存在"),
+
     /**
      * server error
      */

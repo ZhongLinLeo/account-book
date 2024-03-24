@@ -4,6 +4,7 @@ import lombok.Builder;
 import lombok.Data;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * 资金构成
@@ -29,6 +30,8 @@ public class FundsComposeResponse {
     public static class Compose{
 
         private String classifyName;
+
+        private Set<String> classifyIds;
 
         private Double percent;
 

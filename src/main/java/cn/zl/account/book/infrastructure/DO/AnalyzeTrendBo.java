@@ -1,21 +1,27 @@
 package cn.zl.account.book.infrastructure.DO;
 
+import lombok.*;
+
+import java.time.LocalDateTime;
+
 /**
  * @author lin.zl
  */
-//@Data
-public interface AnalyzeTrendBo {
+@Data
+public class AnalyzeTrendBo {
 
-//    private Integer classifyType;
-//
-//    private LocalDate fundsRecordDate;
-//
-//    private Long totalFundsBalance;
+    /**
+     * classify type
+     */
+    private Integer classifyType;
 
-    Integer getClassifyType();
+    /**
+     * fundsRecordDate
+     */
+    private String fundsRecordDate;
 
-    String getFundsRecordDate();
-
-    Long getTotalFundsBalance();
-
+    /**
+     * totalFundsBalance
+     */
+    private Long totalFundsBalance;
 }
