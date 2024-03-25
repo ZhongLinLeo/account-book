@@ -1,11 +1,14 @@
 package cn.zl.account.book.application.impl;
 
 import cn.zl.account.book.application.FundsRecordAppService;
+import cn.zl.account.book.application.factory.ImportFundsRecordFactory;
+import cn.zl.account.book.application.strategy.BaseFundsRecordImportStrategy;
 import cn.zl.account.book.architecture.BizException;
 import cn.zl.account.book.domain.AccountDomainService;
 import cn.zl.account.book.domain.FundsRecordDomainService;
 import cn.zl.account.book.domain.converter.FundsRecordEntityConverter;
 import cn.zl.account.book.enums.ClassifyTypeEnum;
+import cn.zl.account.book.enums.FundsRecordImportTypeEnum;
 import cn.zl.account.book.enums.ResponseStatusEnum;
 import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
@@ -13,6 +16,7 @@ import cn.zl.account.book.infrastructure.entity.FundsRecordClassifyEntity;
 import cn.zl.account.book.infrastructure.entity.FundsRecordEntity;
 import cn.zl.account.book.infrastructure.repository.FundsRecordClassifyRepository;
 import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
@@ -29,6 +33,7 @@ import java.util.stream.Collectors;
  * @author lin.zl
  */
 @Service
+@Slf4j
 public class FundsRecordAppServiceImpl implements FundsRecordAppService {
 
     @Resource
@@ -87,9 +92,12 @@ public class FundsRecordAppServiceImpl implements FundsRecordAppService {
     }
 
     @Override
-    public void importFundsRecord(MultipartFile excelFile) {
-        fundsRecordDomainService.importFundsRecord(excelFile);
+    public void importFundsRecord(MultipartFile excelFile, FundsRecordImportTypeEnum importType) {
+        BaseFundsRecordImportStrategy strategy = ImportFundsRecordFactory.matchImportStrategy(importType);
+
+        strategy.importRecords(excelFile);
     }
+
 
     @Override
     public Page<FundsRecordInfo> paginationFundsRecord(PageRequest pageRequest, FundsRecordSearchInfo recordSearchInfo) {

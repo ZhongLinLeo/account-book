@@ -1,5 +1,6 @@
 package cn.zl.account.book.application;
 
+import cn.zl.account.book.enums.FundsRecordImportTypeEnum;
 import cn.zl.account.book.info.FundsRecordInfo;
 import cn.zl.account.book.info.FundsRecordSearchInfo;
 import org.springframework.data.domain.Page;
@@ -36,8 +37,9 @@ public interface FundsRecordAppService {
      * import funds records
      *
      * @param excelFile excel file
+     * @param importType import type
      */
-    void importFundsRecord(MultipartFile excelFile);
+    void importFundsRecord(MultipartFile excelFile, FundsRecordImportTypeEnum importType);
 
     /**
      * search records

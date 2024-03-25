@@ -9,7 +9,6 @@ import cn.zl.account.book.infrastructure.DO.AnalyzeComposeBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTopsBo;
 import cn.zl.account.book.infrastructure.DO.AnalyzeTrendBo;
 import cn.zl.account.book.infrastructure.repository.ComplexAnalyzeRepository;
-import cn.zl.account.book.infrastructure.repository.FundsRecordRepository;
 import cn.zl.account.book.util.RmbUtils;
 import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.beans.factory.InitializingBean;
@@ -25,9 +24,6 @@ import java.util.stream.Collectors;
  * @author lin.zl
  */
 public abstract class BaseAnalyzeStrategy implements InitializingBean {
-
-    @Resource
-    protected FundsRecordRepository fundsRecordRepository;
 
     @Resource
     private ComplexAnalyzeRepository complexAnalyzeRepository;

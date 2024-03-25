@@ -6,6 +6,7 @@ import cn.zl.account.book.application.FundsRecordClassifyAppService;
 import cn.zl.account.book.converter.AccountConverter;
 import cn.zl.account.book.converter.FundsRecordClassifyConverter;
 import cn.zl.account.book.converter.FundsRecordConverter;
+import cn.zl.account.book.enums.FundsRecordImportTypeEnum;
 import cn.zl.account.book.info.AccountInfo;
 import cn.zl.account.book.info.FundsRecordClassifyInfo;
 import cn.zl.account.book.info.FundsRecordInfo;
@@ -47,7 +48,7 @@ public class FundsRecordController {
         PageRequest pageRequest = PageRequest.of(pagination.getCurrent(), pagination.getPageSize(),
                 Sort.by(Sort.Direction.fromString(pagination.getOrder()), pagination.getSortFiled()));
 
-        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pageRequest,FundsRecordConverter.req2Info(pagination));
+        Page<FundsRecordInfo> fundsRecords = fundsRecordAppService.paginationFundsRecord(pageRequest, FundsRecordConverter.req2Info(pagination));
 
         List<FundsRecordResponse> content = fundsRecords.get()
                 .map(recordInfo -> {
@@ -90,8 +91,11 @@ public class FundsRecordController {
     }
 
     @PostMapping("import")
-    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file") MultipartFile excelFile) {
-        fundsRecordAppService.importFundsRecord(excelFile);
+    public NormalResponse<Boolean> importFundsRecord(@RequestParam("file") MultipartFile excelFile,
+                                                     @RequestBody FundsRecordImportTypeEnum importType) {
+
+        fundsRecordAppService.importFundsRecord(excelFile,importType);
+
         return NormalResponse.wrapSuccessResponse(Boolean.TRUE);
     }
 }
